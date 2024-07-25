@@ -1,7 +1,7 @@
 function OnBoardingPage() {
   return (
     <div>
-      온보딩페이지d
+      온보딩페이지
     </div>
   )
 }
