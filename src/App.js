@@ -9,16 +9,20 @@ import Main from "./components/Main";
 import LoginPage from "./pages/LoginPage";
 import OnBoardingPage from "./pages/OnBoardingPage";
 
+import TestPage from "./pages/TestPage";
+
 import { Container } from "./styles/AppStyle";
  /* Container는 styled-components로 정의된 그리드 레이아웃, 애플리케이션의 기본 구조를 설정, 해당 레이아웃은 Header, Sidebar, Main, Footer를 포함 */ 
 
 function App() {
   return (
     <Router>
-      
+
       <Routes>
         <Route path="/onboarding" element={<OnBoardingPage />} />
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/test" element={<TestPage />} />
+
       </Routes>
 
       <Container>
