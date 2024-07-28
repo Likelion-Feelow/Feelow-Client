@@ -13,6 +13,7 @@ import E2 from '../images/E2.png';
 import L from '../images/L.png';
 import O from '../images/O.png';
 import W from '../images/W.png';
+import { useNavigate } from 'react-router-dom';
 
 const bounce2 = keyframes` 
   0%, 100% {
@@ -257,6 +258,8 @@ const FinalBackgroundButton = styled.button`
 `;
 
 function OnBoardingPage() {
+  const navigate = useNavigate();
+
   const [isHovered, setIsHovered] = useState(false);
   const sectionRefs = useRef([]);
   const mainRef = useRef(null);
@@ -356,7 +359,7 @@ function OnBoardingPage() {
       <FinalBackground ref={(el) => (sectionRefs.current[6] = el)} onClick={() => handleSectionClick(6)}>
         <FinalBackgroundImage src={BlueLogo} alt="Final Image" />
         <FinalBackgroundText>Flow에 따라 당신의 일상을 채워보세요!</FinalBackgroundText>
-        <FinalBackgroundButton>Login</FinalBackgroundButton>
+        <FinalBackgroundButton onClick={() => navigate('/login')}>Login</FinalBackgroundButton>
       </FinalBackground>
     </Container>
   );

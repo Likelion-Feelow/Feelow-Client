@@ -1,6 +1,7 @@
-import React from 'react';
-import styled from 'styled-components';
-import Logo from '../images/Logo.png';
+import React from "react";
+import styled from "styled-components";
+import Logo from "../images/Logo.png";
+import KakaoLoginButton from "../components/Login/KakaoLoginButton";
 
 const Container = styled.div`
   display: flex;
@@ -22,14 +23,14 @@ const InputContainer = styled.div`
   flex-direction: row;
   align-items: center;
   margin-bottom: 16px;
-  width: 40vw
+  width: 40vw;
 `;
 
 const InputText = styled.div`
   font-size: 4vw;
   margin-right: 3vw;
   width: 5vw;
-  color: #3893FF;
+  color: #3893ff;
   font-weight: bold;
   text-align: right;
 `;
@@ -40,7 +41,7 @@ const InputField = styled.input`
   border-radius: 20px;
   height: 3vh;
   font-size: 16px;
-  background-color: #3893FF;
+  background-color: #3893ff;
   color: white;
   flex: 1;
 `;
@@ -55,9 +56,9 @@ const ButtonRow = styled.div`
 const Button = styled.button`
   padding: 1vh 1.5vw;
   background-color: white;
-  color: #3893FF;
+  color: #3893ff;
   border-style: solid;
-  border-color: #3893FF;
+  border-color: #3893ff;
   border-width: 3px;
   border-radius: 20px;
   cursor: pointer;
@@ -65,26 +66,19 @@ const Button = styled.button`
   font-weight: bold;
 `;
 
-const KakaoLogin = styled.a`
-  margin-top: 10vh;
-  color: #3893FF;
-  text-decoration: none;
-  font-size: 16px;
-`;
-
 const LoginPage = () => {
   return (
     <Container>
       <LoginImage src={Logo} alt="Login" />
-      
+
       <InputContainer>
         <InputText>ID</InputText>
-        <InputField id="id" type="text"/>
+        <InputField id="id" type="text" />
       </InputContainer>
 
       <InputContainer>
         <InputText>PW</InputText>
-        <InputField id="pw" type="password"/>
+        <InputField id="pw" type="password" />
       </InputContainer>
 
       <ButtonRow>
@@ -92,7 +86,7 @@ const LoginPage = () => {
         <Button>Login</Button>
       </ButtonRow>
 
-      <KakaoLogin href="#">Kakao로 로그인하기</KakaoLogin>
+      <KakaoLoginButton />
     </Container>
   );
 };
