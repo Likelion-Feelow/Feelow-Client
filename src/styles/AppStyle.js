@@ -9,7 +9,7 @@ export const Container = styled.div`
     'header header header'
     'main main sidebar';
 
-    grid-template-rows: 80px 1fr;
+    grid-template-rows: 5vh 1fr;
     grid-template-columns: 1fr 1fr 1fr;
 
     height: 100vh;
