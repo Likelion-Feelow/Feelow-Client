@@ -19,6 +19,7 @@ function App() {
     <Router>
         <Routes>
           <Route path="/onboarding" element={<OnBoardingPage />} />
+          <Route path="/" element={<OnBoardingPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/auth/kakao" element={<KakaoCallback />} />
           <Route path="/test" element={<TestPage />} />

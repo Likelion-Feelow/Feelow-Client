@@ -53,14 +53,11 @@ const Calendar = styled.div`
 `;
 
 
-const Main = ({ view, setView, setSelectedDate }) => {
+const Main = ({ view, setView, setSelectedDate, onAdd }) => {
   return (
     <Container>
       <ProfileButton />
       <Logo />
-      
-
-
       
       <>
         {view === "calendar" && (
@@ -68,9 +65,8 @@ const Main = ({ view, setView, setSelectedDate }) => {
             <CalendarSection setSelectedDate={setSelectedDate} />
         </Calendar>
         )}
-        {view === "add" && <AddTodoForm onCancel={() => setView("calendar")} />}
+        {view === "add" && <AddTodoForm onCancel={() => setView("calendar")} onAdd={onAdd} />}
       </>
-
 
     </Container>
   );

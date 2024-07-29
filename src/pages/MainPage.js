@@ -17,8 +17,8 @@ function MainPage() {
   return (
     <Container>
       <Header />
-      <Main view={view} setView={setView} setSelectedDate={setSelectedDate} />
-      <Sidebar onAddTodoClick={() => setView('add')} onAdd={addTask} selectedDate={selectedDate} />
+      <Main view={view} setView={setView} setSelectedDate={setSelectedDate} onAdd={addTask} />
+      <Sidebar onAddTodoClick={() => setView('add')} tasks={tasks} selectedDate={selectedDate} />
     </Container>
   )
 }
