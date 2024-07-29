@@ -33,6 +33,7 @@ function App() {
           <Route path="/" element={<Main />} />
           <Route path="/main" element={<Main />} />
         </Routes>
+
       </Container>
     </Router>
   );
