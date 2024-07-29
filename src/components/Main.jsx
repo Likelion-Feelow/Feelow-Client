@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import profile from '../images/profile.png';
 import logo from '../images/Logo.png';
-import CalendarSection from "./Calendar";
+import CalendarSection from "./CalendarSection";
 
 import { ThemeProvider } from 'styled-components';
 import { theme } from './theme';
@@ -50,7 +50,15 @@ const Logo = styled.div`
   width: 100%;
 `;
 
+const Calendar = styled.div`
+  grid-area: calendar;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
+  height: 100%;
+  width: 100%;
+`;
 
 const Main = () => {
 
@@ -62,9 +70,9 @@ const Main = () => {
       <Logo />
       
 
-      <ThemeProvider theme={theme}>
-        <CalendarSection />
-      </ThemeProvider>
+      <Calendar>
+          <CalendarSection />
+      </Calendar>
 
       
     </Container>
