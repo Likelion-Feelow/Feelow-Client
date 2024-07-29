@@ -448,7 +448,7 @@ function OnBoardingPage() {
           </span>
         ))}
       </FinalBackgroundText>
-        <FinalBackgroundButton>Login</FinalBackgroundButton>
+        <FinalBackgroundButton onClick={() => navigate('/login')}>로그인</FinalBackgroundButton>
       </FinalBackground>
     </Container>
   );

@@ -2,9 +2,16 @@
 
 import React from "react";
 import { SidebarContainer } from "../styles/SidebarStyle";
+import TodoList from "./Todo/TodoList";
+import AddTodoButton from "./Todo/AddTodoButton";
 
 const Sidebar = () => {
-    return <SidebarContainer>Sidebar</SidebarContainer>;
+  return (
+    <SidebarContainer>
+      <TodoList />
+      <AddTodoButton />
+    </SidebarContainer>
+  );
 };
 
 export default Sidebar;
