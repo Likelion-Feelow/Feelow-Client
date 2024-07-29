@@ -18,8 +18,14 @@ const AddTodoForm = ({ onCancel, onAdd }) => {
       date: date,
     };
 
+    const accessToken = localStorage.getItem('accessToken');
+
     try {
-      const response = await axios.post('/api/tasks', newTask);
+      const response = await axios.post('/tasks', newTask, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
       onAdd(response.data); // 새 할 일 추가
       onCancel(); // 폼 닫기
     } catch (error) {
