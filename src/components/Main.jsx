@@ -8,10 +8,8 @@ import CalendarSection from "./CalendarSection";
 import { ThemeProvider } from "styled-components";
 import { theme } from "./theme";
 import AddTodoForm from "./Todo/AddTodoForm";
-import styled from 'styled-components';
-import profile from '../images/profile.png';
-import logo from '../images/Logo.png';
-import CalendarSection from "./CalendarSection";
+
+
 
 const Container = styled.div`
   display: grid;
@@ -45,6 +43,15 @@ const Logo = styled.div`
   height: 100%;
   width: 100%;
 `;
+
+const Calendar = styled.div`
+  grid-area: calendar;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+`;
+
 
 const Main = ({ view, setView, setSelectedDate }) => {
   return (
