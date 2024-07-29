@@ -42,6 +42,9 @@ const Logo = styled.div`
   background-size: contain;
   height: 100%;
   width: 100%;
+
+  padding: 1vh 0;
+  margin: 1vh 0;
 `;
 
 const Calendar = styled.div`

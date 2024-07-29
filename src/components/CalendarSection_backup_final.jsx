@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import styled, { keyframes } from 'styled-components';
+import styled from 'styled-components';
 import { startOfMonth, endOfMonth, eachDayOfInterval, format, isSameDay, addMonths, subMonths } from 'date-fns';
 
 // Container for the whole calendar component
@@ -7,12 +7,16 @@ const CalendarContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(8, 1fr);
   grid-template-rows: repeat(7, 1fr);
-  
-  
+  border: 5px solid #3893FF;
+  border-radius: 20px;
   font-family: Helvetica, sans-serif;
   font-weight: bold;
-  height: 80vh; /* Make the calendar height responsive */
-  width: 55vw; /* Set a maximum width */
+
+  
+  height: 75vh; /* Make the calendar height responsive */
+  
+  width: 60vw; /* Set a maximum width */
+  
 `;
 
 // Header for the month
@@ -25,9 +29,7 @@ const MonthHeader = styled.div`
   align-items: center;
   justify-content: center;
   cursor: pointer;
-
-
-  font-size: 3vw;
+  border-top-left-radius: 15px; /* Rounded corners */
 `;
 
 // Day of the week header
@@ -37,9 +39,7 @@ const DayHeader = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  
-
-  font-size: 1.5vw;
+  border-bottom: 5px solid #3893FF;
 `;
 
 // Week number
@@ -49,9 +49,7 @@ const WeekNumber = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  
-
-  font-size: 1.5vw;
+  border-right: 5px solid #3893FF;
 `;
 
 // Calendar tile
@@ -59,61 +57,34 @@ const CalendarTile = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  
+  
+  
+  
+  
   color: black;
   background-color: white;
   cursor: pointer;
-  position: relative;
+
 
   &.today {
     background: #3893FF !important;
     color: white !important;
   }
-
-  &.selected::before {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 80%;
-    height: 80%;
-    border-radius: 50%;
-    transform: translate(-50%, -50%);
-    animation: ${keyframes`
-      0% { transform: translate(-50%, -50%) scale(0); }
-      100% { transform: translate(-50%, -50%) scale(1); }
-    `} 0.5s forwards;
-  }
-
   &.selected {
-    &::before {
-      border: 5px solid ${props => props.taskInfo ? 'blue' : 'gray'};
-      border-top-color: ${props => props.taskInfo && props.taskInfo.completed ? 'blue' : 'gray'};
-      border-right-color: ${props => props.taskInfo && props.taskInfo.incomplete ? 'red' : 'gray'};
-      border-bottom-color: ${props => props.taskInfo && props.taskInfo.remaining ? 'gray' : 'gray'};
-      border-left-color: ${props => props.taskInfo && props.taskInfo.incomplete ? 'red' : 'gray'};
-    }
+    background: #FF8C00 !important;
+    color: white !important;
   }
 `;
 
 const DayContainer = styled.div`
   display: contents;
-
-  font-size: 1.5vw;
 `;
 
 const StyledCalendar = () => {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState(null);
   const [days, setDays] = useState([]);
-  const [tasks, setTasks] = useState({
-    // Example tasks data
-    '2024-07-01': { total: 10, completed: 5, incomplete: 2, remaining: 3 },
-    '2024-07-02': { total: 8, completed: 6, incomplete: 1, remaining: 1 },
-    '2024-07-10': { total: 12, completed: 7, incomplete: 4, remaining: 1 },
-    '2024-07-15': { total: 5, completed: 3, incomplete: 1, remaining: 1 },
-    '2024-07-20': { total: 6, completed: 4, incomplete: 1, remaining: 1 },
-    '2024-07-25': { total: 9, completed: 5, incomplete: 2, remaining: 2 },
-  });
 
   useEffect(() => {
     const start = startOfMonth(currentDate);
@@ -142,11 +113,6 @@ const StyledCalendar = () => {
     return Math.floor((date.getDate() + startDay - 1) / 7) + 2;
   };
 
-  const getTaskInfo = (day) => {
-    const key = format(day, 'yyyy-MM-dd');
-    return tasks[key] || null;
-  };
-
   return (
     <CalendarContainer>
       <MonthHeader>
@@ -171,7 +137,6 @@ const StyledCalendar = () => {
             onClick={() => handleDateClick(day)}
             className={`${isSameDay(day, new Date()) ? 'today' : ''} ${isSameDay(day, selectedDate) ? 'selected' : ''}`}
             style={{ gridColumn: (day.getDay() + 2), gridRow: getGridRowStart(day) }}
-            taskInfo={getTaskInfo(day)}
           >
             {format(day, 'd')}
           </CalendarTile>
