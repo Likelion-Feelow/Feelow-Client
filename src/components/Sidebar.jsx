@@ -5,11 +5,11 @@ import { SidebarContainer } from "../styles/SidebarStyle";
 import TodoList from "./Todo/TodoList";
 import AddTodoButton from "./Todo/AddTodoButton";
 
-const Sidebar = () => {
+const Sidebar = ({onAddTodoClick}) => {
   return (
     <SidebarContainer>
       <TodoList />
-      <AddTodoButton />
+      <AddTodoButton onAddTodoClick={onAddTodoClick} />
     </SidebarContainer>
   );
 };
