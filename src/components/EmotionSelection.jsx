@@ -3,11 +3,8 @@ import styled from 'styled-components';
 
 const Container = styled.div`
     display: grid;
-
-    
-
     grid-template-columns: 1fr 1fr 1fr;
-    grid-area: emotion;
+    
 
     border: 5px solid #3893FF;
     border-radius: 20px;
@@ -20,7 +17,7 @@ const Container = styled.div`
     height: 75vh;
     width: 60vw;
 
-    
+    background-color: #B1D5FF;
 
 `;
 

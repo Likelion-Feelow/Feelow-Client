@@ -5,16 +5,9 @@ import profile from "../images/profile.png";
 import logo from "../images/Logo.png";
 import CalendarSection from "./CalendarSection";
 
-
+import { ThemeProvider } from "styled-components";
+import { theme } from "./theme";
 import AddTodoForm from "./Todo/AddTodoForm";
-
-
-
-
-
-import EmotionSelection from "./EmotionSelection";
-
-
 
 
 
@@ -38,16 +31,11 @@ const Main = ({ view, setView, setSelectedDate }) => {
   return (
     <Container>
       <>
-        {/*{view === "calendar" && (
+        {view === "calendar" && (
         <Calendar>
             <CalendarSection setSelectedDate={setSelectedDate} />
         </Calendar>
-        )}*/}
-        {view === "emotion" && (
-        
-        <EmotionSelection />
-      
-        )} 
+        )}
         {view === "add" && <AddTodoForm onCancel={() => setView("calendar")} />}
       </>
 

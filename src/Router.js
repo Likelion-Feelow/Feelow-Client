@@ -18,9 +18,14 @@ const Router = () => {
         <Route path="/main/schedule" element={<SchedulePage />}></Route>
         <Route path="/profile" element={<ProfilePage />}></Route>
 
+        
+        <Route path="/load" element={<LoadingPage />}></Route>
 
         <Route path="/test" element={<TestPage />}></Route>
-        <Route path="/load" element={<LoadingPage />}></Route>
+        
+
+
+
 
       </Routes>
     </BrowserRouter>
