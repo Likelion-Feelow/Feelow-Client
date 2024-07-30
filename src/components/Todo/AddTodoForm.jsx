@@ -2,21 +2,23 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
 
-const AddTodoForm = ({ onCancel, onAdd }) => {
+const AddTodoForm = ({ onCancel, addTask, selectedDate }) => {
   const [taskName, setTaskName] = useState('');
   const [predictTime, setPredictTime] = useState('');
   const [taskDescription, setTaskDescription] = useState('');
-  const [date, setDate] = useState('');
+  // const [date, setDate] = useState('');
+  const formattedDate = selectedDate.toISOString().split('T')[0];
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     
     const newTask = {
+      date: formattedDate,
       task_name: taskName,
-      predict_time: parseInt(predictTime),
+      task_duration: parseInt(predictTime),
       task_description: taskDescription,
-      date: date,
     };
+    // console.log(newTask);
 
     const accessToken = localStorage.getItem('accessToken');
 
@@ -26,8 +28,8 @@ const AddTodoForm = ({ onCancel, onAdd }) => {
           Authorization: `Bearer ${accessToken}`,
         },
       });
-      onAdd(response.data); // 새 할 일 추가
-      onCancel(); // 폼 닫기
+      addTask(response.data); // 새 할 일 추가(todo list에 띄워주기 위해)
+      onCancel(); // 할 일 추가 이후 폼 닫기
     } catch (error) {
       console.error("새 할 일 추가 실패", error);
     }
@@ -45,7 +47,7 @@ const AddTodoForm = ({ onCancel, onAdd }) => {
           required
         />
 
-        <Label>예상 시간</Label>
+        <Label>예상 시간(분)</Label>
         <TimeInputContainer>
           <TimeInput 
             type="number" 
@@ -62,13 +64,13 @@ const AddTodoForm = ({ onCancel, onAdd }) => {
           required
         />
 
-        <Label>날짜</Label>
+        {/* <Label>날짜</Label>
         <Input 
           type="date" 
           value={date} 
           onChange={(e) => setDate(e.target.value)} 
           required
-        />
+        /> */}
 
         <ButtonContainer>
           <Button type="submit">+ 추가됨</Button>

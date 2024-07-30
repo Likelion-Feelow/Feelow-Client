@@ -1,15 +1,51 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import axios from "axios";
 
-const TodoList = ({ selectedDate, tasks }) => {
-  const formattedDate = selectedDate.toISOString().split('T')[0]; // YYYY-MM-DD 형식으로 변환
+const TodoList = ({ selectedDate }) => {
+  const [tasks, setTasks] = useState([]);
 
-  const filteredTasks = tasks.filter(task => task.date === formattedDate);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchTasks = async () => {
+      try {
+        setLoading(true);
+        // selectedDate에서 연도, 월, 일 추출
+        const year = selectedDate.getFullYear();
+        const month = selectedDate.getMonth() + 1; // 0-indexed이므로 +1 필요
+        const day = selectedDate.getDate();
+        
+        // API 요청 경로에 year, month, day 포함
+        const response = await axios.get(`/tasks`, {
+          params: { year, month, day }
+        });
+
+        setTasks(response.data);
+      } catch (error) {
+        // setError("할 일을 불러오는 데 문제가 발생했습니다.");
+        console.log(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchTasks();
+  }, [selectedDate]);
+
+  if (loading) {
+    return <LoadingMessage>로딩 중...</LoadingMessage>;
+  }
+
+  if (error) {
+    return <ListContainer>{error}</ListContainer>;
+  }
 
   return (
     <ListContainer>
-      {filteredTasks.length > 0 ? (
-        filteredTasks.map(task => (
+      {tasks.length > 0 ? (
+        tasks.map(task => (
           <TaskItem key={task.task_id}>
             <TaskName>{task.task_name}</TaskName>
             {/* <TaskDescription>{task.task_description}</TaskDescription>
@@ -56,4 +92,12 @@ const NoTaskMessage = styled.p`
   color: #999;
   text-align: center;
   margin-top: 20px;
+`;
+
+const LoadingMessage = styled.p`
+  color: #4285f4;  // 파란색 계열 색상
+  text-align: center;
+  margin-top: 20px;
+  font-weight: bold;  // 텍스트를 강조
+  font-size: 16px;    // 텍스트 크기 설정
 `;

@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-const AddTodoButton = ({ onAddTodoClick }) => {
+const AddTodoButton = ({ onAddTodoClick, onPrint }) => {
   return (
     <div>
       <Button onClick={onAddTodoClick}>+ To do</Button>

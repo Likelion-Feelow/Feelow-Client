@@ -1,5 +1,3 @@
-// ./components/Sidebar.js
-
 import React from "react";
 import styled from "styled-components";
 import { SidebarContainer } from "../styles/SidebarStyle";
@@ -7,7 +5,8 @@ import TodoList from "./Todo/TodoList";
 import AddTodoButton from "./Todo/AddTodoButton";
 import Timer from "../images/Timer.png";
 
-const Sidebar = ({ selectedDate, onAddTodoClick, tasks }) => {
+const Sidebar = ({ selectedDate, onAddTodoClick }) => {
+
   return (
     <SidebarContainer>
       <Header>
@@ -17,7 +16,7 @@ const Sidebar = ({ selectedDate, onAddTodoClick, tasks }) => {
         </IconContainer>
       </Header>
       <TodoListContainer>
-        <TodoList selectedDate={selectedDate} tasks={tasks} />
+        <TodoList selectedDate={selectedDate} />
       </TodoListContainer>
       <AddTodoButtonContainer>
         <AddTodoButton onAddTodoClick={onAddTodoClick} />

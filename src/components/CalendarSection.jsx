@@ -1,14 +1,14 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
-import Calendar from 'react-calendar';
-import 'react-calendar/dist/Calendar.css';
+import React, { useState } from "react";
+import styled from "styled-components";
+import Calendar from "react-calendar";
+import "react-calendar/dist/Calendar.css";
 
 // Container for the whole calendar component
 const CalendarContainer = styled.div`
   display: grid;
   grid-template-columns: 1fr 7fr;
   grid-template-rows: 1fr 5fr;
-  border: 5px solid #3893FF;
+  border: 5px solid #3893ff;
   border-radius: 20px;
   font-family: Helvetica, sans-serif;
   font-weight: bold;
@@ -19,7 +19,7 @@ const CalendarContainer = styled.div`
 const MonthHeader = styled.div`
   grid-column: 1 / 2;
   grid-row: 1 / 2;
-  background-color: #3893FF;
+  background-color: #3893ff;
   color: white;
   display: flex;
   align-items: center;
@@ -41,13 +41,13 @@ const ArrowButton = styled.button`
 const WeekSidebar = styled.div`
   grid-column: 1 / 2;
   grid-row: 2 / 3;
-  background-color: #B1D5FF;
+  background-color: #b1d5ff;
   color: white;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-evenly;
-  border-right: 5px solid #3893FF;
+  border-right: 5px solid #3893ff;
   border-bottom-left-radius: 15px; /* Rounded corners */
 `;
 
@@ -55,13 +55,13 @@ const WeekSidebar = styled.div`
 const WeekHeader = styled.div`
   grid-column: 2 / 3;
   grid-row: 1 / 2;
-  background-color: #B1D5FF;
+  background-color: #b1d5ff;
   color: white;
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   align-items: center;
   justify-items: center;
-  border-bottom: 5px solid #3893FF;
+  border-bottom: 5px solid #3893ff;
   border-top-right-radius: 15px; /* Rounded corners */
 `;
 
@@ -87,7 +87,12 @@ const CalendarArea = styled.div`
   }
 
   .react-calendar__tile--now {
-    background: #3893FF !important;
+    background: #3893ff !important;
+    color: white !important;
+  }
+
+  .react-calendar__tile--active {
+    background: #A5D6A7 !important;
     color: white !important;
   }
 
@@ -98,11 +103,16 @@ const CalendarArea = styled.div`
   }
 `;
 
-const StyledCalendar = () => {
+const StyledCalendar = ({ setSelectedDate }) => {
   const [activeStartDate, setActiveStartDate] = useState(new Date());
 
   const handleMonthChange = ({ activeStartDate }) => {
     setActiveStartDate(activeStartDate);
+  };
+
+  const handleDateChange = (date) => {
+    setActiveStartDate(date);
+    setSelectedDate(date);
   };
 
   const handlePreviousMonth = () => {
@@ -127,12 +137,12 @@ const StyledCalendar = () => {
         <ArrowButton onClick={handleNextMonth}>&gt;</ArrowButton>
       </MonthHeader>
       <WeekSidebar>
-        {['1', '2', '3', '4', '5'].map(week => (
+        {["1", "2", "3", "4", "5"].map((week) => (
           <div key={week}>{week}</div>
         ))}
       </WeekSidebar>
       <WeekHeader>
-        {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
+        {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
           <div key={day}>{day}</div>
         ))}
       </WeekHeader>
@@ -141,18 +151,20 @@ const StyledCalendar = () => {
           onActiveStartDateChange={handleMonthChange}
           activeStartDate={activeStartDate}
           showNeighboringMonth={false}
-          formatShortWeekday={() => ''}
+          formatShortWeekday={() => ""}
           locale="en-US"
+          onChange={handleDateChange} // 날짜 선택 시 호출
+          value={activeStartDate}
         />
       </CalendarArea>
     </CalendarContainer>
   );
 };
 
-const CalendarSection = () => {
+const CalendarSection = ({ setSelectedDate }) => {
   return (
     <div className="App">
-      <StyledCalendar />
+      <StyledCalendar setSelectedDate={setSelectedDate} />
     </div>
   );
 };

@@ -13,12 +13,13 @@ function MainPage() {
   const addTask = (task) => {
     setTasks([...tasks, task]);
   };
+  // console.log(selectedDate);
 
   return (
     <Container>
       <Header />
-      <Main view={view} setView={setView} setSelectedDate={setSelectedDate} onAdd={addTask} />
-      <Sidebar onAddTodoClick={() => setView('add')} tasks={tasks} selectedDate={selectedDate} />
+      <Main view={view} setView={setView} selectedDate={selectedDate} setSelectedDate={setSelectedDate} addTask={addTask} />
+      <Sidebar onAddTodoClick={() => setView('add')} selectedDate={selectedDate} />
     </Container>
   )
 }
