@@ -3,7 +3,6 @@ import styled from "styled-components";
 
 import TodoList from "./Todo/TodoList";
 import AddTodoButton from "./Todo/AddTodoButton";
-import Timer from "../images/Timer.png";
 
 const SidebarContainer = styled.div`
   display: grid;
@@ -24,7 +23,7 @@ const SidebarContainer = styled.div`
 `;
 
 
-const Sidebar = ({ selectedDate, onAddTodoClick }) => {  
+const Sidebar = ({ selectedDate, onAddTodoClick, tasks }) => {  
 
   return (
     <SidebarContainer>
@@ -40,7 +39,7 @@ const Sidebar = ({ selectedDate, onAddTodoClick }) => {
 
 
       <TodoListContainer>
-        <TodoList selectedDate={selectedDate} />
+        <TodoList selectedDate={selectedDate} tasks={tasks }/>
       </TodoListContainer>
 
 

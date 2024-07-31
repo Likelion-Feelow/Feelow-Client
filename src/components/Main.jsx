@@ -83,7 +83,7 @@ const LogoutButton = styled.button`
   margin-right: 5vw;
 `;
 
-const Main = ({ view, setView, selectedDate, setSelectedDate, addTask }) => {
+const Main = ({ view, setView, selectedDate, setSelectedDate, addTask, tasks }) => {
   return (
     <Container>
       <Header>
@@ -97,16 +97,14 @@ const Main = ({ view, setView, selectedDate, setSelectedDate, addTask }) => {
 
       <MainContainer>
         {view === "calendar" && (
-        
-        <CalendarSection setSelectedDate={setSelectedDate} />
-        
+          <CalendarSection setSelectedDate={setSelectedDate} selectedDate={selectedDate} tasks={tasks} />
         )}
         {view === "emotion" && (
-        
-        <EmotionSelection />
-      
+          <EmotionSelection />
         )} 
-        {view === "add" && <AddTodoForm onCancel={() => setView("calendar")} addTask={addTask} selectedDate={selectedDate} />}
+        {view === "add" && (
+          <AddTodoForm onCancel={() => setView("calendar")} addTask={addTask} selectedDate={selectedDate} />
+        )}
       </MainContainer>
 
     </Container>

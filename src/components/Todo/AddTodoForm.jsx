@@ -159,7 +159,6 @@ const TimeInputContainer = styled.div`
   display: flex;
   justify-content: space-between;
   margin-bottom: 3vh;
-  
 `;
 
 const TimeInput = styled.input`
