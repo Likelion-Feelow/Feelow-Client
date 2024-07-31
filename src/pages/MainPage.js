@@ -17,7 +17,6 @@ function MainPage() {
 
   return (
     <Container>
-      <Header />
       <Main view={view} setView={setView} selectedDate={selectedDate} setSelectedDate={setSelectedDate} addTask={addTask} />
       <Sidebar onAddTodoClick={() => setView('add')} selectedDate={selectedDate} />
     </Container>
@@ -30,11 +29,10 @@ const Container = styled.div`
     display: grid;
 
     grid-template-areas:
-    'header header'
     'main sidebar';
-
-    grid-template-rows: 7vh 1fr;
+    
     grid-template-columns: 3fr 1fr;
 
     height: 100vh;
+
 `;

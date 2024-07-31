@@ -2,9 +2,7 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
 
-const TodoList = ({ selectedDate }) => {
-  const [tasks, setTasks] = useState([]);
-
+const TodoList = ({ selectedDate, tasks, setTasks }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -24,7 +22,7 @@ const TodoList = ({ selectedDate }) => {
 
         setTasks(response.data);
       } catch (error) {
-        // setError("할 일을 불러오는 데 문제가 발생했습니다.");
+        setError("할 일을 불러오는 데 문제가 발생했습니다.");
         console.log(error);
       } finally {
         setLoading(false);
@@ -32,7 +30,7 @@ const TodoList = ({ selectedDate }) => {
     };
 
     fetchTasks();
-  }, [selectedDate]);
+  }, [selectedDate, setTasks]);
 
   if (loading) {
     return <LoadingMessage>로딩 중...</LoadingMessage>;
@@ -48,8 +46,8 @@ const TodoList = ({ selectedDate }) => {
         tasks.map(task => (
           <TaskItem key={task.task_id}>
             <TaskName>{task.task_name}</TaskName>
-            {/* <TaskDescription>{task.task_description}</TaskDescription>
-            <TaskTime>예상 시간: {task.predict_time}분</TaskTime> */}
+            <TaskDescription>{task.task_description}</TaskDescription>
+            <TaskTime>예상 시간: {task.task_duration} 초</TaskTime>
           </TaskItem>
         ))
       ) : (
@@ -95,9 +93,9 @@ const NoTaskMessage = styled.p`
 `;
 
 const LoadingMessage = styled.p`
-  color: #4285f4;  // 파란색 계열 색상
+  color: #4285f4;
   text-align: center;
   margin-top: 20px;
-  font-weight: bold;  // 텍스트를 강조
-  font-size: 16px;    // 텍스트 크기 설정
+  font-weight: bold;
+  font-size: 16px;
 `;

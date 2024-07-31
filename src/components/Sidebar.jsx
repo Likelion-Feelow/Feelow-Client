@@ -6,8 +6,17 @@ import AddTodoButton from "./Todo/AddTodoButton";
 import Timer from "../images/Timer.png";
 
 const SidebarContainer = styled.div`
-  width: 300px;
-  padding: 15px;
+  display: grid;
+
+  grid-template-rows: 1fr 1fr 4fr 1fr;
+  grid-template-areas:
+    "menu"
+    "header"
+    "todolist"
+    "addtodobutton";
+
+  width: 100%;
+  
   background-color: #D9F1FF;
   
 
@@ -19,38 +28,65 @@ const Sidebar = ({ selectedDate, onAddTodoClick }) => {
 
   return (
     <SidebarContainer>
+      <HamburgerMenu>
+        <MenuButton>☰</MenuButton>
+      </HamburgerMenu>
+
+
       <Header>
         <Title>To - Do</Title>
-        <IconContainer>
-          <img src={Timer} alt="Timer Icon" />
-        </IconContainer>
       </Header>
+
+
+
       <TodoListContainer>
         <TodoList selectedDate={selectedDate} />
       </TodoListContainer>
+
+
       <AddTodoButtonContainer>
         <AddTodoButton onAddTodoClick={onAddTodoClick} />
       </AddTodoButtonContainer>
+
+
     </SidebarContainer>
   );
 };
 
 export default Sidebar;
 
-const Header = styled.div`
+const MenuButton = styled.button`
+  background-color: transparent;
+  border: none;
+  color: white;
+  font-size: 4vw;
+  margin: 2vh 2vw;
+  cursor: pointer;
+`;
+
+const HamburgerMenu = styled.div`
+  grid-area: menu;
   display: flex;
-  justify-content: space-between;
+  justify-content: right;
+  align-items: center;
+`;
+
+const Header = styled.div`
+  grid-area: header;
+  display: flex;
+  justify-content: center;
   align-items: center;
   margin-bottom: 15px;
 `;
 
 const Title = styled.h2`
-  font-size: 18px;
+  font-size: 2vw;
   font-weight: bold;
   color: #4285f4;
   margin: 0;
   background-color: #e3f2fd;
   padding: 5px 10px;
+  margin: 0 2vw;
   border-radius: 10px;
 `;
 
@@ -70,10 +106,12 @@ const IconContainer = styled.div`
 `;
 
 const TodoListContainer = styled.div`
+  grid-area: todolist;
   margin-top: 15px;
 `;
 
 const AddTodoButtonContainer = styled.div`
+  grid-area: addtodobutton;
   margin-top: 15px;
   text-align: center;
 `;

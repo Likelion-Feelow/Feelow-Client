@@ -7,65 +7,48 @@ const CalendarContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(8, 1fr);
   grid-template-rows: repeat(7, 1fr);
-  border: 5px solid #3893FF;
   border-radius: 20px;
   font-family: Helvetica, sans-serif;
   font-weight: bold;
-
-  
-  height: 75vh; /* Make the calendar height responsive */
-  
-  width: 60vw; /* Set a maximum width */
-  
+  height: 100%; /* Make the calendar height responsive */
+  width: 100%; /* Set a maximum width */
 `;
 
 // Header for the month
 const MonthHeader = styled.div`
   grid-column: 1 / 2;
   grid-row: 1 / 2;
-  background-color: #3893ff;
-  color: white;
+  color: #53B7FF;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   border-top-left-radius: 15px; /* Rounded corners */
-
   font-size: 3vw;
 `;
 
 // Day of the week header
 const DayHeader = styled.div`
-  background-color: #B1D5FF;
-  color: white;
+  color: #53B7FF;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-bottom: 5px solid #3893FF;
-  
   font-size: 1.5vw;
 
   ${({ isLast }) => isLast && `
-    
-    
     border-top-right-radius: 15px;
   `}
 `;
 
 // Week number
 const WeekNumber = styled.div`
-  background-color: #B1D5FF;
-  color: white;
+  color: #53B7FF;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-right: 5px solid #3893FF;
-
   font-size: 1.5vw;
 
   ${({ isLast }) => isLast && `
-    
-    
     border-bottom-left-radius: 15px;
   `}
 `;
@@ -75,35 +58,77 @@ const CalendarTile = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  
-  
-  
+  margin: 2vh 4vh;
+  padding: 2vh 1.17vw;
   font-size: 1.5vw;
-  
   color: black;
-  background-color: white;
+  background: ${({ $feelings }) => ($feelings ? `linear-gradient(135deg, ${$feelings[0]} 100%, ${$feelings[1]} 30%)` : 'white')}; // 변경된 부분: 두 감정 색상의 그라디언트 사용
+  
+  border-radius: 50%; /* Make it circular */
   cursor: pointer;
+  opacity: 0.9;
+  transition: all 0.3s ease;
 
+  &:hover {
+    filter: brightness(1.1);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  } 
 
   &.today {
     background: #3893FF !important;
     color: white !important;
+    border-radius: 10px; /* Make it circular */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
   }
+  
   &.selected {
     background: #FF8C00 !important;
     color: white !important;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    border-radius: 10px; /* Make it circular */
   }
 `;
 
 const DayContainer = styled.div`
   display: contents;
-  
 `;
 
 const StyledCalendar = () => {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState(null);
   const [days, setDays] = useState([]);
+  const [feelings, setFeelings] = useState(() => {
+    const daysArray = eachDayOfInterval({ start: startOfMonth(currentDate), end: endOfMonth(currentDate) });
+    const randomFeelings = {};
+
+    daysArray.forEach((day) => {
+      if (day < new Date()) {
+        const happy = Math.random() * 10;
+        const calm = Math.random() * (10 - happy);
+        const sad = Math.random() * (10 - happy - calm);
+        const nervous = Math.random() * (10 - happy - calm - sad);
+        const anger = 10 - happy - calm - sad - nervous;
+
+        // 감정 점수와 색상 객체 배열
+        const feelingScores = [
+          { name: 'happy', score: happy, color: '#FFD89D' }, // Happy
+          { name: 'calm', score: calm, color: '#9DD6FF' },   // Calm
+          { name: 'sad', score: sad, color: '#D39CFF' },     // Sad
+          { name: 'nervous', score: nervous, color: '#C29DFF' }, // Nervous
+          { name: 'anger', score: anger, color: '#FF9D9D' }   // Anger
+        ];
+
+        // 점수를 기준으로 정렬
+        feelingScores.sort((a, b) => b.score - a.score);
+
+        // 가장 높은 두 감정 선택
+        const predominantFeelings = feelingScores.slice(0, 2).map(feeling => feeling.color); // 두 감정 색상 선택
+        randomFeelings[format(day, 'yyyy-MM-dd')] = predominantFeelings; // 색상 배열 저장
+      }
+    });
+
+    return randomFeelings;
+  });
 
   useEffect(() => {
     const start = startOfMonth(currentDate);
@@ -128,9 +153,23 @@ const StyledCalendar = () => {
 
   const getGridRowStart = (date) => {
     const startDay = startOfMonth(currentDate).getDay();
-    const offset = (date.getDate() + startDay - 1) % 7;
     return Math.floor((date.getDate() + startDay - 1) / 7) + 2;
   };
+
+  // 주 수 계산
+  const getTotalWeeks = () => {
+    const start = startOfMonth(currentDate);
+    const end = endOfMonth(currentDate);
+    const startDay = start.getDay(); // 월의 첫 번째 날의 요일
+    const totalDays = end.getDate(); // 월의 총 일 수
+    const endDay = end.getDay(); // 월의 마지막 날의 요일
+
+    // 주 수 계산
+    const totalWeeks = Math.ceil((totalDays + startDay) / 7);
+    return totalWeeks > 6 ? 6 : totalWeeks; // 6주 초과하지 않도록
+  };
+
+  const totalWeeks = getTotalWeeks();
 
   return (
     <CalendarContainer>
@@ -144,18 +183,19 @@ const StyledCalendar = () => {
           {day}
         </DayHeader>
       ))}
-      {['1', '2', '3', '4', '5', '6'].map((week, index) => (
-        <WeekNumber key={week} style={{ gridRow: index + 2, gridColumn: 1 }} isLast={index === 5}>
-          {week}
+      {[...Array(totalWeeks)].map((_, weekIndex) => (
+        <WeekNumber key={weekIndex} style={{ gridRow: weekIndex + 2, gridColumn: 1 }} isLast={weekIndex === totalWeeks - 1}>
+          {weekIndex + 1}
         </WeekNumber>
       ))}
       <DayContainer>
-        {days.map((day, index) => (
+        {days.map((day) => (
           <CalendarTile
             key={day}
             onClick={() => handleDateClick(day)}
             className={`${isSameDay(day, new Date()) ? 'today' : ''} ${isSameDay(day, selectedDate) ? 'selected' : ''}`}
             style={{ gridColumn: (day.getDay() + 2), gridRow: getGridRowStart(day) }}
+            $feelings={feelings[format(day, 'yyyy-MM-dd')]} // 단일 감정 색상 전달
           >
             {format(day, 'd')}
           </CalendarTile>
@@ -174,7 +214,7 @@ const AppContainer = styled.div`
 const ArrowButton = styled.button`
   background: none;
   border: none;
-  color: #3893FF;
+  color: white;
   font-size: 1.5rem;
   cursor: pointer;
 `;
