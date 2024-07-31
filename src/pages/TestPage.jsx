@@ -1,288 +1,190 @@
-import React, { useState } from 'react';
-import styled, { keyframes, css } from 'styled-components';
-import EmotionImg from '../images/EmotionPlus.png';
+import React, { useState, useEffect } from 'react';
+import styled from 'styled-components';
+import { startOfMonth, endOfMonth, eachDayOfInterval, format, isSameDay, addMonths, subMonths } from 'date-fns';
 
-const Container = styled.div`
-    display: grid;
-    grid-template-rows: 1fr 1fr 4fr;
-    grid-template-areas:
-    'header'
-    'question'
-    'main';
-    border: 5px solid #3893FF;
-    border-radius: 20px;
-    font-family: Helvetica, sans-serif;
-    font-weight: bold;
-    height: 60vh;
-    width: 60vw;
+// Container for the whole calendar component
+const CalendarContainer = styled.div`
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  grid-template-rows: repeat(7, 1fr);
+  border: 5px solid #3893FF;
+  border-radius: 20px;
+  font-family: Helvetica, sans-serif;
+  font-weight: bold;
+
+  
+  height: 75vh; /* Make the calendar height responsive */
+  
+  width: 60vw; /* Set a maximum width */
+  
 `;
 
-const slideDown = keyframes`
-    from {
-        opacity: 0;
-        transform: translateY(-20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+// Header for the month
+const MonthHeader = styled.div`
+  grid-column: 1 / 2;
+  grid-row: 1 / 2;
+  background-color: #3893ff;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border-top-left-radius: 15px; /* Rounded corners */
+
+  font-size: 3vw;
 `;
 
-const slideUp = keyframes`
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+// Day of the week header
+const DayHeader = styled.div`
+  background-color: #B1D5FF;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 5px solid #3893FF;
+  
+  font-size: 1.5vw;
+
+  ${({ isLast }) => isLast && `
+    
+    
+    border-top-right-radius: 15px;
+  `}
 `;
 
-const EmotionContainer = styled.div`
-    grid-area: main;
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    margin: 0 1vw;
-    gap: 1vw;
-    animation: ${slideDown} 1s ease-in;
+// Week number
+const WeekNumber = styled.div`
+  background-color: #B1D5FF;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-right: 5px solid #3893FF;
+
+  font-size: 1.5vw;
+
+  ${({ isLast }) => isLast && `
+    
+    
+    border-bottom-left-radius: 15px;
+  `}
 `;
 
-const Header = styled.div`
-    grid-area: header;
-    width: 100%;
-    height: 100%;
-    display: flex;
+// Calendar tile
+const CalendarTile = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  
+  
+  font-size: 1.5vw;
+  
+  color: black;
+  background-color: white;
+  cursor: pointer;
+
+
+  &.today {
+    background: #3893FF !important;
+    color: white !important;
+  }
+  &.selected {
+    background: #FF8C00 !important;
+    color: white !important;
+  }
 `;
 
-const Logo = styled.img`
-    height: 11vh;
-    width: 14vw;
-    margin-right: 20px;
+const DayContainer = styled.div`
+  display: contents;
+  
 `;
 
-const QuestionContainer = styled.div`
-    grid-area: question;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: white;
-    padding: 0 2vw;
+const StyledCalendar = () => {
+  const [currentDate, setCurrentDate] = useState(new Date());
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [days, setDays] = useState([]);
+
+  useEffect(() => {
+    const start = startOfMonth(currentDate);
+    const end = endOfMonth(currentDate);
+    const daysArray = eachDayOfInterval({ start, end });
+    setDays(daysArray);
+  }, [currentDate]);
+
+  const handlePreviousMonth = () => {
+    setCurrentDate(subMonths(currentDate, 1));
+  };
+
+  const handleNextMonth = () => {
+    setCurrentDate(addMonths(currentDate, 1));
+  };
+
+  const handleDateClick = (day) => {
+    setSelectedDate(day);
+  };
+
+  const monthNumber = format(currentDate, 'M');
+
+  const getGridRowStart = (date) => {
+    const startDay = startOfMonth(currentDate).getDay();
+    const offset = (date.getDate() + startDay - 1) % 7;
+    return Math.floor((date.getDate() + startDay - 1) / 7) + 2;
+  };
+
+  return (
+    <CalendarContainer>
+      <MonthHeader>
+        <ArrowButton onClick={handlePreviousMonth}>&lt;</ArrowButton>
+        {monthNumber}
+        <ArrowButton onClick={handleNextMonth}>&gt;</ArrowButton>
+      </MonthHeader>
+      {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day, index) => (
+        <DayHeader key={day} style={{ gridColumn: index + 2, gridRow: 1 }} isLast={index === 6}>
+          {day}
+        </DayHeader>
+      ))}
+      {['1', '2', '3', '4', '5', '6'].map((week, index) => (
+        <WeekNumber key={week} style={{ gridRow: index + 2, gridColumn: 1 }} isLast={index === 5}>
+          {week}
+        </WeekNumber>
+      ))}
+      <DayContainer>
+        {days.map((day, index) => (
+          <CalendarTile
+            key={day}
+            onClick={() => handleDateClick(day)}
+            className={`${isSameDay(day, new Date()) ? 'today' : ''} ${isSameDay(day, selectedDate) ? 'selected' : ''}`}
+            style={{ gridColumn: (day.getDay() + 2), gridRow: getGridRowStart(day) }}
+          >
+            {format(day, 'd')}
+          </CalendarTile>
+        ))}
+      </DayContainer>
+    </CalendarContainer>
+  );
+};
+
+const AppContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 
-const Question = styled.div`
-    font-size: 2vw;
-    font-family: Helvetica, sans-serif;
-    font-weight: bold;
+const ArrowButton = styled.button`
+  background: none;
+  border: none;
+  color: #3893FF;
+  font-size: 1.5rem;
+  cursor: pointer;
 `;
 
-const EmotionBlock = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding-top: 1vw;
-    border-radius: 15px;
-    background-color: #ffffff;
-    overflow: hidden;
-`;
+const App = () => {
+  return (
+    <AppContainer>
+      <StyledCalendar />
+    </AppContainer>
+  );
+};
 
-const growShrink = keyframes`
-    0% {
-        transform: scale(1);
-    }
-    50% {
-        transform: scale(1.1);
-    }
-    100% {
-        transform: scale(1);
-    }
-`;
-
-const animatedStyle = css`
-    animation: ${growShrink} 0.3s ease-in-out;
-`;
-
-const MainEmotionButton = styled.button`
-    font-size: 1.8vw;
-    font-weight: bold;
-    margin-bottom: 1vw;
-    color: ${props => (props.active && !props.subActive ? props.bgColor : '#000')};
-    background-color: ${props => (props.active && !props.subActive ? '#ffffff' : props.bgColor)};
-    border: none;
-    border-radius: 30px;
-    padding: 0.7vw;
-    width: 90%;
-    height: 20%;
-    cursor: pointer;
-    transition: background-color 0.3s, color 0.3s;
-    &:hover {
-        background-color: ${props => !props.active && `darken(${props.bgColor}, 10%)`};
-    }
-    ${props => props.active && animatedStyle}
-`;
-
-const SubEmotionList = styled.div`
-    overflow-y: auto;
-    height: 0;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    scrollbar-width: none; /* Firefox */
-    -ms-overflow-style: none;  /* Internet Explorer 10+ */
-    scroll-behavior: smooth; /* Smooth scroll */
-    transition: height 0.5s ease-in-out;
-    ${props => props.active && css`
-        height: 29vh;
-        animation: ${slideUp} 0.5s ease-in;
-    `}
-    &::-webkit-scrollbar {
-        width: 0px;
-        background: transparent; /* Chrome/Safari/Webkit */
-    }
-`;
-
-const SubEmotionButton = styled.button`
-    background-color: ${props => (props.active ? '#ffffff' : props.subColor)};
-    color: ${props => (props.active ? props.bgColor : '#000')};
-    border: 3px solid ${props => props.bgColor};
-    border-radius: 30px;
-    padding: 0.5vw;
-    margin: 0.5vw 0;
-    width: 70%;
-    height: 10vh;
-    cursor: pointer;
-    font-size: 1.6vw;
-    font-weight: bold;
-    transition: background-color 0.3s, color 0.3s;
-    &:hover {
-        background-color: ${props => !props.active && `darken(${props.bgColor}, 10%)`};
-    }
-    ${props => props.active && animatedStyle}
-`;
-
-const ConfirmButton = styled.button`
-    background-color: ${props => props.bgColor || '#3893FF'};
-    color: ${props => props.color || 'white'};
-    font-size: 1.8vw;
-    font-weight: bold;
-    border: none;
-    border-radius: 30px;
-    padding: 1vw;
-    margin-left: 2vw;
-    cursor: pointer;
-    padding: 0.7vw 2vw;
-    transition: background-color 0.3s, color 0.3s;
-    &:hover {
-        background-color: ${props => props.bgColor ? `darken(${props.bgColor}, 10%)` : '#2869B8'};
-    }
-`;
-
-const NextButton = styled.button`
-    background-color: #3893FF;
-    color: white;
-    font-size: 1.8vw;
-    font-weight: bold;
-    border: none;
-    border-radius: 30px;
-    padding: 0.7vw 1.5vw;
-    margin-left: 1vw;
-    cursor: pointer;
-    transition: background-color 0.3s;
-    &:hover {
-        background-color: #2869B8;
-    }
-`;
-
-const emotions = [
-    { main: '긍정', sub: ['행복', '기쁨', '만족', '감사', '희망', '자신감', '흥미', '열정', '자부심', '안심'], bgColor: '#FFE600', subColor: '#FFF9C6' },
-    { main: '평온', sub: ['안정', '편안', '고요', '차분', '여유', '온화', '따뜻함', '수용', '조화', '균형'], bgColor: '#FFBEFC', subColor: '#FFD7FD' },
-    { main: '우울', sub: ['슬픔', '절망', '침울', '낙담', '눈물', '후회', '무기력', '고독', '상실', '비관'], bgColor: '#3893FF', subColor: '#8BB3FF' },
-    { main: '불안', sub: ['걱정', '초조', '긴장', '두려움', '공포', '당황', '염려', '불편', '근심', '불확실'], bgColor: '#D39CFF', subColor: '#E5C5FF' },
-    { main: '분노', sub: ['화남', '짜증', '격노', '불쾌', '원망', '성남', '분개', '분노', '울분', '분통'], bgColor: '#FF6F6F', subColor: '#FF9292' },
-];
-
-const EmotionSelection = ({ onEmotionSelect }) => {
-    const [activeEmotion, setActiveEmotion] = useState('');
-    const [selectedEmotion, setSelectedEmotion] = useState('');
-    const [confirmedEmotion, setConfirmedEmotion] = useState('');
-    const [confirmedEmotionColor, setConfirmedEmotionColor] = useState('');
-    const [showNextButton, setShowNextButton] = useState(false);
-
-    const handleMainEmotionClick = (emotion) => {
-        if (activeEmotion === emotion) {
-            setActiveEmotion('');
-            setSelectedEmotion('');
-        } else {
-            setActiveEmotion(emotion);
-            setSelectedEmotion(emotion);
-        }
-    };
-
-    const handleSubEmotionClick = (subEmotion) => {
-        if (selectedEmotion === subEmotion) {
-            setSelectedEmotion('');
-        } else {
-            setSelectedEmotion(subEmotion);
-        }
-    };
-
-    const handleConfirmClick = () => {
-        console.log(`Confirmed Emotion: ${selectedEmotion}`);
-        if (onEmotionSelect) {
-            onEmotionSelect(selectedEmotion);
-        }
-        setConfirmedEmotion(selectedEmotion);
-        const selectedMainEmotion = emotions.find(emotion => emotion.sub.includes(selectedEmotion) || emotion.main === selectedEmotion);
-        setConfirmedEmotionColor(selectedMainEmotion ? selectedMainEmotion.bgColor : '#3893FF');
-        setShowNextButton(true);
-    };
-
-    return (
-        <Container>
-            <Header>
-                <Logo src={EmotionImg} alt="Logo" />
-            </Header>
-            
-            <QuestionContainer>
-                <Question>
-                    현재의 감정은 어떤가요?
-                </Question>
-                <ConfirmButton onClick={handleConfirmClick} bgColor={confirmedEmotionColor} color={confirmedEmotionColor ? '#ffffff' : 'white'}>
-                    {confirmedEmotion || '확정'}
-                </ConfirmButton>
-                {showNextButton && <NextButton>다음으로</NextButton>}
-            </QuestionContainer>
-
-            <EmotionContainer>
-                {emotions.map((emotion, index) => (
-                    <EmotionBlock key={index}>
-                        <MainEmotionButton
-                            bgColor={emotion.bgColor}
-                            onClick={() => handleMainEmotionClick(emotion.main)}
-                            active={activeEmotion === emotion.main}
-                            subActive={selectedEmotion && emotion.sub.includes(selectedEmotion)}
-                        >
-                            {emotion.main}
-                        </MainEmotionButton>
-                        <SubEmotionList active={activeEmotion === emotion.main}>
-                            {emotion.sub.map((subEmotion, subIndex) => (
-                                <SubEmotionButton
-                                    key={subIndex}
-                                    bgColor={emotion.bgColor}
-                                    subColor={emotion.subColor}
-                                    onClick={() => handleSubEmotionClick(subEmotion)}
-                                    active={selectedEmotion === subEmotion}
-                                >
-                                    {subEmotion}
-                                </SubEmotionButton>
-                            ))}
-                        </SubEmotionList>
-                    </EmotionBlock>
-                ))}
-            </EmotionContainer>
-        </Container>
-    );
-}
-
-export default EmotionSelection;
+export default App;

@@ -1,11 +1,21 @@
 import React from "react";
 import styled from "styled-components";
-import { SidebarContainer } from "../styles/SidebarStyle";
+
 import TodoList from "./Todo/TodoList";
 import AddTodoButton from "./Todo/AddTodoButton";
 import Timer from "../images/Timer.png";
 
-const Sidebar = ({ selectedDate, onAddTodoClick }) => {
+const SidebarContainer = styled.div`
+  width: 300px;
+  padding: 15px;
+  background-color: #D9F1FF;
+  
+
+  
+`;
+
+
+const Sidebar = ({ selectedDate, onAddTodoClick }) => {  
 
   return (
     <SidebarContainer>
