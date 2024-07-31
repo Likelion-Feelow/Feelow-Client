@@ -23,15 +23,13 @@ const CalendarContainer = styled.div`
 const MonthHeader = styled.div`
   grid-column: 1 / 2;
   grid-row: 1 / 2;
-  background-color: #3893ff;
+  background-color: #3893FF;
   color: white;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   border-top-left-radius: 15px; /* Rounded corners */
-
-  font-size: 3vw;
 `;
 
 // Day of the week header
@@ -42,14 +40,6 @@ const DayHeader = styled.div`
   align-items: center;
   justify-content: center;
   border-bottom: 5px solid #3893FF;
-  
-  font-size: 1.5vw;
-
-  ${({ isLast }) => isLast && `
-    
-    
-    border-top-right-radius: 15px;
-  `}
 `;
 
 // Week number
@@ -60,14 +50,6 @@ const WeekNumber = styled.div`
   align-items: center;
   justify-content: center;
   border-right: 5px solid #3893FF;
-
-  font-size: 1.5vw;
-
-  ${({ isLast }) => isLast && `
-    
-    
-    border-bottom-left-radius: 15px;
-  `}
 `;
 
 // Calendar tile
@@ -78,7 +60,7 @@ const CalendarTile = styled.div`
   
   
   
-  font-size: 1.5vw;
+  
   
   color: black;
   background-color: white;
@@ -97,7 +79,6 @@ const CalendarTile = styled.div`
 
 const DayContainer = styled.div`
   display: contents;
-  
 `;
 
 const StyledCalendar = () => {
@@ -111,11 +92,6 @@ const StyledCalendar = () => {
     const daysArray = eachDayOfInterval({ start, end });
     setDays(daysArray);
   }, [currentDate]);
-
-  const handleDateChange = (date) => {
-    setActiveStartDate(date);
-    setSelectedDate(date);
-  };
 
   const handlePreviousMonth = () => {
     setCurrentDate(subMonths(currentDate, 1));
@@ -145,12 +121,12 @@ const StyledCalendar = () => {
         <ArrowButton onClick={handleNextMonth}>&gt;</ArrowButton>
       </MonthHeader>
       {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day, index) => (
-        <DayHeader key={day} style={{ gridColumn: index + 2, gridRow: 1 }} isLast={index === 6}>
+        <DayHeader key={day} style={{ gridColumn: index + 2, gridRow: 1 }}>
           {day}
         </DayHeader>
       ))}
       {['1', '2', '3', '4', '5', '6'].map((week, index) => (
-        <WeekNumber key={week} style={{ gridRow: index + 2, gridColumn: 1 }} isLast={index === 5}>
+        <WeekNumber key={week} style={{ gridRow: index + 2, gridColumn: 1 }}>
           {week}
         </WeekNumber>
       ))}
@@ -179,7 +155,7 @@ const AppContainer = styled.div`
 const ArrowButton = styled.button`
   background: none;
   border: none;
-  color: #3893FF;
+  color: white;
   font-size: 1.5rem;
   cursor: pointer;
 `;

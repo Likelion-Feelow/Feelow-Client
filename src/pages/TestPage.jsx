@@ -1,226 +1,288 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import styled, { keyframes, css } from 'styled-components';
-
-import arrowImage from '../images/Point.png'; // 화살표 이미지 경로를 지정하세요.
-
-import F from '../images/F.png';
-import E1 from '../images/E1.png';
-import E2 from '../images/E2.png';
-import L from '../images/L.png';
-import O from '../images/O.png';
-import W from '../images/W.png';
-
-const wave = keyframes`
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
-`;
-
-const LogoContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: row;
-`;
-
-const LetterContainer = styled.img`
-  width: 5vw;
-  margin-right: 0.3vw;
-  margin-bottom: 2vh;
-  animation: ${({ isHovered }) => isHovered && css`${wave} 2s infinite`};
-  animation-delay: ${({ delay }) => delay};
-  animation-duration: 2s;
-`;
-
-const E1Container = styled(LetterContainer)`
-  width: 6vw;
-  margin-right: 0.2vw;
-`;
-
-const E2Container = styled(LetterContainer)`
-  width: 6vw;
-`;
-
-const LContainer = styled(LetterContainer)`
-  width: 4vw;
-  margin-left: 1vw;
-  margin-bottom: 4vh;
-  margin-right: 0.3vw;
-`;
-
-const OContainer = styled(LetterContainer)`
-  width: 6vw;
-  margin-bottom: 5.4vh;
-  margin-right: 0.3vw;
-`;
-
-const WContainer = styled(LetterContainer)`
-  width: 8vw;
-  margin-bottom: 4.3vh;
-`;
+import EmotionImg from '../images/EmotionPlus.png';
 
 const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  height: auto; /* 높이를 자동으로 설정 */
+    display: grid;
+    grid-template-rows: 1fr 1fr 4fr;
+    grid-template-areas:
+    'header'
+    'question'
+    'main';
+    border: 5px solid #3893FF;
+    border-radius: 20px;
+    font-family: Helvetica, sans-serif;
+    font-weight: bold;
+    height: 60vh;
+    width: 60vw;
 `;
 
-const Section = styled.div`
-  width: 100%;
-  height: 100vh; /* 각 섹션의 높이를 화면 높이로 설정 */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-`;
-
-const Header = styled.header`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 4vh 4vw;
-  height: 5vh;
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-`;
-
-const Logo = styled.div`
-  font-size: 4vw;
-  font-weight: bold;
-  font-family: 'helvetica';
-`;
-
-const MenuButton = styled.div`
-  font-size: 4vw;
-  cursor: pointer;
-  color: ${({ isOpen }) => (isOpen ? 'white' : 'black')};
-`;
-
-const MenuContainer = styled.div`
-  position: fixed;
-  top: 0;
-  right: 0;
-  width: 0;
-  
-  height: 100vh;
-  background-color: #3893FF;
-  flex-direction: column;
-  overflow-x: hidden;
-  transition: 0.5s;
-  display: flex;
-  align-items: flex-end; /* 아이템을 우측 정렬 */
-  justify-content: center;
-  ${({ isOpen }) =>
-    isOpen &&
-    css`
-      width: 20vw;
-      
-    `}
-`;
-
-const MenuItem = styled.a`
-  
-  padding: 8px 8px 8px 32px;
-  margin: 1vh 2vw;
-  text-decoration: none;
-  font-size: 3vw;
-  color: white;
-  font-weight: bold;
-  font-family: 'helvetica';
-  display: block;
-
-  transition: 0.3s;
-  &:hover {
-    color: #f1f1f1;
-  }
-`;
-
-const Main = styled(Section)`
-  height: 87vh;
-`;
-
-const bounce = keyframes`
-  0%, 100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-10px);
-  }
-`;
-
-const Arrow = styled.img`
-  width: 10vw; /* 화살표 이미지 크기를 조정하세요 */
-  top: 15vh;
-  position: relative;
-  cursor: pointer;
-
-  ${({ isHovered }) =>
-    isHovered &&
-    css`
-      animation: ${bounce} 1s infinite;
-    `}
-`;
-
-function TestPage() {
-  const [isHovered, setIsHovered] = useState(false);
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const mainRef = useRef(null);
-
-  const handleArrowClick = () => {
-    if (mainRef.current) {
-      window.scrollTo({
-        top: mainRef.current.offsetTop + mainRef.current.offsetHeight,
-        behavior: 'smooth',
-      });
+const slideDown = keyframes`
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
     }
-  };
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+`;
 
-  const handleMouseEnter = () => {
-    setIsHovered(true);
-  };
+const slideUp = keyframes`
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+`;
 
-  const handleMouseLeave = () => {
-    setIsHovered(false);
-  };
+const EmotionContainer = styled.div`
+    grid-area: main;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    margin: 0 1vw;
+    gap: 1vw;
+    animation: ${slideDown} 1s ease-in;
+`;
 
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
-  };
+const Header = styled.div`
+    grid-area: header;
+    width: 100%;
+    height: 100%;
+    display: flex;
+`;
 
-  return (
-    <Container>
-      <Header>
-        <Logo>Feelow</Logo>
-        <MenuButton onClick={toggleMenu} isOpen={isMenuOpen}>☰</MenuButton>
-      </Header>
+const Logo = styled.img`
+    height: 11vh;
+    width: 14vw;
+    margin-right: 20px;
+`;
 
-      <MenuContainer isOpen={isMenuOpen}>
-        <MenuItem href="#">Login</MenuItem>
-        <MenuItem href="#">About</MenuItem>
-        <MenuItem href="#">Contact</MenuItem>
-      </MenuContainer>
+const QuestionContainer = styled.div`
+    grid-area: question;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+    padding: 0 2vw;
+`;
 
-      <Main ref={mainRef}>
-        <LogoContainer onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
-          <LetterContainer src={F} alt="F" isHovered={isHovered} delay="0s" />
-          <E1Container src={E1} alt="E1" isHovered={isHovered} delay="0.2s" />
-          <E2Container src={E2} alt="E2" isHovered={isHovered} delay="0.4s" />
-          <LContainer src={L} alt="L" isHovered={isHovered} delay="0.6s" />
-          <OContainer src={O} alt="O" isHovered={isHovered} delay="0.8s" />
-          <WContainer src={W} alt="W" isHovered={isHovered} delay="1s" />
-        </LogoContainer>
+const Question = styled.div`
+    font-size: 2vw;
+    font-family: Helvetica, sans-serif;
+    font-weight: bold;
+`;
 
-        <Arrow 
-          src={arrowImage} 
-          alt="Down Arrow"
-          onMouseEnter={handleMouseEnter}
-          onMouseLeave={handleMouseLeave}
-          isHovered={isHovered}
-          onClick={handleArrowClick}
-        />
-      </Main>
-    </Container>
-  );
+const EmotionBlock = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 1vw;
+    border-radius: 15px;
+    background-color: #ffffff;
+    overflow: hidden;
+`;
+
+const growShrink = keyframes`
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+    100% {
+        transform: scale(1);
+    }
+`;
+
+const animatedStyle = css`
+    animation: ${growShrink} 0.3s ease-in-out;
+`;
+
+const MainEmotionButton = styled.button`
+    font-size: 1.8vw;
+    font-weight: bold;
+    margin-bottom: 1vw;
+    color: ${props => (props.active && !props.subActive ? props.bgColor : '#000')};
+    background-color: ${props => (props.active && !props.subActive ? '#ffffff' : props.bgColor)};
+    border: none;
+    border-radius: 30px;
+    padding: 0.7vw;
+    width: 90%;
+    height: 20%;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+    &:hover {
+        background-color: ${props => !props.active && `darken(${props.bgColor}, 10%)`};
+    }
+    ${props => props.active && animatedStyle}
+`;
+
+const SubEmotionList = styled.div`
+    overflow-y: auto;
+    height: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none;  /* Internet Explorer 10+ */
+    scroll-behavior: smooth; /* Smooth scroll */
+    transition: height 0.5s ease-in-out;
+    ${props => props.active && css`
+        height: 29vh;
+        animation: ${slideUp} 0.5s ease-in;
+    `}
+    &::-webkit-scrollbar {
+        width: 0px;
+        background: transparent; /* Chrome/Safari/Webkit */
+    }
+`;
+
+const SubEmotionButton = styled.button`
+    background-color: ${props => (props.active ? '#ffffff' : props.subColor)};
+    color: ${props => (props.active ? props.bgColor : '#000')};
+    border: 3px solid ${props => props.bgColor};
+    border-radius: 30px;
+    padding: 0.5vw;
+    margin: 0.5vw 0;
+    width: 70%;
+    height: 10vh;
+    cursor: pointer;
+    font-size: 1.6vw;
+    font-weight: bold;
+    transition: background-color 0.3s, color 0.3s;
+    &:hover {
+        background-color: ${props => !props.active && `darken(${props.bgColor}, 10%)`};
+    }
+    ${props => props.active && animatedStyle}
+`;
+
+const ConfirmButton = styled.button`
+    background-color: ${props => props.bgColor || '#3893FF'};
+    color: ${props => props.color || 'white'};
+    font-size: 1.8vw;
+    font-weight: bold;
+    border: none;
+    border-radius: 30px;
+    padding: 1vw;
+    margin-left: 2vw;
+    cursor: pointer;
+    padding: 0.7vw 2vw;
+    transition: background-color 0.3s, color 0.3s;
+    &:hover {
+        background-color: ${props => props.bgColor ? `darken(${props.bgColor}, 10%)` : '#2869B8'};
+    }
+`;
+
+const NextButton = styled.button`
+    background-color: #3893FF;
+    color: white;
+    font-size: 1.8vw;
+    font-weight: bold;
+    border: none;
+    border-radius: 30px;
+    padding: 0.7vw 1.5vw;
+    margin-left: 1vw;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    &:hover {
+        background-color: #2869B8;
+    }
+`;
+
+const emotions = [
+    { main: '긍정', sub: ['행복', '기쁨', '만족', '감사', '희망', '자신감', '흥미', '열정', '자부심', '안심'], bgColor: '#FFE600', subColor: '#FFF9C6' },
+    { main: '평온', sub: ['안정', '편안', '고요', '차분', '여유', '온화', '따뜻함', '수용', '조화', '균형'], bgColor: '#FFBEFC', subColor: '#FFD7FD' },
+    { main: '우울', sub: ['슬픔', '절망', '침울', '낙담', '눈물', '후회', '무기력', '고독', '상실', '비관'], bgColor: '#3893FF', subColor: '#8BB3FF' },
+    { main: '불안', sub: ['걱정', '초조', '긴장', '두려움', '공포', '당황', '염려', '불편', '근심', '불확실'], bgColor: '#D39CFF', subColor: '#E5C5FF' },
+    { main: '분노', sub: ['화남', '짜증', '격노', '불쾌', '원망', '성남', '분개', '분노', '울분', '분통'], bgColor: '#FF6F6F', subColor: '#FF9292' },
+];
+
+const EmotionSelection = ({ onEmotionSelect }) => {
+    const [activeEmotion, setActiveEmotion] = useState('');
+    const [selectedEmotion, setSelectedEmotion] = useState('');
+    const [confirmedEmotion, setConfirmedEmotion] = useState('');
+    const [confirmedEmotionColor, setConfirmedEmotionColor] = useState('');
+    const [showNextButton, setShowNextButton] = useState(false);
+
+    const handleMainEmotionClick = (emotion) => {
+        if (activeEmotion === emotion) {
+            setActiveEmotion('');
+            setSelectedEmotion('');
+        } else {
+            setActiveEmotion(emotion);
+            setSelectedEmotion(emotion);
+        }
+    };
+
+    const handleSubEmotionClick = (subEmotion) => {
+        if (selectedEmotion === subEmotion) {
+            setSelectedEmotion('');
+        } else {
+            setSelectedEmotion(subEmotion);
+        }
+    };
+
+    const handleConfirmClick = () => {
+        console.log(`Confirmed Emotion: ${selectedEmotion}`);
+        if (onEmotionSelect) {
+            onEmotionSelect(selectedEmotion);
+        }
+        setConfirmedEmotion(selectedEmotion);
+        const selectedMainEmotion = emotions.find(emotion => emotion.sub.includes(selectedEmotion) || emotion.main === selectedEmotion);
+        setConfirmedEmotionColor(selectedMainEmotion ? selectedMainEmotion.bgColor : '#3893FF');
+        setShowNextButton(true);
+    };
+
+    return (
+        <Container>
+            <Header>
+                <Logo src={EmotionImg} alt="Logo" />
+            </Header>
+            
+            <QuestionContainer>
+                <Question>
+                    현재의 감정은 어떤가요?
+                </Question>
+                <ConfirmButton onClick={handleConfirmClick} bgColor={confirmedEmotionColor} color={confirmedEmotionColor ? '#ffffff' : 'white'}>
+                    {confirmedEmotion || '확정'}
+                </ConfirmButton>
+                {showNextButton && <NextButton>다음으로</NextButton>}
+            </QuestionContainer>
+
+            <EmotionContainer>
+                {emotions.map((emotion, index) => (
+                    <EmotionBlock key={index}>
+                        <MainEmotionButton
+                            bgColor={emotion.bgColor}
+                            onClick={() => handleMainEmotionClick(emotion.main)}
+                            active={activeEmotion === emotion.main}
+                            subActive={selectedEmotion && emotion.sub.includes(selectedEmotion)}
+                        >
+                            {emotion.main}
+                        </MainEmotionButton>
+                        <SubEmotionList active={activeEmotion === emotion.main}>
+                            {emotion.sub.map((subEmotion, subIndex) => (
+                                <SubEmotionButton
+                                    key={subIndex}
+                                    bgColor={emotion.bgColor}
+                                    subColor={emotion.subColor}
+                                    onClick={() => handleSubEmotionClick(subEmotion)}
+                                    active={selectedEmotion === subEmotion}
+                                >
+                                    {subEmotion}
+                                </SubEmotionButton>
+                            ))}
+                        </SubEmotionList>
+                    </EmotionBlock>
+                ))}
+            </EmotionContainer>
+        </Container>
+    );
 }
 
-export default TestPage;
+export default EmotionSelection;
