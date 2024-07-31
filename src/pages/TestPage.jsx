@@ -65,7 +65,7 @@ const QuestionContainer = styled.div`
     grid-area: question;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
     background-color: white;
     padding: 0 2vw;
 `;
@@ -162,14 +162,31 @@ const SubEmotionButton = styled.button`
 `;
 
 const ConfirmButton = styled.button`
-    background-color: #3893FF;
-    color: white;
+    background-color: ${props => props.bgColor || '#3893FF'};
+    color: ${props => props.color || 'white'};
     font-size: 1.8vw;
     font-weight: bold;
     border: none;
     border-radius: 30px;
     padding: 1vw;
     margin-left: 2vw;
+    cursor: pointer;
+    padding: 0.7vw 2vw;
+    transition: background-color 0.3s, color 0.3s;
+    &:hover {
+        background-color: ${props => props.bgColor ? `darken(${props.bgColor}, 10%)` : '#2869B8'};
+    }
+`;
+
+const NextButton = styled.button`
+    background-color: #3893FF;
+    color: white;
+    font-size: 1.8vw;
+    font-weight: bold;
+    border: none;
+    border-radius: 30px;
+    padding: 0.7vw 1.5vw;
+    margin-left: 1vw;
     cursor: pointer;
     transition: background-color 0.3s;
     &:hover {
@@ -182,12 +199,15 @@ const emotions = [
     { main: '평온', sub: ['안정', '편안', '고요', '차분', '여유', '온화', '따뜻함', '수용', '조화', '균형'], bgColor: '#FFBEFC', subColor: '#FFD7FD' },
     { main: '우울', sub: ['슬픔', '절망', '침울', '낙담', '눈물', '후회', '무기력', '고독', '상실', '비관'], bgColor: '#3893FF', subColor: '#8BB3FF' },
     { main: '불안', sub: ['걱정', '초조', '긴장', '두려움', '공포', '당황', '염려', '불편', '근심', '불확실'], bgColor: '#D39CFF', subColor: '#E5C5FF' },
-    { main: '분노', sub: ['화남', '짜증', '격노', '불쾌', '원망', '성남', '분개', '빡침', '울분', '분통'], bgColor: '#FF6F6F', subColor: '#FF9292' },
+    { main: '분노', sub: ['화남', '짜증', '격노', '불쾌', '원망', '성남', '분개', '분노', '울분', '분통'], bgColor: '#FF6F6F', subColor: '#FF9292' },
 ];
 
 const EmotionSelection = ({ onEmotionSelect }) => {
     const [activeEmotion, setActiveEmotion] = useState('');
     const [selectedEmotion, setSelectedEmotion] = useState('');
+    const [confirmedEmotion, setConfirmedEmotion] = useState('');
+    const [confirmedEmotionColor, setConfirmedEmotionColor] = useState('');
+    const [showNextButton, setShowNextButton] = useState(false);
 
     const handleMainEmotionClick = (emotion) => {
         if (activeEmotion === emotion) {
@@ -212,6 +232,10 @@ const EmotionSelection = ({ onEmotionSelect }) => {
         if (onEmotionSelect) {
             onEmotionSelect(selectedEmotion);
         }
+        setConfirmedEmotion(selectedEmotion);
+        const selectedMainEmotion = emotions.find(emotion => emotion.sub.includes(selectedEmotion) || emotion.main === selectedEmotion);
+        setConfirmedEmotionColor(selectedMainEmotion ? selectedMainEmotion.bgColor : '#3893FF');
+        setShowNextButton(true);
     };
 
     return (
@@ -224,9 +248,10 @@ const EmotionSelection = ({ onEmotionSelect }) => {
                 <Question>
                     현재의 감정은 어떤가요?
                 </Question>
-                <ConfirmButton onClick={handleConfirmClick}>
-                    확정
+                <ConfirmButton onClick={handleConfirmClick} bgColor={confirmedEmotionColor} color={confirmedEmotionColor ? '#ffffff' : 'white'}>
+                    {confirmedEmotion || '확정'}
                 </ConfirmButton>
+                {showNextButton && <NextButton>다음으로</NextButton>}
             </QuestionContainer>
 
             <EmotionContainer>
