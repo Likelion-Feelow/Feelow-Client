@@ -112,11 +112,6 @@ const StyledCalendar = () => {
     setDays(daysArray);
   }, [currentDate]);
 
-  const handleDateChange = (date) => {
-    setActiveStartDate(date);
-    setSelectedDate(date);
-  };
-
   const handlePreviousMonth = () => {
     setCurrentDate(subMonths(currentDate, 1));
   };
