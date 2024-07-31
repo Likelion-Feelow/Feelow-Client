@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import Logo from "../images/Logo.png";
 import KakaoLoginButton from "../components/Login/KakaoLoginButton";
+import KakaoLogoutButton from "../components/Login/KakaoLogoutButton";
 
 const Container = styled.div`
   display: flex;
@@ -86,6 +87,7 @@ const LoginPage = () => {
         <Button>Login</Button>
       </ButtonRow>
 
+      {/* 카카오 로그인 */}
       <KakaoLoginButton />
     </Container>
   );

@@ -1,11 +1,11 @@
 import styled from 'styled-components';
 
 const KakaoLogin = styled.button`
-  margin-top: 10vh;
+  margin-top: 5vh;
   color: #3893FF;
   text-decoration: none;
   font-weight: 500;
-  font-size: 16px;
+  font-size: 18px;
   border: none;
   background-color: transparent;
   cursor: pointer;
@@ -23,7 +23,7 @@ const KakaoLoginButton = () => {
   
   return (
     <>
-      <KakaoLogin onClick={handleLogin}>Kakao로 로그인하기</KakaoLogin>
+      <KakaoLogin onClick={handleLogin}>Kakao로 시작하기</KakaoLogin>
     </>
   )
 };

@@ -18,16 +18,31 @@ const KakaoLogoutButton = () => {
 
   const handleLogout = async () => {
     try {
+      const accessToken = localStorage.getItem("access_token");
+      const refreshToken = localStorage.getItem("refresh_token");
+
       // 백엔드 서버에 로그아웃 요청
-      await axios.post("/auths/logout");
+      await axios.post(
+        "/auths/logout",
+        {
+          refresh_token: refreshToken,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
 
       // 클라이언트 측 상태 초기화 및 로컬 스토리지 정리
       localStorage.removeItem("access_token"); // 저장된 액세스 토큰 삭제
       localStorage.removeItem("refresh_token"); // 저장된 리프레시 토큰 삭제
 
       // 카카오 로그아웃
-      window.location.href =
-        "https://kauth.kakao.com/oauth/logout?client_id=YOUR_APP_KEY&logout_redirect_uri=YOUR_REDIRECT_URI";
+      const Rest_api_key = process.env.REACT_APP_KAKAO_API_KEY; // 카카오 개발자 콘솔에서 발급받은 앱 키
+      const logoutRedirectUri="http://localhost:3000/onboarding"
+      // const logoutRedirectUri = process.env.REACT_APP_KAKAO_REDIRECT_URI; // 로그아웃 후 리디렉션될 URI
+      window.location.href = `https://kauth.kakao.com/oauth/logout?client_id=${Rest_api_key}&logout_redirect_uri=${encodeURIComponent(logoutRedirectUri)}`;
 
       // 홈 페이지로 리디렉션
       navigate("/");
