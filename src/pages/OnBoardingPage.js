@@ -1,19 +1,18 @@
-import React, { useState, useRef } from 'react';
-import styled, { keyframes, css } from 'styled-components';
+import React, { useState, useRef } from "react";
+import styled, { keyframes, css } from "styled-components";
 
-import arrowImage from '../images/Point.png'; // 화살표 이미지 경로를 지정하세요.
-import TimerImage from '../images/Timer.png'; // 예제 이미지 경로를 지정하세요.
-import ListImage from '../images/List.png'; // 또 다른 예제 이미지 경로를 지정하세요.
-import BlueLogo from '../images/BlueLogo.png'; // 마지막 예제 이미지 경로를 지정하세요.
+import arrowImage from "../images/Point.png"; // 화살표 이미지 경로를 지정하세요.
+import TimerImage from "../images/Timer.png"; // 예제 이미지 경로를 지정하세요.
+import ListImage from "../images/List.png"; // 또 다른 예제 이미지 경로를 지정하세요.
+import BlueLogo from "../images/BlueLogo.png"; // 마지막 예제 이미지 경로를 지정하세요.
 
-
-import F from '../images/F.png';
-import E1 from '../images/E1.png';
-import E2 from '../images/E2.png';
-import L from '../images/L.png';
-import O from '../images/O.png';
-import W from '../images/W.png';
-import { useNavigate } from 'react-router-dom';
+import F from "../images/F.png";
+import E1 from "../images/E1.png";
+import E2 from "../images/E2.png";
+import L from "../images/L.png";
+import O from "../images/O.png";
+import W from "../images/W.png";
+import { useNavigate } from "react-router-dom";
 
 const wave = keyframes`
   0%, 100% { transform: translateY(0); }
@@ -27,12 +26,15 @@ const LogoContainer = styled.div`
   flex-direction: row;
 `;
 
-
 const LetterContainer = styled.img`
   width: 5vw;
   margin-right: 0.3vw;
   margin-bottom: 2vh;
-  animation: ${({ isHovered }) => isHovered && css`${wave} 2s infinite`};
+  animation: ${({ isHovered }) =>
+    isHovered &&
+    css`
+      ${wave} 2s infinite
+    `};
   animation-delay: ${({ delay }) => delay};
   animation-duration: 2s;
 `;
@@ -64,12 +66,6 @@ const WContainer = styled(LetterContainer)`
   margin-bottom: 4.3vh;
 `;
 
-
-
-
-
-
-
 const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -99,18 +95,13 @@ const Header = styled.header`
 const Logo = styled.div`
   font-size: 4vw;
   font-weight: bold;
-  font-family: 'helvetica';
+  font-family: "helvetica";
 `;
-
-
-
-
-
 
 const MenuButton = styled.div`
   font-size: 4vw;
   cursor: pointer;
-  color: ${({ isOpen }) => (isOpen ? 'white' : 'black')};
+  color: ${({ isOpen }) => (isOpen ? "white" : "black")};
 `;
 
 const MenuContainer = styled.div`
@@ -119,7 +110,7 @@ const MenuContainer = styled.div`
   right: 0;
   width: 0;
   height: 100vh;
-  background-color: #3893FF;
+  background-color: #3893ff;
   flex-direction: column;
   overflow-x: hidden;
   transition: 0.5s;
@@ -147,7 +138,7 @@ const MenuItem = styled.a`
   font-size: 3vw;
   color: white;
   font-weight: bold;
-  font-family: 'helvetica';
+  font-family: "helvetica";
   display: block;
   transition: opacity 0.6s ease, color 0.3s;
 
@@ -155,9 +146,6 @@ const MenuItem = styled.a`
     color: #f1f1f1;
   }
 `;
-
-
-
 
 const Main = styled(Section)`
   height: 87vh;
@@ -186,7 +174,7 @@ const Arrow = styled.img`
 `;
 
 const BlueBackground = styled(Section)`
-  background-color: #3893FF;
+  background-color: #3893ff;
 
   ${({ isHovered }) =>
     isHovered &&
@@ -198,7 +186,7 @@ const BlueBackground = styled(Section)`
 const BlueBackgroundText = styled.div`
   font-size: 70px;
   font-weight: bold;
-  font-family: 'helvetica';
+  font-family: "helvetica";
   color: white;
 `;
 
@@ -210,7 +198,7 @@ const WhiteBackgroundText = styled.div`
   font-size: 6vw;
   margin: 2vh 0;
   font-weight: bold;
-  font-family: 'helvetica';
+  font-family: "helvetica";
   color: black;
   text-align: center;
 `;
@@ -222,7 +210,7 @@ const SecondWhiteBackground = styled(Section)`
 const SecondWhiteBackgroundText = styled.div`
   font-size: 3.5vw;
   font-weight: bold;
-  font-family: 'helvetica';
+  font-family: "helvetica";
   color: black;
   text-align: center;
   white-space: pre-line;
@@ -241,7 +229,7 @@ const ThirdBackgroundImage = styled.img`
 const ThirdBackgroundText = styled.div`
   font-size: 3vw;
   font-weight: bold;
-  font-family: 'helvetica';
+  font-family: "helvetica";
   color: black;
   text-align: center;
   margin: 2vh 0;
@@ -260,13 +248,13 @@ const FourthBackgroundText = styled.div`
   font-size: 3vw;
   margin: 2vh 0;
   font-weight: bold;
-  font-family: 'helvetica';
+  font-family: "helvetica";
   color: black;
   text-align: center;
 `;
 
 const FinalBackground = styled(Section)`
-  background-color: #3893FF;
+  background-color: #3893ff;
 `;
 
 const FinalBackgroundImage = styled.img`
@@ -303,10 +291,10 @@ const FinalBackgroundButton = styled.button`
   padding: 1vh 2vw;
   font-size: 2vw;
   font-weight: bold;
-  font-family: 'helvetica';
-  color: #3893FF;
+  font-family: "helvetica";
+  color: #3893ff;
   margin: 2vh 0;
-  
+
   background-color: white;
   border: none;
   border-radius: 20px;
@@ -314,6 +302,22 @@ const FinalBackgroundButton = styled.button`
   cursor: pointer;
   &:hover {
     background-color: #f1f1f1;
+  }
+`;
+
+const FinalBackgroundButton2 = styled.button`
+  background: none;
+  border: none;
+  color: #fff;
+  text-decoration: underline;
+  padding: 0;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 40px;  // 로그인 버튼과 간격 추가
+
+  &:hover {
+    color: #f1f1f1;
   }
 `;
 
@@ -326,13 +330,11 @@ function OnBoardingPage() {
   const mainRef = useRef(null);
   const [hoveredIndex, setHoveredIndex] = useState(null);
 
-  
-
   const handleArrowClick = () => {
     if (mainRef.current) {
       window.scrollTo({
         top: mainRef.current.offsetTop + mainRef.current.offsetHeight,
-        behavior: 'smooth',
+        behavior: "smooth",
       });
     }
   };
@@ -342,7 +344,7 @@ function OnBoardingPage() {
     if (nextSection) {
       window.scrollTo({
         top: nextSection.offsetTop,
-        behavior: 'smooth',
+        behavior: "smooth",
       });
     }
   };
@@ -360,31 +362,34 @@ function OnBoardingPage() {
   };
 
   const text = "Flow에 따라 당신의 일상을 채워보세요!";
-  
 
   return (
     <Container>
       <Header>
         <Logo>Feelow</Logo>
-        <MenuButton onClick={toggleMenu} isOpen={isMenuOpen}>☰</MenuButton>
+        <MenuButton onClick={toggleMenu} isOpen={isMenuOpen}>
+          ☰
+        </MenuButton>
       </Header>
 
       <MenuContainer isOpen={isMenuOpen}>
-      {['Login', 'About', 'Contact'].map((item, index) => (
-        <MenuItemWrapper
-          key={item}
-          isHovered={hoveredIndex !== null && hoveredIndex !== index}
-          onMouseEnter={() => setHoveredIndex(index)}
-          onMouseLeave={() => setHoveredIndex(null)}
-        >
-          <MenuItem href="#">{item}</MenuItem>
-        </MenuItemWrapper>
-      ))}
-    </MenuContainer>
+        {["Login", "About", "Contact"].map((item, index) => (
+          <MenuItemWrapper
+            key={item}
+            isHovered={hoveredIndex !== null && hoveredIndex !== index}
+            onMouseEnter={() => setHoveredIndex(index)}
+            onMouseLeave={() => setHoveredIndex(null)}
+          >
+            <MenuItem href="#">{item}</MenuItem>
+          </MenuItemWrapper>
+        ))}
+      </MenuContainer>
 
       <Main ref={mainRef}>
-
-      <LogoContainer onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+        <LogoContainer
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+        >
           <LetterContainer src={F} alt="F" isHovered={isHovered} delay="0s" />
           <E1Container src={E1} alt="E1" isHovered={isHovered} delay="0.2s" />
           <E2Container src={E2} alt="E2" isHovered={isHovered} delay="0.4s" />
@@ -393,11 +398,9 @@ function OnBoardingPage() {
           <WContainer src={W} alt="W" isHovered={isHovered} delay="1s" />
         </LogoContainer>
 
-
-
-        { /* <LogoImage src={logoImage} alt="Feelow Logo" /> */ }
-        <Arrow 
-          src={arrowImage} 
+        {/* <LogoImage src={logoImage} alt="Feelow Logo" /> */}
+        <Arrow
+          src={arrowImage}
           alt="Down Arrow"
           onClick={handleArrowClick}
           onMouseEnter={handleMouseEnter}
@@ -406,49 +409,77 @@ function OnBoardingPage() {
         />
       </Main>
 
-      <BlueBackground ref={(el) => (sectionRefs.current[1] = el)} onClick={() => handleSectionClick(1)} isHovered={isHovered}>
+      <BlueBackground
+        ref={(el) => (sectionRefs.current[1] = el)}
+        onClick={() => handleSectionClick(1)}
+        isHovered={isHovered}
+      >
         <BlueBackgroundText>What is Feelow?</BlueBackgroundText>
       </BlueBackground>
 
-      <WhiteBackground ref={(el) => (sectionRefs.current[2] = el)} onClick={() => handleSectionClick(2)}>
+      <WhiteBackground
+        ref={(el) => (sectionRefs.current[2] = el)}
+        onClick={() => handleSectionClick(2)}
+      >
         <WhiteBackgroundText>Feelow</WhiteBackgroundText>
         <WhiteBackgroundText>=</WhiteBackgroundText>
         <WhiteBackgroundText>Feel + Flow</WhiteBackgroundText>
       </WhiteBackground>
 
-      <SecondWhiteBackground ref={(el) => (sectionRefs.current[3] = el)} onClick={() => handleSectionClick(3)}>
+      <SecondWhiteBackground
+        ref={(el) => (sectionRefs.current[3] = el)}
+        onClick={() => handleSectionClick(3)}
+      >
         <SecondWhiteBackgroundText>Feelow는</SecondWhiteBackgroundText>
-        <SecondWhiteBackgroundText>사용자의 감정을 컨트롤하고</SecondWhiteBackgroundText>
-        <SecondWhiteBackgroundText>해야 하는 일들을 효율적으로 완수할 수 있도록 하는</SecondWhiteBackgroundText>
-        <SecondWhiteBackgroundText>감정 타이머입니다.</SecondWhiteBackgroundText>
+        <SecondWhiteBackgroundText>
+          사용자의 감정을 컨트롤하고
+        </SecondWhiteBackgroundText>
+        <SecondWhiteBackgroundText>
+          해야 하는 일들을 효율적으로 완수할 수 있도록 하는
+        </SecondWhiteBackgroundText>
+        <SecondWhiteBackgroundText>
+          감정 타이머입니다.
+        </SecondWhiteBackgroundText>
       </SecondWhiteBackground>
 
-      <ThirdWhiteBackground ref={(el) => (sectionRefs.current[4] = el)} onClick={() => handleSectionClick(4)}>
+      <ThirdWhiteBackground
+        ref={(el) => (sectionRefs.current[4] = el)}
+        onClick={() => handleSectionClick(4)}
+      >
         <ThirdBackgroundImage src={TimerImage} alt="Example Image" />
-        <ThirdBackgroundText>내 마음대로 조절하기 힘든 감정,</ThirdBackgroundText>
+        <ThirdBackgroundText>
+          내 마음대로 조절하기 힘든 감정,
+        </ThirdBackgroundText>
         <ThirdBackgroundText>Feelow의 Flow에 따라</ThirdBackgroundText>
         <ThirdBackgroundText>관리해요!</ThirdBackgroundText>
       </ThirdWhiteBackground>
 
-      <FourthWhiteBackground ref={(el) => (sectionRefs.current[5] = el)} onClick={() => handleSectionClick(5)}>
+      <FourthWhiteBackground
+        ref={(el) => (sectionRefs.current[5] = el)}
+        onClick={() => handleSectionClick(5)}
+      >
         <FourthBackgroundImage src={ListImage} alt="Another Example Image" />
         <FourthBackgroundText>미루기만 하는 할 일들,</FourthBackgroundText>
         <FourthBackgroundText>Feelow의 Flow에 따라</FourthBackgroundText>
         <FourthBackgroundText>완수해요!</FourthBackgroundText>
       </FourthWhiteBackground>
 
-
-      
-      <FinalBackground ref={(el) => (sectionRefs.current[6] = el)} onClick={() => handleSectionClick(6)}>
+      <FinalBackground
+        ref={(el) => (sectionRefs.current[6] = el)}
+        onClick={() => handleSectionClick(6)}
+      >
         <FinalBackgroundImage src={BlueLogo} alt="Final Image" />
         <FinalBackgroundText>
-        {text.split("").map((char, index) => (
-          <span key={index} style={{ '--index': index }}>
-            {char === " " ? '\u00A0' : char}
-          </span>
-        ))}
-      </FinalBackgroundText>
-        <FinalBackgroundButton onClick={() => navigate('/login')}>로그인</FinalBackgroundButton>
+          {text.split("").map((char, index) => (
+            <span key={index} style={{ "--index": index }}>
+              {char === " " ? "\u00A0" : char}
+            </span>
+          ))}
+        </FinalBackgroundText>
+        <FinalBackgroundButton onClick={() => navigate("/login")}>
+          로그인
+        </FinalBackgroundButton>
+        <FinalBackgroundButton2 onClick={() => navigate("/main")}>둘러보기</FinalBackgroundButton2>
       </FinalBackground>
     </Container>
   );

@@ -34,7 +34,7 @@ const Calendar = styled.div`
 `;
 
 
-const Main = ({ view, setView, setSelectedDate }) => {
+const Main = ({ view, setView, selectedDate, setSelectedDate, addTask }) => {
   return (
     <Container>
       <>
@@ -48,9 +48,8 @@ const Main = ({ view, setView, setSelectedDate }) => {
         <EmotionSelection />
       
         )} 
-        {view === "add" && <AddTodoForm onCancel={() => setView("calendar")} />}
+        {view === "add" && <AddTodoForm onCancel={() => setView("calendar")} addTask={addTask} selectedDate={selectedDate} />}
       </>
-
 
     </Container>
   );

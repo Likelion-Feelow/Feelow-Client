@@ -23,7 +23,7 @@ const CalendarContainer = styled.div`
 const MonthHeader = styled.div`
   grid-column: 1 / 2;
   grid-row: 1 / 2;
-  background-color: #3893FF;
+  background-color: #3893ff;
   color: white;
   display: flex;
   align-items: center;
@@ -111,6 +111,11 @@ const StyledCalendar = () => {
     const daysArray = eachDayOfInterval({ start, end });
     setDays(daysArray);
   }, [currentDate]);
+
+  const handleDateChange = (date) => {
+    setActiveStartDate(date);
+    setSelectedDate(date);
+  };
 
   const handlePreviousMonth = () => {
     setCurrentDate(subMonths(currentDate, 1));
