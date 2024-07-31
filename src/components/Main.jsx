@@ -9,6 +9,8 @@ import { ThemeProvider } from "styled-components";
 import { theme } from "./theme";
 import AddTodoForm from "./Todo/AddTodoForm";
 
+
+
 const Container = styled.div`
   display: grid;
   grid-template-areas:
@@ -42,19 +44,30 @@ const Logo = styled.div`
   width: 100%;
 `;
 
-const Main = ({ view, setView, setSelectedDate }) => {
+const Calendar = styled.div`
+  grid-area: calendar;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+`;
+
+
+const Main = ({ view, setView, selectedDate, setSelectedDate, addTask }) => {
   return (
     <Container>
       <ProfileButton />
       <Logo />
-      <div>
+      
+      <>
         {view === "calendar" && (
-          <ThemeProvider theme={theme}>
+        <Calendar>
             <CalendarSection setSelectedDate={setSelectedDate} />
-          </ThemeProvider>
+        </Calendar>
         )}
-        {view === "add" && <AddTodoForm onCancel={() => setView("calendar")} />}
-      </div>
+        {view === "add" && <AddTodoForm onCancel={() => setView("calendar")} addTask={addTask} selectedDate={selectedDate} />}
+      </>
+
     </Container>
   );
 };

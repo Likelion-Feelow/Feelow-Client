@@ -1,64 +1,170 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
+import styled from "styled-components";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
-import styled from "styled-components";
-import moment from "moment";
-import "moment/locale/ko";
 
-const StyledCalendar = styled(Calendar)`
-  .react-calendar__navigation {
-    background: ${({ theme }) => theme.color.pink};
-    border-bottom: 4px solid ${({ theme }) => theme.color.brown};
-    height: 90px;
-    border-radius: 20px 20px 0 0;
+// Container for the whole calendar component
+const CalendarContainer = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 7fr;
+  grid-template-rows: 1fr 5fr;
+  border: 5px solid #3893ff;
+  border-radius: 20px;
+  font-family: Helvetica, sans-serif;
+  font-weight: bold;
+  overflow: hidden; /* Ensure content stays within the rounded border */
+`;
 
-    span {
-      font-size: 24px;
-      font-weight: 600;
-      color: ${({ theme }) => theme.color.brown};
-    }
+// Header for the month
+const MonthHeader = styled.div`
+  grid-column: 1 / 2;
+  grid-row: 1 / 2;
+  background-color: #3893ff;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border-top-left-radius: 15px; /* Rounded corners */
+`;
+
+// Arrow button for changing months
+const ArrowButton = styled.button`
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.5rem;
+  cursor: pointer;
+`;
+
+// Sidebar for the weeks
+const WeekSidebar = styled.div`
+  grid-column: 1 / 2;
+  grid-row: 2 / 3;
+  background-color: #b1d5ff;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+  border-right: 5px solid #3893ff;
+  border-bottom-left-radius: 15px; /* Rounded corners */
+`;
+
+// Header for the days of the week
+const WeekHeader = styled.div`
+  grid-column: 2 / 3;
+  grid-row: 1 / 2;
+  background-color: #b1d5ff;
+  color: white;
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  align-items: center;
+  justify-items: center;
+  border-bottom: 5px solid #3893ff;
+  border-top-right-radius: 15px; /* Rounded corners */
+`;
+
+// Main calendar area for the dates
+const CalendarArea = styled.div`
+  grid-column: 2 / 3;
+  grid-row: 2 / 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  border-bottom-right-radius: 15px; /* Rounded corners */
+
+  .react-calendar {
+    width: 100%;
+    border: none;
   }
 
-  .react-calendar__navigation button:disabled,
-  .react-calendar__navigation button:enabled:hover,
-  .react-calendar__navigation button:enabled:focus {
-    background-color: ${({ theme }) => theme.color.pink};
-    border-radius: 20px 20px 0 0;
+  .react-calendar__month-view__days__day {
+    color: black;
+    background-color: white;
+  }
+
+  .react-calendar__tile--now {
+    background: #3893ff !important;
+    color: white !important;
+  }
+
+  .react-calendar__tile--active {
+    background: #A5D6A7 !important;
+    color: white !important;
+  }
+
+  .react-calendar__navigation,
+  .react-calendar__month-view__weekdays,
+  .react-calendar__month-view__weekNumbers {
+    display: none;
   }
 `;
 
-const CalendarSection = ({ setSelectedDate }) => {
-  const curDate = new Date(); // 현재 날짜
-  const [value, setValue] = useState(curDate); // 클릭한 날짜 (초기값으로 현재 날짜 넣어줌)
-  // const activeDate = moment(value).format("YYYY-MM-DD"); // 클릭한 날짜 (년-월-일))
+const StyledCalendar = ({ setSelectedDate }) => {
+  const [activeStartDate, setActiveStartDate] = useState(new Date());
 
-  // const monthOfActiveDate = moment(value).format("YYYY-MM");
-  // const [activeMonth, setActiveMonth] = useState(monthOfActiveDate);
-
-  useEffect(() => {
-    setSelectedDate(value);
-  }, [value, setSelectedDate]);
-
-  // const getActiveMonth = (activeStartDate) => {
-  //   const newActiveMonth = moment(activeStartDate).format("YYYY-MM");
-  //   setActiveMonth(newActiveMonth);
-  // };
-
-  const handleDateChange = (date) => {
-    setValue(date); // 선택된 날짜 업데이트
+  const handleMonthChange = ({ activeStartDate }) => {
+    setActiveStartDate(activeStartDate);
   };
 
+  const handleDateChange = (date) => {
+    setActiveStartDate(date);
+    setSelectedDate(date);
+  };
+
+  const handlePreviousMonth = () => {
+    const newDate = new Date(activeStartDate);
+    newDate.setMonth(activeStartDate.getMonth() - 1);
+    setActiveStartDate(newDate);
+  };
+
+  const handleNextMonth = () => {
+    const newDate = new Date(activeStartDate);
+    newDate.setMonth(activeStartDate.getMonth() + 1);
+    setActiveStartDate(newDate);
+  };
+
+  const monthNumber = activeStartDate.getMonth() + 1;
+
   return (
-    <div>
-<StyledCalendar
-        locale="en"
-        onChange={handleDateChange}
-        value={value}
-        next2Label={null}
-        prev2Label={null}
-        formatDay={(locale, date) => moment(date).format("D")}
-        showNeighboringMonth={false}
-      />
+    <CalendarContainer>
+      <MonthHeader>
+        <ArrowButton onClick={handlePreviousMonth}>&lt;</ArrowButton>
+        {monthNumber}
+        <ArrowButton onClick={handleNextMonth}>&gt;</ArrowButton>
+      </MonthHeader>
+      <WeekSidebar>
+        {["1", "2", "3", "4", "5"].map((week) => (
+          <div key={week}>{week}</div>
+        ))}
+      </WeekSidebar>
+      <WeekHeader>
+        {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
+          <div key={day}>{day}</div>
+        ))}
+      </WeekHeader>
+      <CalendarArea>
+        <Calendar
+          onActiveStartDateChange={handleMonthChange}
+          activeStartDate={activeStartDate}
+          showNeighboringMonth={false}
+          formatShortWeekday={() => ""}
+          locale="en-US"
+          onChange={handleDateChange} // 날짜 선택 시 호출
+          value={activeStartDate}
+        />
+      </CalendarArea>
+    </CalendarContainer>
+  );
+};
+
+const CalendarSection = ({ setSelectedDate }) => {
+  return (
+    <div className="App">
+      <StyledCalendar setSelectedDate={setSelectedDate} />
     </div>
   );
 };
