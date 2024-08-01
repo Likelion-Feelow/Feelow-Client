@@ -113,7 +113,7 @@ const StyledCalendar = () => {
   }, [currentDate]);
 
   const handleDateChange = (date) => {
-    setActiveStartDate(date);
+    // setActiveStartDate(date);
     setSelectedDate(date);
   };
 

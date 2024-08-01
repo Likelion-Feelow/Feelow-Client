@@ -38,11 +38,11 @@ const Main = ({ view, setView, selectedDate, setSelectedDate, addTask }) => {
   return (
     <Container>
       <>
-        {/*{view === "calendar" && (
+        {view === "calendar" && (
         <Calendar>
             <CalendarSection setSelectedDate={setSelectedDate} />
         </Calendar>
-        )}*/}
+        )}
         {view === "emotion" && (
         
         <EmotionSelection />

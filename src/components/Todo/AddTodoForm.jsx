@@ -18,7 +18,7 @@ const AddTodoForm = ({ onCancel, addTask, selectedDate }) => {
       task_duration: parseInt(predictTime),
       task_description: taskDescription,
     };
-    // console.log(newTask);
+    console.log(newTask);
 
     const accessToken = localStorage.getItem('accessToken');
 

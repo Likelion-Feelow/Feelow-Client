@@ -15,6 +15,7 @@ const KakaoCallback = () => {
           await handleLogin(code);
         } catch (error) {
           console.error("Error during authentication: ", error);
+          // console.log(error.response.status)
           if (error.response && error.response.status === 404) {
             // 로그인 실패 후 회원가입 시도
             const { access_token: accessToken } = error.response.data;
@@ -24,7 +25,8 @@ const KakaoCallback = () => {
               console.error("Registration Error: ", registerError);
               alert("사용자 인증이 실패하였습니다.");
             }
-          } else {
+          } 
+          else {
             alert("사용자 인증이 실패하였습니다.");
           }
         }
@@ -33,7 +35,7 @@ const KakaoCallback = () => {
 
     const handleLogin = async (code) => {
       const response = await axios.post(
-        "http://localhost:8000/auths/kakao/login",
+        "http://3.39.201.42:8090/auths/kakao/login",
         { access_code: code }
       );
       processResponse(response);
@@ -41,7 +43,7 @@ const KakaoCallback = () => {
 
     const handleRegister = async (accessToken) => {
       const response = await axios.post(
-        "http://localhost:8000/auths/kakao/register",
+        "http://3.39.201.42:8090/auths/register",
         { access_token: accessToken }
       );
       processResponse(response);
