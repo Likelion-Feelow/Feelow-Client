@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
+import { useLocation } from 'react-router-dom'; // React Router DOM import
 
 import PauseImage from '../images/Pause.png';
 import TimerOn from '../images/TimerOn.png';
@@ -35,7 +36,7 @@ const ProgressBar = styled.div`
   height: 100%;
   background-color: #70BBFF;
   width: ${props => props.progress}%;
-  transition: width 1s linear; /* Use linear transition for smoother animation */
+  transition: width 1s linear;
 `;
 
 const Content = styled.div`
@@ -131,12 +132,10 @@ const ResetButton = styled.button`
   height: 5vh;
   font-size: 2vw;
   cursor: pointer;
-  
   font-weight: bold;
   font-family: 'Helvetica', sans-serif;
   background-color: white;  
   border: none;
-  
   display: flex;
   align-items: center;
   justify-content: center;
@@ -157,7 +156,6 @@ const Colon = styled.div`
   justify-content: center;
   align-items: center;
   margin: 0 0.5vw;
-
 `;
 
 const DotElement = styled.div`
@@ -170,12 +168,12 @@ const DotElement = styled.div`
 
 const TimeView = styled.div`
   display: flex;
-  
 `;
 
-
-const App = ({ focusTime, breakTime }) => {
-  const [time, setTime] = useState(focusTime);
+const TimerPage = () => {
+  const location = useLocation();
+  const { focusTime, breakTime } = location.state;
+  const [time, setTime] = useState(focusTime * 60);
   const [isActive, setIsActive] = useState(false);
   const [isFocus, setIsFocus] = useState(true);
   const [cycles, setCycles] = useState(0);
@@ -196,7 +194,7 @@ const App = ({ focusTime, breakTime }) => {
   const resetTimer = () => {
     setIsActive(false);
     setIsFocus(true);
-    setTime(focusTime);
+    setTime(focusTime * 60);
     setProgress(0);
   };
 
@@ -206,7 +204,7 @@ const App = ({ focusTime, breakTime }) => {
       interval = setInterval(() => {
         setTime(prevTime => {
           const newTime = prevTime - 1;
-          const newProgress = ((isFocus ? focusTime - newTime : breakTime - newTime) / (isFocus ? focusTime : breakTime)) * 100;
+          const newProgress = ((isFocus ? focusTime * 60 - newTime : breakTime * 60 - newTime) / (isFocus ? focusTime * 60 : breakTime * 60)) * 100;
           setProgress(newProgress);
           return newTime;
         });
@@ -217,11 +215,11 @@ const App = ({ focusTime, breakTime }) => {
       setTimeout(() => {
         if (isFocus) {
           setIsFocus(false);
-          setTime(breakTime);
+          setTime(breakTime * 60);
         } else {
           setIsFocus(true);
           setCycles(cycles + 1);
-          setTime(focusTime);
+          setTime(focusTime * 60);
         }
         setProgress(0);
       }, 1000);
@@ -233,16 +231,14 @@ const App = ({ focusTime, breakTime }) => {
     const minutes = String(Math.floor(seconds / 60)).padStart(2, '0');
     const remainingSeconds = String(seconds % 60).padStart(2, '0');
     return (
-      
-        <TimeView>
+      <TimeView>
         {minutes}
         <Colon>
           <DotElement />
           <DotElement />
         </Colon>
         {remainingSeconds}
-        </TimeView>
-      
+      </TimeView>
     );
   };
 
@@ -263,10 +259,10 @@ const App = ({ focusTime, breakTime }) => {
             <FocusText>{isFocus ? 'Focus' : 'Break'}</FocusText>
             <TimerButtonContainer>
               <TimerButton onClick={pauseTimer}>
-                <ButtonImage src={StartImage} alt="Pause" />
+                <ButtonImage src={PauseImage} alt="Pause" />
               </TimerButton>
               <TimerButton onClick={startTimer}>
-                <ButtonImage src={PauseImage} alt="Start" />
+                <ButtonImage src={StartImage} alt="Start" />
               </TimerButton>
             </TimerButtonContainer>
           </TimerDisplay>
@@ -279,9 +275,9 @@ const App = ({ focusTime, breakTime }) => {
   );
 };
 
-App.defaultProps = {
-  focusTime: 10, // 25 minutes for focus time
-  breakTime: 3, // 5 minutes for break time
+TimerPage.defaultProps = {
+  focusTime: 10, // Default focus time in minutes
+  breakTime: 3,  // Default break time in minutes
 };
 
-export default App;
+export default TimerPage;

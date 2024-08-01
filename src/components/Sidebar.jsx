@@ -1,13 +1,14 @@
 import React, { useState } from "react";
 import styled, { keyframes } from "styled-components";
-import { CSSTransition, TransitionGroup } from "react-transition-group";
+import { CSSTransition } from "react-transition-group";
 import TodoList from "./Todo/TodoList";
 import KakaoLogoutButton, { handleLogout } from "./Login/KakaoLogoutButton";
 import { useNavigate } from "react-router-dom";
+import AddTodoButton from "./Todo/AddTodoButton";
 
 const SidebarContainer = styled.div`
   display: grid;
-  grid-template-rows: 10vh 6vh 1fr 1fr;
+  grid-template-rows: 10vh 6vh auto 1fr;
   grid-template-areas:
     "menu"
     "header"
@@ -18,7 +19,7 @@ const SidebarContainer = styled.div`
   position: relative;
 `;
 
-const Sidebar = ({ selectedDate, onAddTodoClick, tasks, setTasks }) => {
+const Sidebar = ({ selectedDate, onAddTodoClick, tasks, setTasks, handleTaskSelect, selectedTask }) => {
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -45,16 +46,20 @@ const Sidebar = ({ selectedDate, onAddTodoClick, tasks, setTasks }) => {
           </Header>
 
           <TodoListContainer>
-            <TodoList selectedDate={selectedDate} tasks={tasks} setTasks={setTasks} />
+            <TodoList 
+              selectedDate={selectedDate} 
+              tasks={tasks} 
+              setTasks={setTasks} 
+              handleTaskSelect={handleTaskSelect} // 추가: 작업 선택 핸들러 전달
+              selectedTask={selectedTask} // 추가: 선택된 작업 전달
+            />
           </TodoListContainer>
 
-          <TransitionGroup component={null}>
-            <CSSTransition key={selectedDate} timeout={{ enter: 500, exit: 300 }} classNames="fade">
-              <AddTodoButtonContainer>
-                <AddToDoButton onClick={onAddTodoClick}>+</AddToDoButton>
-              </AddTodoButtonContainer>
-            </CSSTransition>
-          </TransitionGroup>
+          <CSSTransition key={selectedDate} timeout={{ enter: 300, exit: 80 }} classNames="fade">
+            <AddTodoButtonContainer>
+              <AddToDoButton onClick={onAddTodoClick}>+</AddToDoButton>
+            </AddTodoButtonContainer>
+          </CSSTransition>
         </Content>
       </CSSTransition>
     </SidebarContainer>
@@ -113,12 +118,10 @@ const AddTodoButtonContainer = styled.div`
 
   &.fade-enter {
     opacity: 0;
-    transform: translateY(10px); /* 추가: 자연스러운 움직임을 위해 위치 조정 */
   }
   &.fade-enter-active {
     opacity: 1;
-    transform: translateY(0); /* 추가: 자연스러운 움직임을 위해 위치 조정 */
-    transition: opacity 500ms, transform 500ms;
+    transition: opacity 500ms;
   }
   &.fade-exit {
     opacity: 1;
@@ -179,7 +182,6 @@ const MenuContent = styled.div`
   flex-direction: column;
   align-items: left;
   justify-content: center;
-  
   box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
 
   &.fade-enter {
@@ -226,7 +228,7 @@ const Content = styled.div`
     "todolist"
     "addtodobutton";
   z-index: 5;
-  
+
   &.fade-enter {
     opacity: 0;
   }

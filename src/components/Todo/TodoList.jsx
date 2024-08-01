@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import styled, { keyframes } from "styled-components";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 
-const TodoList = ({ selectedDate, tasks, setTasks }) => {
+const TodoList = ({ selectedDate, tasks, setTasks, handleTaskSelect, selectedTask }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [showNoTaskMessage, setShowNoTaskMessage] = useState(false);
@@ -95,8 +95,11 @@ const TodoList = ({ selectedDate, tasks, setTasks }) => {
         {tasks.length > 0 ? (
           tasks.map(task => (
             <CSSTransition key={task.task_id} timeout={300} classNames="fade">
-              <TaskItem>
-                <Circle />
+              <TaskItem 
+                onClick={() => handleTaskSelect(task)} 
+                selected={selectedTask && selectedTask.task_id === task.task_id} // 추가: 선택된 작업 여부 확인
+              >
+                <Circle selected={selectedTask && selectedTask.task_id === task.task_id} /> {/* 추가: 선택된 작업 여부에 따라 색상 변경 */}
                 <TaskContent>
                   <TaskName>{task.task_name}</TaskName>
                   <TaskDescription>{task.task_description}</TaskDescription>
@@ -165,15 +168,20 @@ const TaskItem = styled.div`
   background-color: white;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   margin: 1.5vh 2vw;
+  cursor: pointer; /* 추가: 클릭 가능하게 변경 */
+  ${({ selected }) => selected && `
+    background-color: #f0f8ff;
+    border-color: #4285f4;
+  `}
 `;
 
 const Circle = styled.div`
   width: 2vw;
   height: 2vw;
-  border: 3px solid #9CDBFF;;
+  border: 3px solid ${({ selected }) => (selected ? '#4285f4' : '#9CDBFF')}; /* 선택된 경우 색상 변경 */
   border-radius: 50%;
   margin-right: 1.5vw;
-
+  background-color: ${({ selected }) => (selected ? '#4285f4' : 'transparent')}; /* 선택된 경우 배경색 변경 */
 `;
 
 const TaskContent = styled.div`
