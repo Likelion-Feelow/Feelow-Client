@@ -12,60 +12,60 @@ const KakaoCallback = () => {
 
       if (code) {
         try {
-          await handleLogin(code);
+          // 인가 코드(code)를 서버로 전송하여 로그인 시도
+          const response = await axios.post(
+            "http://3.39.201.42:8090/auths/kakao/login",
+            { access_code: code }
+          );
+          // 로그인 성공
+          if (response.status === 200) {
+            const { access_token: accessToken, refresh_token: refreshToken } =
+              response.data;
+            localStorage.setItem("access_token", accessToken);
+            localStorage.setItem("refresh_token", refreshToken);
+            navigate("/main");
+          }
         } catch (error) {
-          console.error("Error during authentication: ", error);
-          // console.log(error.response.status)
+          // 로그인 에러 해결 절차
+          console.error("Login Error: ", error);
+          // 사용자가 존재하지 않는 경우
           if (error.response && error.response.status === 404) {
-            // 로그인 실패 후 회원가입 시도
-            const { access_token: accessToken } = error.response.data;
+            const accessToken = error.response.data.access_token;
             try {
-              await handleRegister(accessToken);
+              // 회원가입 시도
+              const response = await axios.post(
+                "http://3.39.201.42:8090/auths/kakao/register",
+                { access_token: accessToken }
+              );
+
+              if (response.status === 200) {
+                const {
+                  access_token: newAccessToken,
+                  refresh_token: newRefreshToken,
+                } = response.data;
+                localStorage.setItem("access_token", newAccessToken);
+                localStorage.setItem("refresh_token", newRefreshToken);
+                navigate("/main");
+              }
             } catch (registerError) {
               console.error("Registration Error: ", registerError);
-              alert("사용자 인증이 실패하였습니다.");
+              alert("회원가입에 실패하였습니다.");
             }
-          } 
-          else {
+          } else if (error.response && error.response.status === 400) {
+            console.error("Bad Request: ", error.response.data);
+            alert("잘못된 요청입니다. 요청 데이터를 확인하세요.");
+          } else {
+            console.error("Unexpected Error: ", error);
             alert("사용자 인증이 실패하였습니다.");
           }
         }
       }
     };
 
-    const handleLogin = async (code) => {
-      const response = await axios.post(
-        "http://3.39.201.42:8090/auths/kakao/login",
-        { access_code: code }
-      );
-      processResponse(response);
-    };
-
-    const handleRegister = async (accessToken) => {
-      const response = await axios.post(
-        "http://3.39.201.42:8090/auths/register",
-        { access_token: accessToken }
-      );
-      processResponse(response);
-    };
-
-    const processResponse = (response) => {
-      if (response.status === 200) {
-        console.log(response.data);
-        const { access_token: accessToken, refresh_token: refreshToken } =
-          response.data;
-        localStorage.setItem("access_token", accessToken);
-        localStorage.setItem("refresh_token", refreshToken);
-        navigate("/main");
-      } else {
-        throw new Error("Invalid response status");
-      }
-    };
-
     fetchData();
-  }, [navigate]); // 두번 post 요청 보내게되면 의존성배열을 빈 배열로 설정해보기
+  }, [navigate]);
 
-  return <></>;
+  return <div>Loading...</div>;
 };
 
 export default KakaoCallback;

@@ -26,16 +26,16 @@ const AddTodoForm = ({ onCancel, addTask, selectedDate }) => {
     };
     console.log(newTask);
 
-    const accessToken = localStorage.getItem('accessToken');
+    const accessToken = localStorage.getItem('access_token');
 
     try {
-      const response = await axios.post('http://3.39.201.42:8090//tasks', newTask, {
+      const response = await axios.post('http://3.39.201.42:8090/tasks/', newTask, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
       });
       addTask(response.data); // 새 할 일 추가(todo list에 띄워주기 위해)
-      // onCancel(); // 할 일 추가 이후 폼 닫기
+      onCancel(); // 할 일 추가 이후 폼 닫기
     } catch (error) {
       console.error("새 할 일 추가 실패", error);
     }

@@ -16,6 +16,7 @@ import MainPage from "./pages/MainPage";
 
 import TimerPage from "./pages/TimerPage";
 import LoadingPage from "./pages/LoadingPage";
+import SignUpPage from "./pages/SignUpPage";
 
 
 function App() {
@@ -30,6 +31,7 @@ function App() {
           <Route path="/main" element={<MainPage />} />
           <Route path="/timer" element={<TimerPage />} />
           <Route path="/loading" element={<LoadingPage />} />
+          <Route path="/signup" element={<SignUpPage />} />
         </Routes>
 
       {/* <Container> */}

@@ -8,6 +8,8 @@ import AddTodoForm from "./Todo/AddTodoForm";
 import EmotionSelection from "./EmotionSelection";
 import EvaluatingPage from "../pages/EvaluatingPage";
 
+
+
 const Container = styled.div`
   display: grid;
   grid-template-rows: 1fr 7fr;
@@ -107,7 +109,8 @@ const Main = ({
           <TodoList 
             selectedDate={selectedDate} 
             tasks={tasks} 
-            setTasks={setTasks} 
+            setTasks={setTasks}
+            addTask={addTask} 
             handleTaskSelect={handleTaskSelect}
           />
         )}

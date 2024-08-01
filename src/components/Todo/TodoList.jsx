@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import styled, { keyframes } from "styled-components";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 
-const TodoList = ({ selectedDate, tasks, setTasks, handleTaskSelect, selectedTask }) => {
+const TodoList = ({ selectedDate, tasks, setTasks, addTask, handleTaskSelect, selectedTask }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [showNoTaskMessage, setShowNoTaskMessage] = useState(false);
@@ -120,6 +120,7 @@ const TodoList = ({ selectedDate, tasks, setTasks, handleTaskSelect, selectedTas
 
 export default TodoList;
 
+// styled-components
 const fadeIn = keyframes`
   from {
     opacity: 0;
