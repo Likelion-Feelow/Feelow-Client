@@ -1,53 +1,58 @@
-import React from "react";
-import styled from "styled-components";
-
+import React, { useState } from "react";
+import styled, { keyframes } from "styled-components";
+import { CSSTransition, TransitionGroup } from "react-transition-group";
 import TodoList from "./Todo/TodoList";
-import AddTodoButton from "./Todo/AddTodoButton";
 
 const SidebarContainer = styled.div`
   display: grid;
-
-  grid-template-rows: 1fr 1fr 4fr 1fr;
+  grid-template-rows: 10vh 6vh 1fr 1fr;
   grid-template-areas:
     "menu"
     "header"
     "todolist"
     "addtodobutton";
-
   width: 100%;
-  
   background-color: #D9F1FF;
-  
-
-  
+  position: relative;
 `;
 
-
-const Sidebar = ({ selectedDate, onAddTodoClick, tasks }) => {  
+const Sidebar = ({ selectedDate, onAddTodoClick, tasks, setTasks }) => {
+  const [menuOpen, setMenuOpen] = useState(false);
 
   return (
     <SidebarContainer>
       <HamburgerMenu>
-        <MenuButton>☰</MenuButton>
+        <MenuButton onClick={() => setMenuOpen(!menuOpen)}>☰</MenuButton>
       </HamburgerMenu>
 
+      <CSSTransition in={menuOpen} timeout={300} classNames="fade" unmountOnExit>
+        <MenuContent>
+          <MenuButton onClick={() => setMenuOpen(!menuOpen)}>☰</MenuButton>
+          <MenuItem>Profile</MenuItem>
+          <MenuItem>Logout</MenuItem>
+          <MenuItem>About</MenuItem>
+        </MenuContent>
+      </CSSTransition>
 
-      <Header>
-        <Title>To - Do</Title>
-      </Header>
+      <CSSTransition in={!menuOpen} timeout={300} classNames="fade" unmountOnExit>
+        <Content>
+          <Header>
+            <Title>To - Do</Title>
+          </Header>
 
+          <TodoListContainer>
+            <TodoList selectedDate={selectedDate} tasks={tasks} setTasks={setTasks} />
+          </TodoListContainer>
 
-
-      <TodoListContainer>
-        <TodoList selectedDate={selectedDate} tasks={tasks }/>
-      </TodoListContainer>
-
-
-      <AddTodoButtonContainer>
-        <AddTodoButton onAddTodoClick={onAddTodoClick} />
-      </AddTodoButtonContainer>
-
-
+          <TransitionGroup component={null}>
+            <CSSTransition key={selectedDate} timeout={{ enter: 500, exit: 300 }} classNames="fade">
+              <AddTodoButtonContainer>
+                <AddToDoButton onClick={onAddTodoClick}>+</AddToDoButton>
+              </AddTodoButtonContainer>
+            </CSSTransition>
+          </TransitionGroup>
+        </Content>
+      </CSSTransition>
     </SidebarContainer>
   );
 };
@@ -58,9 +63,12 @@ const MenuButton = styled.button`
   background-color: transparent;
   border: none;
   color: white;
-  font-size: 4vw;
-  margin: 2vh 2vw;
+  font-size: 3vw;
+  position: absolute;
+  top: 2vh;
+  right: 2vw;
   cursor: pointer;
+  z-index: 10;
 `;
 
 const HamburgerMenu = styled.div`
@@ -75,33 +83,16 @@ const Header = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-bottom: 15px;
 `;
 
 const Title = styled.h2`
-  font-size: 2vw;
+  font-size: 1.8vw;
   font-weight: bold;
   color: #4285f4;
   margin: 0;
-  background-color: #e3f2fd;
   padding: 5px 10px;
   margin: 0 2vw;
   border-radius: 10px;
-`;
-
-const IconContainer = styled.div`
-  width: 30px;
-  height: 30px;
-  background-color: #e3f2fd;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  img {
-    width: 40px;  // 원하는 크기로 설정
-    height: 40px; // 원하는 크기로 설정
-  }
 `;
 
 const TodoListContainer = styled.div`
@@ -111,22 +102,139 @@ const TodoListContainer = styled.div`
 
 const AddTodoButtonContainer = styled.div`
   grid-area: addtodobutton;
-  margin-top: 15px;
+  margin: 2vh 0;
+  display: flex;
   text-align: center;
+  justify-content: center;
+
+  &.fade-enter {
+    opacity: 0;
+    transform: translateY(10px); /* 추가: 자연스러운 움직임을 위해 위치 조정 */
+  }
+  &.fade-enter-active {
+    opacity: 1;
+    transform: translateY(0); /* 추가: 자연스러운 움직임을 위해 위치 조정 */
+    transition: opacity 500ms, transform 500ms;
+  }
+  &.fade-exit {
+    opacity: 1;
+  }
+  &.fade-exit-active {
+    opacity: 0;
+    transition: opacity 300ms;
+  }
 `;
 
-const Button = styled.button`
-  background: none;
-  border: 2px solid #4285f4;
-  border-radius: 20px;
-  color: #4285f4;
-  padding: 10px 20px;
-  font-size: 16px;
+const AddToDoButton = styled.button`
+  background-color: #9CDBFF;
+  border: none;
+  border-radius: 50%;
+  color: white;
+  font-size: 4vw;
   cursor: pointer;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   outline: none;
 
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   &:hover {
     background-color: #4285f4;
     color: white;
+  }
+`;
+
+const fadeIn = keyframes`
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+`;
+
+const fadeOut = keyframes`
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+`;
+
+const MenuContent = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #4285f4;
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+  justify-content: center;
+  
+  box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+
+  &.fade-enter {
+    opacity: 0;
+  }
+  &.fade-enter-active {
+    opacity: 1;
+    transition: opacity 300ms;
+  }
+  &.fade-exit {
+    opacity: 1;
+  }
+  &.fade-exit-active {
+    opacity: 0;
+    transition: opacity 300ms;
+  }
+`;
+
+const MenuItem = styled.div`
+  color: white;
+  padding-left: 3vw;
+  font-family: helvetica;
+  font-weight: bold;
+  cursor: pointer;
+  &:hover {
+    background-color: #3071a9;
+  }
+  font-size: 2vw;
+  margin: 2vh 0;
+`;
+
+const Content = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #D9F1FF;
+  display: grid;
+  grid-template-rows: 10vh 6vh auto 1fr;
+  grid-template-areas:
+    "menu"
+    "header"
+    "todolist"
+    "addtodobutton";
+  z-index: 5;
+  
+  &.fade-enter {
+    opacity: 0;
+  }
+  &.fade-enter-active {
+    opacity: 1;
+    transition: opacity 300ms;
+  }
+  &.fade-exit {
+    opacity: 1;
+  }
+  &.fade-exit-active {
+    opacity: 0;
+    transition: opacity 300ms;
   }
 `;

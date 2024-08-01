@@ -93,13 +93,16 @@ const DayContainer = styled.div`
   display: contents;
 `;
 
-const StyledCalendar = () => {
+const StyledCalendar = ({ 
+  selectedDate, 
+  setSelectedDate 
+}) => {
   const [currentDate, setCurrentDate] = useState(new Date());
-  const [selectedDate, setSelectedDate] = useState(null);
   const [days, setDays] = useState([]);
+  
   const [feelings, setFeelings] = useState(() => {
-    const daysArray = eachDayOfInterval({ start: startOfMonth(currentDate), end: endOfMonth(currentDate) });
-    const randomFeelings = {};
+  const daysArray = eachDayOfInterval({ start: startOfMonth(currentDate), end: endOfMonth(currentDate) });
+  const randomFeelings = {};
 
     daysArray.forEach((day) => {
       if (day < new Date()) {
@@ -146,6 +149,8 @@ const StyledCalendar = () => {
   };
 
   const handleDateClick = (day) => {
+    console.log("handleDateClick called with:", day);
+    console.log("setSelectedDate in handleDateClick:", setSelectedDate);
     setSelectedDate(day);
   };
 
@@ -195,7 +200,7 @@ const StyledCalendar = () => {
             onClick={() => handleDateClick(day)}
             className={`${isSameDay(day, new Date()) ? 'today' : ''} ${isSameDay(day, selectedDate) ? 'selected' : ''}`}
             style={{ gridColumn: (day.getDay() + 2), gridRow: getGridRowStart(day) }}
-            $feelings={feelings[format(day, 'yyyy-MM-dd')]} // 단일 감정 색상 전달
+            $feelings={feelings[format(day, 'yyyy-MM-dd')]}
           >
             {format(day, 'd')}
           </CalendarTile>
@@ -227,4 +232,4 @@ const App = () => {
   );
 };
 
-export default App;
+export default StyledCalendar;

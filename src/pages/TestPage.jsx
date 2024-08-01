@@ -16,6 +16,11 @@ const Container = styled.div`
     width: 60vw;
 
     background-color: #A8E0FF;
+
+    padding: 1vw;
+
+    border-radius: 15px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 `;
 
 const slideDown = keyframes`
@@ -116,6 +121,8 @@ const Question = styled.div`
     font-family: Helvetica, sans-serif;
     color: white;
     font-weight: bold;
+
+    margin-left: 12vw;
 `;
 
 const EmotionBlock = styled.div`
@@ -210,7 +217,7 @@ const ConfirmButton = styled.button`
     border: none;
     border-radius: 30px;
     padding: 0.5vw 1.3vw;
-    margin-left: 2vw;
+    margin-left: 1vw;
     cursor: pointer;
     transition: background-color 0.3s, color 0.3s;
     &:hover {
@@ -237,6 +244,8 @@ const NextButton = styled.button`
     &:active {
         animation: ${bounce} 0.5s;
     }
+
+    margin-left: 8vw;
 `;
 
 const emotions = [
