@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import styled, { keyframes } from "styled-components";
 import { CSSTransition } from "react-transition-group";
+import { useNavigate } from "react-router-dom";
 import TodoList from "./Todo/TodoList";
-import AddTodoButton from "./Todo/AddTodoButton";
 
 const SidebarContainer = styled.div`
   display: grid;
@@ -13,12 +13,13 @@ const SidebarContainer = styled.div`
     "todolist"
     "addtodobutton";
   width: 100%;
-  background-color: #D9F1FF;
+  background-color: #d9f1ff;
   position: relative;
 `;
 
 const Sidebar = ({ selectedDate, onAddTodoClick, tasks, setTasks, handleTaskSelect, selectedTask }) => {
   const [menuOpen, setMenuOpen] = useState(false);
+  const navigate = useNavigate(); // useNavigate 훅 추가
 
   return (
     <SidebarContainer>
@@ -29,7 +30,7 @@ const Sidebar = ({ selectedDate, onAddTodoClick, tasks, setTasks, handleTaskSele
       <CSSTransition in={menuOpen} timeout={300} classNames="fade" unmountOnExit>
         <MenuContent>
           <MenuButton onClick={() => setMenuOpen(!menuOpen)}>☰</MenuButton>
-          <MenuItem>Profile</MenuItem>
+          <MenuItem onClick={() => navigate("/main")}>Home</MenuItem> {/* Home 클릭 시 navigate 호출 */}
           <MenuItem>Logout</MenuItem>
           <MenuItem>About</MenuItem>
         </MenuContent>
@@ -129,7 +130,7 @@ const AddTodoButtonContainer = styled.div`
 `;
 
 const AddToDoButton = styled.button`
-  background-color: #9CDBFF;
+  background-color: #9cdbff;
   border: none;
   border-radius: 50%;
   color: white;
@@ -146,24 +147,6 @@ const AddToDoButton = styled.button`
   &:hover {
     background-color: #4285f4;
     color: white;
-  }
-`;
-
-const fadeIn = keyframes`
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-`;
-
-const fadeOut = keyframes`
-  from {
-    opacity: 1;
-  }
-  to {
-    opacity: 0;
   }
 `;
 
@@ -203,7 +186,7 @@ const MenuItem = styled.div`
   font-weight: bold;
   cursor: pointer;
   &:hover {
-    background-color: #3071a9;
+    color: black;
   }
   font-size: 2vw;
   margin: 2vh 0;
@@ -215,7 +198,7 @@ const Content = styled.div`
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: #D9F1FF;
+  background-color: #d9f1ff;
   display: grid;
   grid-template-rows: 10vh 6vh auto 1fr;
   grid-template-areas:

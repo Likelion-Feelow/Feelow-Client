@@ -13,6 +13,8 @@ import MainPage from "./pages/MainPage";
 import TimerPage from "./pages/TimerPage";
 import LoadingPage from "./pages/LoadingPage";
 
+import GPTPage from "./pages/GPTPage";
+
 
 function App() {
   return (
@@ -26,6 +28,7 @@ function App() {
           <Route path="/main" element={<MainPage />} />
           <Route path="/timer" element={<TimerPage />} />
           <Route path="/loading" element={<LoadingPage />} />
+          <Route path="/feedback" element={<GPTPage />} />
         </Routes>
     </Router>
   );

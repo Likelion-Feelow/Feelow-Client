@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { useLocation } from 'react-router-dom'; // React Router DOM import
+import { useLocation, useNavigate } from 'react-router-dom';
 
 import PauseImage from '../images/Pause.png';
 import TimerOn from '../images/TimerOn.png';
@@ -55,7 +55,8 @@ const DotsContainer = styled.div`
   align-items: center;
   width: 100%;
   padding-left: 20px;
-  margin-bottom: 20px;
+  margin-bottom: 6vh;
+  margin-left: 2vw
 `;
 
 const Dot = styled.div`
@@ -171,17 +172,30 @@ const TimeView = styled.div`
 `;
 
 const TimerPage = () => {
+
+  // 타이머 시간을 스킵하는 메서드
+  const skipTime = (seconds) => {
+    setTime(prevTime => Math.max(prevTime - seconds, 0));
+  };
+
+  // window 객체에 skipTime 메서드 추가
+  useEffect(() => {
+    window.skipTime = skipTime;
+    return () => {
+      delete window.skipTime;
+    };
+  }, []);
+
+  const navigate = useNavigate();
+
   const location = useLocation();
-  const { focusTime, breakTime, cycles } = location.state;
+  const { focusTime, breakTime, cycles, selectedEmotion, selectedTask } = location.state; // selectedTask 추가
+
   const [time, setTime] = useState(focusTime * 60);
   const [isActive, setIsActive] = useState(false);
   const [isFocus, setIsFocus] = useState(true);
   const [currentCycle, setCurrentCycle] = useState(0);
   const [progress, setProgress] = useState(0);
-
-  const toggleTimer = () => {
-    setIsActive(!isActive);
-  };
 
   const pauseTimer = () => {
     setIsActive(false);
@@ -211,7 +225,7 @@ const TimerPage = () => {
       }, 1000);
     } else if (time === 0) {
       clearInterval(interval);
-      setProgress(100); // Ensure the progress bar is at 100%
+      setProgress(100);
       setTimeout(() => {
         if (isFocus) {
           setIsFocus(false);
@@ -219,13 +233,35 @@ const TimerPage = () => {
         } else {
           setIsFocus(true);
           setCurrentCycle(currentCycle + 1);
-          setTime(focusTime * 60);
+          if (currentCycle < cycles - 1) {
+            setTime(focusTime * 60);
+          } else {
+            // 모든 사이클이 끝난 경우
+            handleComplete();
+            return; // 타이머를 중지하고 피드백 페이지로 이동
+          }
         }
         setProgress(0);
       }, 1000);
     }
     return () => clearInterval(interval);
   }, [isActive, time, isFocus, currentCycle, focusTime, breakTime]);
+
+  const handleComplete = () => {
+    setIsActive(false); // 타이머를 중지합니다.
+    navigate('/feedback', {
+      state: {
+        emotion: selectedEmotion,
+        task: selectedTask.task_name, // selectedTask의 task_name을 넘깁니다.
+      },
+    });
+  };
+
+  useEffect(() => {
+    if (time === 0 && !isActive) {
+      handleComplete();
+    }
+  }, [time, isActive]);
 
   const formatTime = (seconds) => {
     const minutes = String(Math.floor(seconds / 60)).padStart(2, '0');
@@ -276,8 +312,8 @@ const TimerPage = () => {
 };
 
 TimerPage.defaultProps = {
-  focusTime: 10, // Default focus time in minutes
-  breakTime: 3,  // Default break time in minutes
+  focusTime: 10,
+  breakTime: 3,
 };
 
 export default TimerPage;

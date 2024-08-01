@@ -46,25 +46,6 @@ const LogoImage = styled.img`
   margin-bottom: 1vh;
 `;
 
-const ProfileImage = styled.img`
-  margin-left: 6vw;
-  height: 5vh;
-  width: 5.1vh;
-`;
-
-const LogoutButton = styled.button`
-  background-color: #53B7FF;
-  border: none;
-  color: white;
-  font-size: 1vw;
-  cursor: pointer;
-  font-family: helvetica;
-  font-weight: bold;
-  border-radius: 20px;
-  padding: 0.8vh 1.5vw;
-  margin-right: 5vw;
-`;
-
 const Main = ({ 
     view, 
     setView, 

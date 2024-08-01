@@ -315,8 +315,21 @@ const EvaluatingPage = ({ selectedEmotion, taskDuration, selectedTask }) => {
   };
 
   const handleStartButtonClick = () => {
-    console.log('Navigating to /timer with state:', { focusTime: pomodoroCycle.focusTime, breakTime: pomodoroCycle.breakTime, cycles: pomodoroCycle.cycles });
-    navigate('/timer', { state: { focusTime: pomodoroCycle.focusTime, breakTime: pomodoroCycle.breakTime, cycles: pomodoroCycle.cycles } });
+    console.log('Navigating to /timer with state:', {
+      focusTime: pomodoroCycle.focusTime,
+      breakTime: pomodoroCycle.breakTime,
+      cycles: pomodoroCycle.cycles,
+      selectedTask: selectedTask, // selectedTask를 추가
+    });
+    navigate('/timer', {
+      state: {
+        focusTime: pomodoroCycle.focusTime,
+        breakTime: pomodoroCycle.breakTime,
+        cycles: pomodoroCycle.cycles,
+        selectedTask: selectedTask, // selectedTask를 추가
+        selectedEmotion: selectedEmotion, // selectedEmotion을 추가
+      },
+    });
   };
 
   return (
