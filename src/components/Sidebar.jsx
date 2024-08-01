@@ -1,85 +1,246 @@
-import React from "react";
-import styled from "styled-components";
-import { SidebarContainer } from "../styles/SidebarStyle";
+import React, { useState } from "react";
+import styled, { keyframes } from "styled-components";
+import { CSSTransition } from "react-transition-group";
 import TodoList from "./Todo/TodoList";
+import KakaoLogoutButton, { handleLogout } from "./Login/KakaoLogoutButton";
+import { useNavigate } from "react-router-dom";
 import AddTodoButton from "./Todo/AddTodoButton";
-import Timer from "../images/Timer.png";
 
-const Sidebar = ({ selectedDate, onAddTodoClick }) => {
+const SidebarContainer = styled.div`
+  display: grid;
+  grid-template-rows: 10vh 6vh auto 1fr;
+  grid-template-areas:
+    "menu"
+    "header"
+    "todolist"
+    "addtodobutton";
+  width: 100%;
+  background-color: #D9F1FF;
+  position: relative;
+`;
+
+const Sidebar = ({ selectedDate, onAddTodoClick, tasks, setTasks, handleTaskSelect, selectedTask }) => {
+  const navigate = useNavigate();
+  const [menuOpen, setMenuOpen] = useState(false);
 
   return (
     <SidebarContainer>
-      <Header>
-        <Title>To - Do</Title>
-        <IconContainer>
-          <img src={Timer} alt="Timer Icon" />
-        </IconContainer>
-      </Header>
-      <TodoListContainer>
-        <TodoList selectedDate={selectedDate} />
-      </TodoListContainer>
-      <AddTodoButtonContainer>
-        <AddTodoButton onAddTodoClick={onAddTodoClick} />
-      </AddTodoButtonContainer>
+      <HamburgerMenu>
+        <MenuButton onClick={() => setMenuOpen(!menuOpen)}>☰</MenuButton>
+      </HamburgerMenu>
+
+      <CSSTransition in={menuOpen} timeout={300} classNames="fade" unmountOnExit>
+        <MenuContent>
+          <MenuButton onClick={() => setMenuOpen(!menuOpen)}>☰</MenuButton>
+          <MenuItem>Profile</MenuItem>
+          <MenuItem onClick={() => handleLogout(navigate)}>Logout</MenuItem>
+          <MenuItem>About</MenuItem>
+          <KakaoLogoutButton />
+        </MenuContent>
+      </CSSTransition>
+
+      <CSSTransition in={!menuOpen} timeout={300} classNames="fade" unmountOnExit>
+        <Content>
+          <Header>
+            <Title>To - Do</Title>
+          </Header>
+
+          <TodoListContainer>
+            <TodoList 
+              selectedDate={selectedDate} 
+              tasks={tasks} 
+              setTasks={setTasks} 
+              handleTaskSelect={handleTaskSelect} // 추가: 작업 선택 핸들러 전달
+              selectedTask={selectedTask} // 추가: 선택된 작업 전달
+            />
+          </TodoListContainer>
+
+          <CSSTransition key={selectedDate} timeout={{ enter: 300, exit: 80 }} classNames="fade">
+            <AddTodoButtonContainer>
+              <AddToDoButton onClick={onAddTodoClick}>+</AddToDoButton>
+            </AddTodoButtonContainer>
+          </CSSTransition>
+        </Content>
+      </CSSTransition>
     </SidebarContainer>
   );
 };
 
 export default Sidebar;
 
-const Header = styled.div`
+const MenuButton = styled.button`
+  background-color: transparent;
+  border: none;
+  color: white;
+  font-size: 3vw;
+  position: absolute;
+  top: 2vh;
+  right: 2vw;
+  cursor: pointer;
+  z-index: 10;
+`;
+
+const HamburgerMenu = styled.div`
+  grid-area: menu;
   display: flex;
-  justify-content: space-between;
+  justify-content: right;
   align-items: center;
-  margin-bottom: 15px;
+`;
+
+const Header = styled.div`
+  grid-area: header;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 const Title = styled.h2`
-  font-size: 18px;
+  font-size: 1.8vw;
   font-weight: bold;
   color: #4285f4;
   margin: 0;
-  background-color: #e3f2fd;
   padding: 5px 10px;
+  margin: 0 2vw;
   border-radius: 10px;
 `;
 
-const IconContainer = styled.div`
-  width: 30px;
-  height: 30px;
-  background-color: #e3f2fd;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  img {
-    width: 40px;  // 원하는 크기로 설정
-    height: 40px; // 원하는 크기로 설정
-  }
-`;
-
 const TodoListContainer = styled.div`
+  grid-area: todolist;
   margin-top: 15px;
 `;
 
 const AddTodoButtonContainer = styled.div`
-  margin-top: 15px;
+  grid-area: addtodobutton;
+  margin: 2vh 0;
+  display: flex;
   text-align: center;
+  justify-content: center;
+
+  &.fade-enter {
+    opacity: 0;
+  }
+  &.fade-enter-active {
+    opacity: 1;
+    transition: opacity 500ms;
+  }
+  &.fade-exit {
+    opacity: 1;
+  }
+  &.fade-exit-active {
+    opacity: 0;
+    transition: opacity 300ms;
+  }
 `;
 
-const Button = styled.button`
-  background: none;
-  border: 2px solid #4285f4;
-  border-radius: 20px;
-  color: #4285f4;
-  padding: 10px 20px;
-  font-size: 16px;
+const AddToDoButton = styled.button`
+  background-color: #9CDBFF;
+  border: none;
+  border-radius: 50%;
+  color: white;
+  font-size: 4vw;
   cursor: pointer;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   outline: none;
 
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   &:hover {
     background-color: #4285f4;
     color: white;
+  }
+`;
+
+const fadeIn = keyframes`
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+`;
+
+const fadeOut = keyframes`
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+`;
+
+const MenuContent = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #4285f4;
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+  justify-content: center;
+  box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+
+  &.fade-enter {
+    opacity: 0;
+  }
+  &.fade-enter-active {
+    opacity: 1;
+    transition: opacity 300ms;
+  }
+  &.fade-exit {
+    opacity: 1;
+  }
+  &.fade-exit-active {
+    opacity: 0;
+    transition: opacity 300ms;
+  }
+`;
+
+const MenuItem = styled.div`
+  color: white;
+  padding-left: 3vw;
+  font-family: helvetica;
+  font-weight: bold;
+  cursor: pointer;
+  &:hover {
+    background-color: #3071a9;
+  }
+  font-size: 2vw;
+  margin: 2vh 0;
+`;
+
+const Content = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #D9F1FF;
+  display: grid;
+  grid-template-rows: 10vh 6vh auto 1fr;
+  grid-template-areas:
+    "menu"
+    "header"
+    "todolist"
+    "addtodobutton";
+  z-index: 5;
+
+  &.fade-enter {
+    opacity: 0;
+  }
+  &.fade-enter-active {
+    opacity: 1;
+    transition: opacity 300ms;
+  }
+  &.fade-exit {
+    opacity: 1;
+  }
+  &.fade-exit-active {
+    opacity: 0;
+    transition: opacity 300ms;
   }
 `;
