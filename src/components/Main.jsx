@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import profile from "../images/SkyBlueProfile.png";
 import logo from "../images/SkyBlueLogo.png";
@@ -6,6 +6,7 @@ import StyledCalendar from "./CalendarSection";
 import TodoList from "./Todo/TodoList";
 import AddTodoForm from "./Todo/AddTodoForm";
 import EmotionSelection from "./EmotionSelection";
+import EvaluatingPage from "../pages/EvaluatingPage";
 
 const Container = styled.div`
   display: grid;
@@ -15,7 +16,7 @@ const Container = styled.div`
     "main";
   justify-content: center;
   width: 100%;
-  height: 100%; /* 높이를 뷰포트 높이에 맞게 설정 */
+  height: 100%;
 `;
 
 const MainContainer = styled.div`
@@ -71,7 +72,10 @@ const Main = ({
     setSelectedDate, 
     addTask, 
     tasks,
-    setTasks
+    setTasks,
+    handleTaskSelect,
+    selectedTask,
+    handleEmotionSelect, // Make sure this prop is passed from the parent component
   }) => {
 
     console.log("Main selectedDate:", selectedDate);
@@ -80,28 +84,37 @@ const Main = ({
   return (
     <Container>
       <Header>
-        
         <LogoImage src={logo} alt="Logo" />
-        
       </Header>
       <MainContainer>
         {view === "calendar" && (
           <StyledCalendar 
             selectedDate={selectedDate} 
             setSelectedDate={setSelectedDate} 
+            tasks={tasks}
           />
+        )}
+        {view === "emotion" && selectedTask && (
+        <EmotionSelection 
+          selectedTask={selectedTask} 
+          onEmotionSelect={(selectedEmotion) => {
+            handleEmotionSelect(selectedEmotion);
+            setView("evaluating");
+          }} 
+        />
         )}
         {view === "todolist" && (
           <TodoList 
             selectedDate={selectedDate} 
             tasks={tasks} 
             setTasks={setTasks} 
+            handleTaskSelect={handleTaskSelect}
           />
         )}
-        {view === "emotion" && <EmotionSelection />}
         {view === "add" && (
           <AddTodoForm onCancel={() => setView("calendar")} addTask={addTask} selectedDate={selectedDate} />
         )}
+        {view === "evaluating" && <EvaluatingPage selectedTask={selectedTask} selectedEmotion={selectedTask.selectedEmotion} taskDuration={selectedTask.task_duration} />}
       </MainContainer>
     </Container>
   );
