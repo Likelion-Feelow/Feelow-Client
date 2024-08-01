@@ -12,58 +12,78 @@ const KakaoCallback = () => {
 
       if (code) {
         try {
-          await handleLogin(code);
+          // 인가 코드(code)를 서버로 전송하여 로그인 시도
+          const response = await axios.post(
+            "http://3.39.201.42:8090/auths/kakao/login",
+            { access_code: code }
+          );
+
+          if (response.status === 200) {
+            const { access_token: accessToken, refresh_token: refreshToken } = response.data;
+            localStorage.setItem("access_token", accessToken);
+            
+            // refresh token이 존재하는지 확인
+            if (refreshToken) {
+              localStorage.setItem("refresh_token", refreshToken);
+            } else {
+              console.warn("Refresh token is missing in the response");
+            }
+
+            navigate("/main");
+          }
         } catch (error) {
-          console.error("Error during authentication: ", error);
-          if (error.response && error.response.status === 404) {
-            // 로그인 실패 후 회원가입 시도
-            const { access_token: accessToken } = error.response.data;
-            try {
-              await handleRegister(accessToken);
-            } catch (registerError) {
-              console.error("Registration Error: ", registerError);
-              alert("사용자 인증이 실패하였습니다.");
+          console.error("Login Error: ", error);
+
+          if (error.response) {
+            // 서버 응답이 있는 경우
+            console.error("Error Response:", error.response);
+            alert(`Login Error: ${error.response.status} - ${error.response.data.error}`);
+            
+            // 사용자가 존재하지 않는 경우
+            if (error.response.status === 404 && error.response.data.error === "User is not registered. Please register first.") {
+              const accessToken = error.response.data.access_token;
+              const nickname = error.response.data.nickname;
+              try {
+                // 회원가입 시도
+                const response = await axios.post(
+                  "http://3.39.201.42:8090/auths/kakao/register",
+                  { access_token: accessToken, nickname: nickname }
+                );
+
+                if (response.status === 200) {
+                  const { access_token: newAccessToken, refresh_token: newRefreshToken } = response.data;
+                  localStorage.setItem("access_token", newAccessToken);
+
+                  // refresh token이 존재하는지 확인
+                  if (newRefreshToken) {
+                    localStorage.setItem("refresh_token", newRefreshToken);
+                  } else {
+                    console.warn("Refresh token is missing in the registration response");
+                  }
+
+                  navigate("/");
+                }
+              } catch (registerError) {
+                console.error("Registration Error: ", registerError);
+                alert(`Registration Error: ${registerError.response?.status} - ${registerError.response?.data?.message}`);
+              }
+            } else {
+              console.error("Unexpected Error: ", error.response);
+              alert(`Unexpected Error: ${error.response.status} - ${error.response.data.error}`);
             }
           } else {
-            alert("사용자 인증이 실패하였습니다.");
+            // 네트워크 에러 등
+            console.error("Network Error:", error);
+            alert(`Network Error: ${error.message}`);
           }
         }
       }
     };
 
-    const handleLogin = async (code) => {
-      const response = await axios.post(
-        "http://localhost:8000/auths/kakao/login",
-        { access_code: code }
-      );
-      processResponse(response);
-    };
-
-    const handleRegister = async (accessToken) => {
-      const response = await axios.post(
-        "http://localhost:8000/auths/kakao/register",
-        { access_token: accessToken }
-      );
-      processResponse(response);
-    };
-
-    const processResponse = (response) => {
-      if (response.status === 200) {
-        console.log(response.data);
-        const { access_token: accessToken, refresh_token: refreshToken } =
-          response.data;
-        localStorage.setItem("access_token", accessToken);
-        localStorage.setItem("refresh_token", refreshToken);
-        navigate("/main");
-      } else {
-        throw new Error("Invalid response status");
-      }
-    };
-
     fetchData();
-  }, [navigate]); // 두번 post 요청 보내게되면 의존성배열을 빈 배열로 설정해보기
+  }, [navigate]);
 
-  return <></>;
+  return <div>Loading...</div>;
 };
 
 export default KakaoCallback;

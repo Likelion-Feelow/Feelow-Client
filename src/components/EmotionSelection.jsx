@@ -224,8 +224,11 @@ const NextButton = styled.button`
     margin-left: 1vw;
     cursor: pointer;
     transition: background-color 0.3s;
-    opacity: ${props => (props.visible ? 1 : 0)};
-    animation: ${props => (props.visible ? fadeIn : fadeOut)} 0.5s;
+    opacity: 0;
+    ${({ visible }) => visible && css`
+        opacity: 1;
+        animation: ${fadeIn} 0.5s forwards;
+    `}
     &:hover {
         background-color: #2869B8;
     }

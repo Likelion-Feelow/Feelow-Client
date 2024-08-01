@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import styled, { keyframes, css } from "styled-components";
 
 import arrowImage from "../images/Point.png"; // 화살표 이미지 경로를 지정하세요.
@@ -13,6 +13,111 @@ import L from "../images/L.png";
 import O from "../images/O.png";
 import W from "../images/W.png";
 import { useNavigate } from "react-router-dom";
+
+
+
+
+
+
+
+const fadeIn = keyframes`
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+`;
+
+const slideUp = keyframes`
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-20vh);
+  }
+`;
+
+const slideDown = keyframes`
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(20vh);
+  }
+`;
+
+const slideDown2 = keyframes`
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(18vh);
+  }
+`;
+
+const slideLeft = keyframes`
+  from {
+    transform: translateY(20vh);
+  }
+  to {
+    transform: translate(-14vw, 20vh);
+  }
+`;
+
+const slideRight = keyframes`
+  from {
+    transform: translateY(20vh);
+  }
+  to {
+    transform: translate(14vw, 20vh);
+  }
+`;
+
+const WhiteBackground = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: white;
+  position: relative;
+  cursor: pointer;
+`;
+
+const WhiteBackgroundText = styled.div`
+  position: absolute;
+  opacity: 0;
+  animation-fill-mode: forwards;
+
+  font-size: 6vw;
+  font-weight: bold;
+  font-family: "helvetica";
+`;
+
+const FeelowText = styled(WhiteBackgroundText)`
+  animation: ${({ isVisible }) => isVisible && css`${fadeIn} 1s forwards, ${slideUp} 1s forwards 1s`};
+`;
+
+const FeelText = styled(WhiteBackgroundText)`
+  animation: ${({ isVisible }) => isVisible && css`${fadeIn} 1s forwards 2s, ${slideDown} 1s forwards 3s, ${slideLeft} 1s forwards 4s`};
+`;
+
+const FlowText = styled(WhiteBackgroundText)`
+  animation: ${({ isVisible }) => isVisible && css`${fadeIn} 1s forwards 5s, ${slideDown} 1s forwards 6s, ${slideRight} 1s forwards 7s`};
+`;
+
+const PlusText = styled(WhiteBackgroundText)`
+  animation: ${({ isVisible }) => isVisible && css`${fadeIn} 1s forwards 8s, ${slideDown2} 1s forwards 9s`};
+`;
+
+const EqualText = styled(WhiteBackgroundText)`
+  animation: ${({ isVisible }) => isVisible && css`${fadeIn} 1s forwards 10s`};
+`;
+
+
+
+
+
 
 const wave = keyframes`
   0%, 100% { transform: translateY(0); }
@@ -190,18 +295,18 @@ const BlueBackgroundText = styled.div`
   color: white;
 `;
 
-const WhiteBackground = styled(Section)`
-  background-color: white;
-`;
+// const WhiteBackground = styled(Section)`
+//  background-color: white;
+// `;
 
-const WhiteBackgroundText = styled.div`
-  font-size: 6vw;
-  margin: 2vh 0;
-  font-weight: bold;
-  font-family: "helvetica";
-  color: black;
-  text-align: center;
-`;
+// const WhiteBackgroundText = styled.div`
+//   font-size: 6vw;
+//   margin: 2vh 0;
+//   font-weight: bold;
+//   font-family: "helvetica";
+//   color: black;
+//   text-align: center;
+// `; 
 
 const SecondWhiteBackground = styled(Section)`
   background-color: white;
@@ -327,8 +432,47 @@ function OnBoardingPage() {
   const [isHovered, setIsHovered] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const sectionRefs = useRef([]);
+  const [isVisible, setIsVisible] = useState(false);
   const mainRef = useRef(null);
   const [hoveredIndex, setHoveredIndex] = useState(null);
+  
+
+
+
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true); // 섹션에 도착했을 때 애니메이션 시작
+          observer.disconnect(); // 관찰자 연결 해제
+        }
+      },
+      {
+        threshold: 0.5, // 섹션이 화면에 50% 보일 때 트리거
+      }
+    );
+
+    const section = sectionRefs.current[2]; // 3번째 섹션을 관찰
+    if (section) {
+      observer.observe(section); // 섹션을 관찰
+    }
+
+    return () => {
+      if (section) {
+        observer.unobserve(section); // 컴포넌트 언마운트 시 관찰 해제
+      }
+    };
+  }, []);
+
+
+
+
+
+
+  useEffect(() => {
+    // 애니메이션이 페이지 로드 시 실행되도록 하기 위해서 빈 useEffect를 사용합니다.
+  }, []);
 
   const handleArrowClick = () => {
     if (mainRef.current) {
@@ -421,9 +565,11 @@ function OnBoardingPage() {
         ref={(el) => (sectionRefs.current[2] = el)}
         onClick={() => handleSectionClick(2)}
       >
-        <WhiteBackgroundText>Feelow</WhiteBackgroundText>
-        <WhiteBackgroundText>=</WhiteBackgroundText>
-        <WhiteBackgroundText>Feel + Flow</WhiteBackgroundText>
+        <FeelowText isVisible={isVisible}>Feelow</FeelowText>
+        <FeelText isVisible={isVisible}>Feel</FeelText>
+        <FlowText isVisible={isVisible}>Flow</FlowText>
+        <PlusText isVisible={isVisible}>+</PlusText>
+        <EqualText isVisible={isVisible}>=</EqualText>
       </WhiteBackground>
 
       <SecondWhiteBackground
