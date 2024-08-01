@@ -11,7 +11,7 @@ const Wrapper = styled.div`
   align-items: center;
   justify-content: center;
   height: 100vh;
-  background-color: #3893FF;
+  background-color: #88D4FE;
 `;
 
 const Box = styled.div`
@@ -34,14 +34,14 @@ const ProgressBarContainer = styled.div`
 
 const ProgressBar = styled.div`
   height: 100%;
-  background-color: #70BBFF;
+  background-color: #BDE7FF;
   width: ${props => props.progress}%;
   transition: width 1s linear;
 `;
 
 const Content = styled.div`
   padding: 20px;
-  border-top: 5px solid #3893FF;
+  border-top: 5px solid #88D4FE;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -64,7 +64,7 @@ const Dot = styled.div`
   margin-right: 10px;
   border-radius: 50%;
   background-color: ${props => (props.completed ? '#3893FF' : '#FFFFFF')};
-  border: 4px solid #3893FF;
+  border: 4px solid #88D4FE;
   transition: background-color 0.5s;
 `;
 
@@ -76,7 +76,7 @@ const TimerDisplay = styled.div`
   width: 25vw;
   height: 20vh;
   padding: 4vh 7vw;
-  border: 5px solid #3893FF;
+  border: 5px solid #88D4FE;
   border-radius: 30px;
   background-color: #FFFFFF;
   display: flex;
@@ -97,7 +97,7 @@ const FocusText = styled.div`
   font-size: 2vw;
   font-weight: bold;
   font-family: 'Helvetica', sans-serif;
-  background-color: #3893FF;
+  background-color: #88D4FE;
   border-radius: 40px;
   padding: 2vh 2vw;
 `;
@@ -119,7 +119,7 @@ const TimerButton = styled.button`
   color: white;
   font-weight: bold;
   font-family: 'Helvetica', sans-serif;
-  background-color: #3893FF;
+  background-color: #88D4FE;
   border: none;
   border-radius: 30px;
   display: flex;
@@ -172,11 +172,11 @@ const TimeView = styled.div`
 
 const TimerPage = () => {
   const location = useLocation();
-  const { focusTime, breakTime } = location.state;
+  const { focusTime, breakTime, cycles } = location.state;
   const [time, setTime] = useState(focusTime * 60);
   const [isActive, setIsActive] = useState(false);
   const [isFocus, setIsFocus] = useState(true);
-  const [cycles, setCycles] = useState(0);
+  const [currentCycle, setCurrentCycle] = useState(0);
   const [progress, setProgress] = useState(0);
 
   const toggleTimer = () => {
@@ -218,14 +218,14 @@ const TimerPage = () => {
           setTime(breakTime * 60);
         } else {
           setIsFocus(true);
-          setCycles(cycles + 1);
+          setCurrentCycle(currentCycle + 1);
           setTime(focusTime * 60);
         }
         setProgress(0);
       }, 1000);
     }
     return () => clearInterval(interval);
-  }, [isActive, time, isFocus, cycles, focusTime, breakTime]);
+  }, [isActive, time, isFocus, currentCycle, focusTime, breakTime]);
 
   const formatTime = (seconds) => {
     const minutes = String(Math.floor(seconds / 60)).padStart(2, '0');
@@ -250,9 +250,9 @@ const TimerPage = () => {
         </ProgressBarContainer>
         <Content>
           <DotsContainer>
-            <Dot completed={cycles > 0} />
-            <Dot completed={cycles > 1} />
-            <Dot completed={cycles > 2} />
+            {Array.from({ length: cycles }).map((_, index) => (
+              <Dot key={index} completed={currentCycle > index} />
+            ))}
           </DotsContainer>
           <TimerDisplay>
             {formatTime(time)}

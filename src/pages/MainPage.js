@@ -21,9 +21,12 @@ function MainPage() {
     setView('emotion'); // 선택된 작업이 있을 때 emotion 화면으로 전환
   };
 
-  const handleEmotionSelect = (emotion) => {
-    setSelectedEmotion(emotion);
-    setCurrentStep("evaluating");
+  const handleEmotionSelect = (selectedEmotion) => {
+    if (selectedTask) {
+      selectedTask.selectedEmotion = selectedEmotion;
+      console.log("Task after emotion select:", selectedTask);
+      setCurrentStep("evaluating");
+    }
   };
 
   return (

@@ -1,10 +1,6 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
-import Header from "./components/Header";
-import Sidebar from "./components/Sidebar";
-import Main from "./components/Main";
-
 import LoginPage from "./pages/LoginPage";
 import OnBoardingPage from "./pages/OnBoardingPage";
 
@@ -31,17 +27,6 @@ function App() {
           <Route path="/timer" element={<TimerPage />} />
           <Route path="/loading" element={<LoadingPage />} />
         </Routes>
-
-      {/* <Container> */}
-      {/* Header와 Sidebar는 모든 페이지에서 공통으로 사용되는 컴포넌트로, Container 내에서 고정된 위치에 렌더링 */}
-      {/* <Header />
-        <Sidebar />
-      
-        <Routes>
-          <Route path="/" element={<Main />} />
-          <Route path="/main" element={<Main />} />
-        </Routes> */}
-      {/* </Container> */}
     </Router>
   );
 }

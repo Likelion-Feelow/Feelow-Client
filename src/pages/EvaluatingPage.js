@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styled, { keyframes } from 'styled-components';
 import { FaClock } from 'react-icons/fa';
-import { useNavigate } from 'react-router-dom'; // useNavigate import
+import { useNavigate } from 'react-router-dom';
 
 const MainContainer = styled.div`
   display: flex;
@@ -212,7 +212,7 @@ const CycleText = styled.div`
 const EvaluatingPage = ({ selectedEmotion, taskDuration, selectedTask }) => {
   const [loading, setLoading] = useState(true);
   const [pomodoroCycle, setPomodoroCycle] = useState(null);
-  const navigate = useNavigate(); // useNavigate 훅 사용
+  const navigate = useNavigate();
 
   useEffect(() => {
     const calculatePomodoroCycle = () => {
@@ -267,18 +267,28 @@ const EvaluatingPage = ({ selectedEmotion, taskDuration, selectedTask }) => {
         '분노2': 0.1,
         '울분': 0.1,
         '분통': 0.1,
+        '불안': 0.3,
       };
 
       const weight = emotionWeights[selectedEmotion] || 1.0;
-      const focusTime = Math.min(Math.max(15, weight * 25), 50);
-      const breakTime = 5 + (focusTime - 25) / 5;
-      const cycles = Math.ceil(taskDuration / (focusTime * 60));
+      console.log(`Selected Emotion: ${selectedEmotion}, Weight: ${weight}`);
 
+      const focusTime = Math.min(Math.max(15, weight * 25), 50);
+      console.log(`Calculated Focus Time: ${focusTime} minutes`);
+
+      const breakTime = 5 + (focusTime - 25) / 5;
+      console.log(`Calculated Break Time: ${breakTime} minutes`);
+
+      // 전체 작업 시간을 주어진 포모도로 사이클로 나누어 총 몇 회의 포모도로 사이클이 필요한지 계산
+      const cycles = Math.ceil(taskDuration / (focusTime * 60));
+      console.log(`Calculated Pomodoro Cycles: ${cycles}`);
+
+      // 상태 업데이트
       setPomodoroCycle({ focusTime, breakTime, cycles });
       setLoading(false);
     };
 
-    setTimeout(calculatePomodoroCycle, 2000);
+    setTimeout(calculatePomodoroCycle, 2000); // 계산을 2초 후에 수행 (로딩 화면을 위해)
   }, [selectedEmotion, taskDuration]);
 
   if (loading) {
@@ -305,8 +315,8 @@ const EvaluatingPage = ({ selectedEmotion, taskDuration, selectedTask }) => {
   };
 
   const handleStartButtonClick = () => {
-    console.log('Navigating to /timer with state:', { focusTime: pomodoroCycle.focusTime, breakTime: pomodoroCycle.breakTime });
-    navigate('/timer', { state: { focusTime: pomodoroCycle.focusTime, breakTime: pomodoroCycle.breakTime } });
+    console.log('Navigating to /timer with state:', { focusTime: pomodoroCycle.focusTime, breakTime: pomodoroCycle.breakTime, cycles: pomodoroCycle.cycles });
+    navigate('/timer', { state: { focusTime: pomodoroCycle.focusTime, breakTime: pomodoroCycle.breakTime, cycles: pomodoroCycle.cycles } });
   };
 
   return (

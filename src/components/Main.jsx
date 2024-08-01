@@ -80,6 +80,7 @@ const Main = ({
 
     console.log("Main selectedDate:", selectedDate);
     console.log("Main setSelectedDate:", setSelectedDate);
+    console.log("Main selectedTask:", selectedTask);
 
   return (
     <Container>
