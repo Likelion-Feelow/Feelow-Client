@@ -52,7 +52,7 @@ const ProfileImage = styled.img`
 `;
 
 const LogoutButton = styled.button`
-  background-color: #53B7FF;
+  background-color: #53b7ff;
   border: none;
   color: white;
   font-size: 1vw;
@@ -64,43 +64,44 @@ const LogoutButton = styled.button`
   margin-right: 5vw;
 `;
 
-const Main = ({ 
-    view, 
-    setView, 
-    selectedDate, 
-    setSelectedDate, 
-    addTask, 
-    tasks,
-    setTasks
-  }) => {
-
-    console.log("Main selectedDate:", selectedDate);
-    console.log("Main setSelectedDate:", setSelectedDate);
+const Main = ({
+  view,
+  setView,
+  selectedDate,
+  setSelectedDate,
+  addTask,
+  tasks,
+  setTasks,
+}) => {
+  console.log("Main selectedDate:", selectedDate);
+  console.log("Main setSelectedDate:", setSelectedDate);
 
   return (
     <Container>
       <Header>
-        
         <LogoImage src={logo} alt="Logo" />
-        
       </Header>
       <MainContainer>
         {view === "calendar" && (
-          <StyledCalendar 
-            selectedDate={selectedDate} 
-            setSelectedDate={setSelectedDate} 
+          <StyledCalendar
+            selectedDate={selectedDate}
+            setSelectedDate={setSelectedDate}
           />
         )}
         {view === "todolist" && (
-          <TodoList 
-            selectedDate={selectedDate} 
-            tasks={tasks} 
-            setTasks={setTasks} 
+          <TodoList
+            selectedDate={selectedDate}
+            tasks={tasks}
+            setTasks={setTasks}
           />
         )}
         {view === "emotion" && <EmotionSelection />}
         {view === "add" && (
-          <AddTodoForm onCancel={() => setView("calendar")} addTask={addTask} selectedDate={selectedDate} />
+          <AddTodoForm
+            onCancel={() => setView("calendar")}
+            addTask={addTask}
+            selectedDate={selectedDate}
+          />
         )}
       </MainContainer>
     </Container>

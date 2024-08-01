@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import styled, { keyframes } from "styled-components";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 import TodoList from "./Todo/TodoList";
+import KakaoLogoutButton, { handleLogout } from "./Login/KakaoLogoutButton";
+import { useNavigate } from "react-router-dom";
 
 const SidebarContainer = styled.div`
   display: grid;
@@ -17,6 +19,7 @@ const SidebarContainer = styled.div`
 `;
 
 const Sidebar = ({ selectedDate, onAddTodoClick, tasks, setTasks }) => {
+  const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
@@ -29,8 +32,9 @@ const Sidebar = ({ selectedDate, onAddTodoClick, tasks, setTasks }) => {
         <MenuContent>
           <MenuButton onClick={() => setMenuOpen(!menuOpen)}>☰</MenuButton>
           <MenuItem>Profile</MenuItem>
-          <MenuItem>Logout</MenuItem>
+          <MenuItem onClick={() => handleLogout(navigate)}>Logout</MenuItem>
           <MenuItem>About</MenuItem>
+          <KakaoLogoutButton />
         </MenuContent>
       </CSSTransition>
 

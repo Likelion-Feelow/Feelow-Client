@@ -8,7 +8,10 @@ const AddTodoForm = ({ onCancel, addTask, selectedDate }) => {
   const [minutes, setMinutes] = useState('');
   const [seconds, setSeconds] = useState('');
   const [taskDescription, setTaskDescription] = useState('');
-  const formattedDate = selectedDate.toISOString().split('T')[0];
+  // const formattedDate = selectedDate.toISOString().split('T')[0];
+
+  // 로컬 시간대로 날짜 포맷팅
+  const formattedDate = selectedDate.toLocaleDateString('en-CA'); // 'en-CA' 포맷은 'YYYY-MM-DD' 형식으로 출력
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -26,13 +29,13 @@ const AddTodoForm = ({ onCancel, addTask, selectedDate }) => {
     const accessToken = localStorage.getItem('accessToken');
 
     try {
-      const response = await axios.post('/tasks', newTask, {
+      const response = await axios.post('http://3.39.201.42:8090//tasks', newTask, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
       });
       addTask(response.data); // 새 할 일 추가(todo list에 띄워주기 위해)
-      onCancel(); // 할 일 추가 이후 폼 닫기
+      // onCancel(); // 할 일 추가 이후 폼 닫기
     } catch (error) {
       console.error("새 할 일 추가 실패", error);
     }
