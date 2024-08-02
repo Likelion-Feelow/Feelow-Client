@@ -7,10 +7,9 @@ const CalendarContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(8, 1fr);
   grid-template-rows: repeat(7, 1fr);
-  border-radius: 20px;
   font-family: Helvetica, sans-serif;
   font-weight: bold;
-  height: 100%; /* Make the calendar height responsive */
+  height: 100% /* Make the calendar height responsive */
   width: 100%; /* Set a maximum width */
 `;
 
@@ -23,8 +22,8 @@ const MonthHeader = styled.div`
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  border-top-left-radius: 15px; /* Rounded corners */
-  font-size: 3vw;
+  
+  font-size: 4vw;
 `;
 
 // Day of the week header
@@ -33,7 +32,7 @@ const DayHeader = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.5vw;
+  font-size: 2vw;
 
   ${({ isLast }) => isLast && `
     border-top-right-radius: 15px;
@@ -46,7 +45,7 @@ const WeekNumber = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.5vw;
+  font-size: 2vw;
 
   ${({ isLast }) => isLast && `
     border-bottom-left-radius: 15px;
@@ -58,9 +57,9 @@ const CalendarTile = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 2vh 4vh;
-  padding: 2vh 1.17vw;
-  font-size: 1.5vw;
+  margin: 1vh 3vh;
+  padding: 1.5vw 1.5vw;
+  font-size: 2vw;
   color: black;
   background: ${({ $feelings }) => ($feelings ? `linear-gradient(135deg, ${$feelings[0]} 100%, ${$feelings[1]} 30%)` : 'white')}; // 변경된 부분: 두 감정 색상의 그라디언트 사용
   
@@ -68,6 +67,22 @@ const CalendarTile = styled.div`
   cursor: pointer;
   opacity: 0.9;
   transition: all 0.3s ease;
+
+  box-sizing: border-box;
+
+
+  &::before {
+    content: '';
+    display: block;
+    padding-top: 100%;
+  }
+
+  & > span {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
 
   &:hover {
     filter: brightness(1.1);

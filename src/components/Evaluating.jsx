@@ -209,7 +209,7 @@ const CycleText = styled.div`
   transform: translate(-50%, -50%);
 `;
 
-const EvaluatingPage = ({ selectedEmotion, taskDuration, selectedTask }) => {
+const Evaluating = ({ selectedEmotion, taskDuration, selectedTask }) => {
   const [loading, setLoading] = useState(true);
   const [pomodoroCycle, setPomodoroCycle] = useState(null);
   const navigate = useNavigate();
@@ -363,4 +363,4 @@ const EvaluatingPage = ({ selectedEmotion, taskDuration, selectedTask }) => {
   );
 };
 
-export default EvaluatingPage;
+export default Evaluating;

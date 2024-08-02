@@ -6,11 +6,11 @@ import StyledCalendar from "./CalendarSection";
 import TodoList from "./Todo/TodoList";
 import AddTodoForm from "./Todo/AddTodoForm";
 import EmotionSelection from "./EmotionSelection";
-import EvaluatingPage from "../pages/EvaluatingPage";
+import Evaluating from "./Evaluating.jsx";
 
 const Container = styled.div`
   display: grid;
-  grid-template-rows: 1fr 7fr;
+  grid-template-rows: 1fr 6fr;
   grid-template-areas:
     "header"
     "main";
@@ -25,7 +25,7 @@ const MainContainer = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 75vw;
+  width: 100vh;
 `;
 
 const Header = styled.header`
@@ -37,13 +37,13 @@ const Header = styled.header`
   justify-content: center;
   background-color: white;
   padding: 0 0;
-  margin-top: 6vh;
+  
 `;
 
 const LogoImage = styled.img`
-  margin-top: 0vh;
+  margin-top: 4vh;
   height: 3vw;
-  margin-bottom: 1vh;
+  
 `;
 
 const Main = ({ 
@@ -65,9 +65,13 @@ const Main = ({
 
   return (
     <Container>
+
+
       <Header>
         <LogoImage src={logo} alt="Logo" />
       </Header>
+
+
       <MainContainer>
         {view === "calendar" && (
           <StyledCalendar 
@@ -96,8 +100,9 @@ const Main = ({
         {view === "add" && (
           <AddTodoForm onCancel={() => setView("calendar")} addTask={addTask} selectedDate={selectedDate} />
         )}
-        {view === "evaluating" && <EvaluatingPage selectedTask={selectedTask} selectedEmotion={selectedTask.selectedEmotion} taskDuration={selectedTask.task_duration} />}
+        {view === "evaluating" && <Evaluating selectedTask={selectedTask} selectedEmotion={selectedTask.selectedEmotion} taskDuration={selectedTask.task_duration} />}
       </MainContainer>
+      
     </Container>
   );
 };

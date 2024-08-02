@@ -15,7 +15,7 @@ const Wrapper = styled.div`
 
 const Box = styled.div`
   width: 60vw;
-  height: 30vh;
+  height: 10vw;
   background-color: #FFFFFF;
   border-radius: 20px;
   display: flex;
@@ -26,6 +26,8 @@ const Box = styled.div`
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   position: relative; /* 자식 박스를 절대 위치시키기 위해 */
   border-top: 5px solid #53B7FF; /* 상단 테두리 추가 */
+  margin-bottom: 2vw; /* 하단 여백 추가 */
+  margin-top: 4vw;
 `;
 
 const TopBox = styled.div`
@@ -57,33 +59,26 @@ const BottomBox = styled.div`
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.1); /* 그림자 추가 */
 `;
 
-const Feedback = styled.div`
-  font-family: 'Helvetica', sans-serif;
-  font-size: 1.5vw;
-  color: #000;
-  text-align: center;
-`;
-
 const EmotionTextRight = styled.div`
     font-family: 'Helvetica', sans-serif;
-    font-size: 2vw;
+    font-size: 2.5vw;
     color: white;
     font-weight: bold;
     background-color: #53B7FF;
     border-radius: 50%;
-    padding: 0.7vw 1vw;
+    padding: 0.5vw 1vw;
     margin-right: -0.5vw;
     margin-left: 0.5vw;
 `;
 
 const EmotionTextLeft = styled.div`
     font-family: 'Helvetica', sans-serif;
-    font-size: 2vw;
+    font-size: 2.5vw;
     color: white;
     font-weight: bold;
     background-color: #53B7FF;
     border-radius: 50%;
-    padding: 0.7vw 1vw;
+    padding: 0.5vw 1vw;
     margin-left: -0.5vw;
     margin-right: 0.5vw;
 `;
@@ -122,8 +117,7 @@ const Text2 = styled.div`
 `;
 
 const NextButton = styled.button`
-  margin-top: 20px;
-  padding: 10px 20px;
+  margin-top: 3.5vw;
   font-size: 1.5vw;
   border: none;
   border-radius: 10px;

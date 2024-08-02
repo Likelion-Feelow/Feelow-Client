@@ -61,4 +61,5 @@ const Container = styled.div`
   grid-template-areas: 'main sidebar';
   grid-template-columns: 3fr 1fr;
   height: 100vh;
+  width: 100vw;
 `;

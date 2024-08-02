@@ -34,7 +34,7 @@ const slideUp = keyframes`
     transform: translateY(0);
   }
   to {
-    transform: translateY(-20vh);
+    transform: translateY(-10vw);
   }
 `;
 
@@ -43,7 +43,7 @@ const slideDown = keyframes`
     transform: translateY(0);
   }
   to {
-    transform: translateY(20vh);
+    transform: translateY(10vw);
   }
 `;
 
@@ -52,25 +52,25 @@ const slideDown2 = keyframes`
     transform: translateY(0);
   }
   to {
-    transform: translateY(18vh);
+    transform: translateY(10vw);
   }
 `;
 
 const slideLeft = keyframes`
   from {
-    transform: translateY(20vh);
+    transform: translateY(10vw);
   }
   to {
-    transform: translate(-14vw, 20vh);
+    transform: translate(-14vw, 10vw);
   }
 `;
 
 const slideRight = keyframes`
   from {
-    transform: translateY(20vh);
+    transform: translateY(10vw);
   }
   to {
-    transform: translate(14vw, 20vh);
+    transform: translate(14vw, 10vw);
   }
 `;
 
@@ -280,6 +280,9 @@ const Arrow = styled.img`
 
 const BlueBackground = styled(Section)`
   background-color: #3893ff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
   ${({ isHovered }) =>
     isHovered &&
@@ -289,7 +292,7 @@ const BlueBackground = styled(Section)`
 `;
 
 const BlueBackgroundText = styled.div`
-  font-size: 70px;
+  font-size: 7vw;
   font-weight: bold;
   font-family: "helvetica";
   color: white;
@@ -377,7 +380,7 @@ const wave2 = keyframes`
 `;
 
 const FinalBackgroundText = styled.div`
-  font-size: 40px;
+  font-size: 4vw;
   font-weight: bold;
   font-family: 'helvetica';
   color: white;

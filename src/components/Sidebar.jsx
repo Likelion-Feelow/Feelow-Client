@@ -136,8 +136,8 @@ const AddToDoButton = styled.button`
   color: white;
   font-size: 4vw;
   cursor: pointer;
-  width: 60px;
-  height: 60px;
+  width: 5vw;
+  height: 5vw;
   display: flex;
   align-items: center;
   justify-content: center;
