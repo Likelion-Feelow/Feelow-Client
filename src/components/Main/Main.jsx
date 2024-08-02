@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import profile from "../images/SkyBlueProfile.png";
-import logo from "../images/SkyBlueLogo.png";
-import StyledCalendar from "./CalendarSection";
-import TodoList from "./Todo/TodoList";
-import AddTodoForm from "./Todo/AddTodoForm";
-import EmotionSelection from "./EmotionSelection";
-import Evaluating from "./Evaluating.jsx";
+import profile from "../../images/SkyBlueProfile.png";
+import logo from "../../images/SkyBlueLogo.png";
+import StyledCalendar from "../Calendar/CalendarSection.jsx";
+import TodoList from "../Todo/TodoList.jsx";
+import AddTodoForm from "../Todo/AddTodoForm.jsx";
+import EmotionSelection from "../Emotion/StartEmotionSelection.jsx";
+import Evaluating from "../Emotion/Evaluating.jsx";
 
 const Container = styled.div`
   display: grid;

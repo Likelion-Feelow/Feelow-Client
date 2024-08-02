@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import styled, { keyframes } from "styled-components";
 import { CSSTransition } from "react-transition-group";
 import { useNavigate } from "react-router-dom";
-import TodoList from "./Todo/TodoList";
+import TodoList from "../Todo/TodoList";
 
 const SidebarContainer = styled.div`
   display: grid;

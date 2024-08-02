@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled, { keyframes, css } from 'styled-components';
+import { useNavigate } from 'react-router-dom';
 
 const Container = styled.div`
     display: grid;
@@ -13,7 +14,7 @@ const Container = styled.div`
     font-weight: bold;
     height: 75vh;
     width: 65vw;
-    background-color: #A8E0FF;
+    background-color: white;
     padding: 1vw;
     border-radius: 15px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -92,7 +93,7 @@ const HeaderTitle = styled.div`
     font-weight: bold;
     display: flex;
     font-family: Helvetica, sans-serif;
-    color: white;
+    color: #3893FF;
     margin-top: 3vh;
     margin-left: 2vw;
 `;
@@ -102,16 +103,15 @@ const QuestionContainer = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: transparent;
+    background-color: transparent; 
 `;
 
 const Question = styled.div`
     font-size: 2vw;
     font-family: Helvetica, sans-serif;
-    color: white;
+    color: #3893FF;
     font-weight: bold;
     margin-left: 8vw;
-    
 `;
 
 const EmotionBlock = styled.div`
@@ -150,7 +150,7 @@ const MainEmotionButton = styled.button`
     border-radius: 30px;
     padding: 0.7vh;
     width: 90%;
-    height: 5vw;
+    height: 4vw;
     cursor: pointer;
     transition: background-color 0.3s, color 0.3s;
     &:hover {
@@ -247,6 +247,7 @@ const emotions = [
 ];
 
 const EmotionSelection = ({ onEmotionSelect, selectedTask }) => {
+    const navigate = useNavigate();
     const [activeEmotion, setActiveEmotion] = useState('');
     const [selectedEmotion, setSelectedEmotion] = useState('');
     const [confirmedEmotionColor, setConfirmedEmotionColor] = useState('#3893FF');
@@ -288,6 +289,11 @@ const EmotionSelection = ({ onEmotionSelect, selectedTask }) => {
         }
     };
 
+    const handleNextClick = () => {
+        onEmotionSelect(selectedEmotion);
+        navigate('/main');
+    };
+
     return (
         <Container>
             <Header>
@@ -296,14 +302,14 @@ const EmotionSelection = ({ onEmotionSelect, selectedTask }) => {
             
             <QuestionContainer>
                 <Question>
-                    현재의 감정은 어떤가요?
+                    할 일이 끝난 현재의 감정은 어떤가요?
                 </Question>
 
                 <ConfirmButton bgColor={confirmedEmotionColor} color={confirmedEmotionColor ? '#ffffff' : 'white'}>
                     {selectedEmotion || '감정'}
                 </ConfirmButton>
 
-                <NextButton visible={showNextButton} onClick={() => onEmotionSelect(selectedEmotion)}>다음으로</NextButton>
+                <NextButton visible={showNextButton} onClick={handleNextClick}>다음으로</NextButton>
             </QuestionContainer>
 
             <EmotionContainer>

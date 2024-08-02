@@ -1,119 +1,113 @@
 import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
-import { useLocation, useNavigate } from 'react-router-dom';
+import styled, { keyframes, css } from 'styled-components';
+import { useLocation } from 'react-router-dom';
 import axios from 'axios';
+import EmotionSelection from '../components/Emotion/EndEmotionSelection'; // Adjust the import path as needed
 
 const Wrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
   height: 100vh;
+  width: 100vw; /* Ensure it takes full width */
   background-color: #53B7FF;
   flex-direction: column;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+  position: relative; /* Positioning relative to align the sliding components */
+  overflow: hidden; /* Hide overflowing content */
 `;
 
 const Box = styled.div`
-  width: 60vw;
-  height: 10vw;
+  width: 61vw;
+  height: 40vh; /* Adjusted to a fixed height */
   background-color: #FFFFFF;
   border-radius: 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 8vw;
+  padding: 0 4vw; /* Adjusted padding */
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  position: relative; /* 자식 박스를 절대 위치시키기 위해 */
-  border-top: 5px solid #53B7FF; /* 상단 테두리 추가 */
-  margin-bottom: 2vw; /* 하단 여백 추가 */
-  margin-top: 4vw;
+  position: relative;
+  border-top: 5px solid #53B7FF;
+  margin-bottom: 2vw;
 `;
 
 const TopBox = styled.div`
-  width: 70%; /* 너비 조정 가능 */
-  height: 13vh; /* 높이 조정 가능 */
+  width: 50vw;
+  height: 13vh;
   background-color: #FFFFFF;
-  border: 3px solid #53B7FF; /* 테두리 색상 */
+  border: 3px solid #53B7FF;
   border-radius: 10px;
-  position: absolute; /* 절대 위치로 상단 중앙에 배치 */
-  top: -65px; /* 박스의 위치 조정: 상단 테두리 위로 */
-  left: 50%; /* 중앙 정렬 */
-  transform: translateX(-50%); /* 중앙 정렬 보정 */
+  position: absolute;
+  top: -65px;
+  left: 50%;
+  transform: translateX(-50%);
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1); /* 그림자 추가 */
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
 `;
 
 const BottomBox = styled.div`
-  width: 60vw; /* Box와 같은 너비 설정 */
-  height: 70px; /* 높이 조정 가능 */
+  width: 65vw; /* Full width within Box */
+  height: auto; /* Adjust height to content */
   background-color: #FFFFFF;
-  border: 2px solid #53B7FF; /* 테두리 색상 */
+  border: 2px solid #53B7FF;
   border-radius: 10px;
-  margin-top: 20px; /* 상단 박스와의 간격 조정 */
+  margin-top: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1); /* 그림자 추가 */
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  padding: 2vw; /* Added padding for spacing */
 `;
 
-const EmotionTextRight = styled.div`
-    font-family: 'Helvetica', sans-serif;
-    font-size: 2.5vw;
-    color: white;
-    font-weight: bold;
-    background-color: #53B7FF;
-    border-radius: 50%;
-    padding: 0.5vw 1vw;
-    margin-right: -0.5vw;
-    margin-left: 0.5vw;
-`;
-
-const EmotionTextLeft = styled.div`
-    font-family: 'Helvetica', sans-serif;
-    font-size: 2.5vw;
-    color: white;
-    font-weight: bold;
-    background-color: #53B7FF;
-    border-radius: 50%;
-    padding: 0.5vw 1vw;
-    margin-left: -0.5vw;
-    margin-right: 0.5vw;
+const EmotionText = styled.div`
+  font-family: 'Helvetica', sans-serif;
+  font-size: 2.5vw;
+  color: white;
+  font-weight: bold;
+  background-color: #53B7FF;
+  border-radius: 40px;
+  padding: 0.5vw 2vw;
+  margin: 0 0.5vw;
 `;
 
 const NormalText = styled.div`
-    font-family: 'Helvetica', sans-serif;
-    font-size: 2vw;
-    color: #53B7FF;
-    font-weight: bold;
+  font-family: 'Helvetica', sans-serif;
+  font-size: 2vw;
+  color: #53B7FF;
+  font-weight: bold;
+  text-align: center;
 `;
 
 const NormalText2 = styled.div`
-    font-family: 'Helvetica', sans-serif;
-    font-size: 2vw;
-    color: black;
-    text-align: center;
-    line-height: 2;
+  font-family: 'Helvetica', sans-serif;
+  font-size: 2vw;
+  color: black;
+  text-align: center;
+  line-height: 2;
 `;
 
 const Text1 = styled.div`
-    font-family: 'Helvetica', sans-serif;
-    font-size: 1.5vw;
-    color: #53B7FF;
-    font-weight: bold;
+  font-family: 'Helvetica', sans-serif;
+  font-size: 1.8vw;
+  color: #53B7FF;
+  font-weight: bold;
+  text-align: center;
 `;
 
 const Text2 = styled.div`
-    color: white;
-    font-family: 'Helvetica', sans-serif;
-    font-size: 2vw;
-    font-weight: bold;
-    background-color: #53B7FF;
-    border-radius: 90px;
-    padding: 2vw 1.5vw;
-    margin: 0 1vw;
+  color: white;
+  font-family: 'Helvetica', sans-serif;
+  font-size: 2vw;
+  font-weight: bold;
+  background-color: #53B7FF;
+  border-radius: 90px;
+  padding: 1vw 1vw;
+  margin-right: 0.5vw;
+  margin-left: 1vw;
+  text-align: center;
 `;
 
 const NextButton = styled.button`
@@ -128,16 +122,77 @@ const NextButton = styled.button`
   transition: opacity 0.5s ease;
 `;
 
+const PrevNextButtonContainer = styled.div`
+  position: absolute;
+  bottom: -4.5vw;
+  display: flex;
+  gap: 2vw;
+`;
+
+const PrevNextButton = styled.button`
+  font-size: 1.5vw;
+  border: none;
+  background-color: transparent;
+  color: white;
+  cursor: pointer;
+  padding: 0.5vw 2vw;
+`;
+
+const slideUp = keyframes`
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-100%);
+  }
+`;
+
+const slideDown = keyframes`
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+`;
+
+const SlideWrapper = styled.div`
+  width: 100%;
+  position: absolute; /* Positioned absolutely within Wrapper */
+  top: ${({ slide }) => (slide ? '-100%' : '50%')};
+  left: 50%;
+  transform: translate(-50%, -50%);
+  transition: top 0.5s ease;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+`;
+
+const EmotionSelectionWrapper = styled.div`
+  width: 100%;
+  position: absolute; /* Positioned absolutely within Wrapper */
+  top: ${({ slide }) => (slide ? '50%' : '100%')};
+  left: 50%;
+  transform: translate(-50%, -50%);
+  transition: top 0.5s ease;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
 const GPTPage = () => {
   const location = useLocation();
-  const navigate = useNavigate();
   const { emotion, task } = location.state;
   const [feedback, setFeedback] = useState('');
-  const [loading, setLoading] = useState(true); // 로딩 상태 추가
-  const [buttonVisible, setButtonVisible] = useState(false); // 버튼 가시성 상태 추가
+  const [loading, setLoading] = useState(true);
+  const [buttonVisible, setButtonVisible] = useState(false);
+  const [slide, setSlide] = useState(false); // State for sliding effect
 
   useEffect(() => {
-    let isMounted = true; // 이 플래그를 사용하여 컴포넌트가 마운트된 상태인지 확인합니다.
+    let isMounted = true;
 
     const fetchFeedback = async () => {
       try {
@@ -167,7 +222,7 @@ const GPTPage = () => {
         console.error('Error fetching feedback:', error);
       } finally {
         if (isMounted) {
-          setLoading(false); // 요청이 끝난 후 로딩 상태를 false로 설정
+          setLoading(false);
         }
       }
     };
@@ -175,43 +230,58 @@ const GPTPage = () => {
     fetchFeedback();
 
     return () => {
-      isMounted = false; // 컴포넌트 언마운트 시 플래그를 false로 설정합니다.
+      isMounted = false;
     };
   }, [emotion, task]);
 
-  // 3초 후 버튼을 보이게 하는 useEffect 추가
   useEffect(() => {
     if (!loading) {
       const timer = setTimeout(() => {
         setButtonVisible(true);
-      }, 3000); // 3초 후에 버튼을 보이도록 설정
+      }, 3000);
 
-      return () => clearTimeout(timer); // 컴포넌트 언마운트 시 타이머 정리
+      return () => clearTimeout(timer);
     }
   }, [loading]);
 
   const handleNextPage = () => {
-    navigate('/main'); // 다음 페이지로 이동하는 로직 추가
+    setSlide(true); // Trigger slide up animation
+  };
+
+  const handlePreviousPage = () => {
+    setSlide(false); // Trigger slide down animation
   };
 
   return (
     <Wrapper>
-      <Box>
-        <TopBox>
-          <EmotionTextRight>{emotion[0]}</EmotionTextRight>
-          <EmotionTextLeft>{emotion[1]}</EmotionTextLeft>
-          <NormalText>의 감정을 안고 할 일을 완수했군요!</NormalText>
-        </TopBox>
-        <NormalText2>{loading ? '피드백을 가져오는 중...' : feedback}</NormalText2>
-      </Box>
-      <BottomBox>
-        <Text1>방금 수행한</Text1>
-        <Text2>{task}</Text2>
-        <Text1>가 끝난 후인 지금, 현재 감정을 선택해주세요!</Text1>
-      </BottomBox>
-      <NextButton isVisible={buttonVisible} onClick={handleNextPage}>
-        다음 페이지로 이동
-      </NextButton>
+      <SlideWrapper slide={slide}>
+        <Box>
+          <TopBox>
+            <EmotionText>{emotion}</EmotionText>
+            <NormalText>의 감정을 안고 할 일을 완수했군요!</NormalText>
+          </TopBox>
+          <NormalText2>{loading ? '피드백을 가져오는 중...' : feedback}</NormalText2>
+        </Box>
+        <BottomBox>
+          <Text1>방금 수행한</Text1>
+          <Text2>{task}</Text2>
+          <Text1>가 끝난 후인 지금, 현재 감정을 선택해주세요!</Text1>
+        </BottomBox>
+        <NextButton isVisible={buttonVisible} onClick={handleNextPage}>
+          다음으로
+        </NextButton>
+      </SlideWrapper>
+
+      <EmotionSelectionWrapper slide={slide}>
+        {slide && (
+          <>
+            <EmotionSelection onEmotionSelect={() => {}} />
+            <PrevNextButtonContainer>
+              <PrevNextButton onClick={handlePreviousPage}>이전으로</PrevNextButton>
+            </PrevNextButtonContainer>
+          </>
+        )}
+      </EmotionSelectionWrapper>
     </Wrapper>
   );
 };

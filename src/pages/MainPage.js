@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import Main from "../components/Main";
-import Sidebar from "../components/Sidebar";
-import EmotionSelection from "../components/EmotionSelection"; // 추가
+import Main from "../components/Main/Main";
+import Sidebar from "../components/Main/Sidebar";
+import EmotionSelection from "../components/Emotion/StartEmotionSelection"; // 추가
 
 function MainPage() {
   const [view, setView] = useState('calendar');

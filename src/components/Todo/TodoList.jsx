@@ -36,7 +36,7 @@ const TodoList = ({ selectedDate, tasks, setTasks, handleTaskSelect, selectedTas
             task_name: "7월 2일 할 일 1",
             task_description: "설명 3",
             task_duration: 10,
-            task_date: "2024-07-02"
+            task_date: "2024-08-02"
           },
           {
             task_id: 4,
