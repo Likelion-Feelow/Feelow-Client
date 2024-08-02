@@ -106,12 +106,14 @@ const ResultContainer = styled.div`
 `;
 
 const TaskNameText = styled.div`
-  font-family: Helvetica, sans-serif;
+  font-family: helvetica;
   color: black;
   padding: 0.5vw 1vw;
   font-size: 1.5vw;
   margin: 1vw 0;
   font-weight: bold;
+  white-space: pre-wrap; /* This will preserve the whitespace and line breaks in the text */
+  word-wrap: break-word; /* This ensures that long words will break and wrap to the next line */
 `;
 
 const TimeText = styled.div`
@@ -126,6 +128,20 @@ const TimeText = styled.div`
   text-align: center;
   width: 90%;
 `;
+
+const TimeText3 = styled.div`
+  font-family: Helvetica, sans-serif;
+  color: #53B7FF;
+  background-color: #ECF8FF;
+  border-radius: 20px;
+  padding: 0.5vw 1vw;
+  font-size: 2vw;
+  font-weight: bold;
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.1);
+  text-align: center;
+  width: 90%;
+`;
+
 
 const TimeText2 = styled.div`
   font-family: Helvetica, sans-serif;
@@ -194,6 +210,8 @@ const ReasonContainer = styled.div`
   margin: 0 4vw;
   overflow: auto;
   max-height: 20vh;
+  white-space: pre-wrap; /* This will preserve the whitespace and line breaks in the text */
+  word-wrap: break-word; /* This ensures that long words will break and wrap to the next line */
 `;
 
 const Evaluating = ({ selectedEmotion, taskDuration, selectedTask }) => {
@@ -219,6 +237,7 @@ const Evaluating = ({ selectedEmotion, taskDuration, selectedTask }) => {
           또한, 맞춤형이므로, 일반적인 포모도로 타이머에 대한 개념은 배제하십시오. 필요하다면 휴식 시간이 집중 시간보다 길어지거나 집중 시간이 더 길어지는 등의 변화가 있을 수 있습니다.
           초 단위로 집중 시간, 휴식 시간 및 사이클 수를 숫자로 제공한 다음, 이 권장 사항에 대한 간단한 과학적이고, 심리학적 이유를 전문 과학 용어를 사용하여 한 문장으로 설명하십시오. 
           결과를 한국어로 제공하십시오.
+          사이클은 집중 시간과 휴식 시간을 합한 시간을 1 사이클로 계산합니다. 그리고, 사이클은 총 계획 시간을 넘지 않게 해야 합니다. 사이클이 너무 많아지지 않도록 유의하십시오.
           답변은 "(집중 시간), (휴식 시간), (사이클 수), (이유)"의 정확히 똑같은 형식으로, 다른 추가적인 글자 없이 제공하십시오.
           만약 이유에 시간이 들어간다면 시간과 분 단위로 제공하십시오. 존댓말을 사용하십시오.`,
         },
@@ -334,7 +353,7 @@ const Evaluating = ({ selectedEmotion, taskDuration, selectedTask }) => {
         <EmptyDiv gridArea="empty6" />
         <TimeText style={{ gridArea: 'focusTitle' }}>Focus Time</TimeText>
         <TimeText2 style={{ gridArea: 'focusTime' }}>{formatTime(pomodoroCycle.focusTime)}</TimeText2>
-        <TimeText style={{ gridArea: 'restTitle' }}>Rest Time</TimeText>
+        <TimeText3 style={{ gridArea: 'restTitle' }}>Rest Time</TimeText3>
         <TimeText2 style={{ gridArea: 'restTime' }}>{formatTime(pomodoroCycle.breakTime)}</TimeText2>
         <CycleIconContainer style={{ gridArea: 'iconArea' }}>
           <CycleIcon>

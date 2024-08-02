@@ -57,12 +57,12 @@ const DotsContainer = styled.div`
 `;
 
 const Dot = styled.div`
-  width: 2vw;
-  height: 2vw;
+  width: 1.5vw;
+  height: 1.5vw;
   margin-right: 10px;
   border-radius: 50%;
-  background-color: ${props => (props.completed ? '#3893FF' : '#FFFFFF')};
-  border: 4px solid #88D4FE;
+  background-color: ${props => (props.completed ? '#BDE7FF' : '#FFFFFF')};
+  border: 0.3vw solid #88D4FE;
   transition: background-color 0.5s;
 `;
 

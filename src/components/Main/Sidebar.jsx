@@ -45,7 +45,7 @@ const Sidebar = ({ selectedDate, onAddTodoClick, tasks, setTasks, handleTaskSele
       <CSSTransition in={!menuOpen} timeout={300} classNames="fade" unmountOnExit>
         <Content>
           <Header>
-            <Title>To - Do</Title>
+            <Title>To Do List</Title>
           </Header>
 
           <TodoListContainer>
@@ -98,9 +98,9 @@ const Header = styled.div`
 `;
 
 const Title = styled.h2`
-  font-size: 1.8vw;
+  font-size:  2vw;
   font-weight: bold;
-  color: #4285f4;
+  color: #53b7ff;
   margin: 0;
   padding: 5px 10px;
   margin: 0 2vw;
@@ -140,10 +140,10 @@ const AddToDoButton = styled.button`
   border: none;
   border-radius: 50%;
   color: white;
-  font-size: 4vw;
+  font-size: 3vw;
   cursor: pointer;
-  width: 5vw;
-  height: 5vw;
+  width: 4vw;
+  height: 4vw;
   display: flex;
   align-items: center;
   justify-content: center;

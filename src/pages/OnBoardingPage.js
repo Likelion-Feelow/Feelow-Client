@@ -198,13 +198,13 @@ const Header = styled.header`
 `;
 
 const Logo = styled.div`
-  font-size: 4vw;
+  font-size: 2.5vw;
   font-weight: bold;
   font-family: "helvetica";
 `;
 
 const MenuButton = styled.div`
-  font-size: 4vw;
+  font-size: 2.5vw;
   cursor: pointer;
   color: ${({ isOpen }) => (isOpen ? "white" : "black")};
 `;
@@ -448,6 +448,13 @@ function OnBoardingPage() {
   const handleMenuItemClick = (item) => {
     if (item === 'About') {
       navigate('/about');
+    }
+    
+    if (item === "Login") {
+      navigate('/login');
+    } else {
+      // Handle other menu items if needed
+      console.log(`Clicked on ${item}`);
     }
   };
 
