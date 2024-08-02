@@ -32,13 +32,12 @@ const InputContainer = styled.div`
 `;
 
 const InputText = styled.div`
-  font-size: 4vw;
+  font-size: 1.5vw;
   margin-right: 3vw;
   width: 5vw;
-  min-width: 50px; /* 최소 너비 설정 */
   color: #3893ff;
   font-weight: bold;
-  text-align: right;
+  
 `;
 
 const InputField = styled.input`
@@ -63,11 +62,24 @@ const ButtonRow = styled.div`
 
 const Button = styled.button`
   padding: 1vh 1.5vw;
-  background-color: white;
-  color: #3893ff;
-  border-style: solid;
-  border-color: #3893ff;
-  border-width: 3px;
+  background-color: #3893ff;
+  color: white;
+  border:none;
+  
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 2vw;
+  font-weight: bold;
+  min-width: 100px; /* 최소 너비 설정 */
+`;
+
+const Button2 = styled.button`
+  padding: 1vh 1.5vw;
+  background-color: #3893ff;
+  color: white;
+  border: none;
+  
+  
   border-radius: 20px;
   cursor: pointer;
   font-size: 2vw;
@@ -105,7 +117,7 @@ const LoginPage = () => {
       <LoginImage src={Logo} alt="Login" />
 
       <InputContainer>
-        <InputText>닉네임</InputText>
+        <InputText>ID</InputText>
         <InputField 
           type="text" 
           value={nickname} 
@@ -114,7 +126,7 @@ const LoginPage = () => {
       </InputContainer>
 
       <InputContainer>
-        <InputText>비밀번호</InputText>
+        <InputText>PW</InputText>
         <InputField 
           type="password" 
           value={password} 
@@ -124,7 +136,7 @@ const LoginPage = () => {
 
       <ButtonRow>
         <Button onClick={() => navigate('/signup')}>Sign Up</Button>
-        <Button onClick={handleLogin}>Login</Button>
+        <Button2 onClick={handleLogin}>Login</Button2>
       </ButtonRow>
 
       {/* 카카오 로그인 */}

@@ -123,14 +123,14 @@ const ListContainer = styled.div`
   }
   .fade-enter-active {
     opacity: 1;
-    transition: opacity 300ms 100ms;
+    transition: opacity 300ms ease-in;
   }
   .fade-exit {
     opacity: 1;
   }
   .fade-exit-active {
     opacity: 0;
-    transition: opacity 200ms;
+    transition: opacity 200ms ease-out;
   }
 `;
 
@@ -152,11 +152,12 @@ const TaskItem = styled.div`
 `;
 
 const Circle = styled.div`
-  width: 2vw;
-  height: 2vw;
-  border: 3px solid ${({ selected }) => (selected ? '#4285f4' : '#9CDBFF')};
+  width: 1.5vw;
+  height: 1.5vw;
+  border: 2.5px solid ${({ selected }) => (selected ? '#4285f4' : '#9CDBFF')};
   border-radius: 50%;
-  margin-right: 1.5vw;
+  margin-right: 1vw;
+  margin-left: 1vw;
   background-color: ${({ selected }) => (selected ? '#4285f4' : 'transparent')};
 `;
 
