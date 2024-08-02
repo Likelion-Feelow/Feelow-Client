@@ -30,9 +30,9 @@ const Sidebar = ({ selectedDate, onAddTodoClick, tasks, setTasks, handleTaskSele
       <CSSTransition in={menuOpen} timeout={300} classNames="fade" unmountOnExit>
         <MenuContent>
           <MenuButton onClick={() => setMenuOpen(!menuOpen)}>☰</MenuButton>
-          <MenuItem onClick={() => navigate("/main")}>Home</MenuItem> {/* Home 클릭 시 navigate 호출 */}
+          <MenuItem onClick={() => navigate("/main")}>Statistics</MenuItem> {/* Home 클릭 시 navigate 호출 */}
           <MenuItem>Logout</MenuItem>
-          <MenuItem>About</MenuItem>
+          <MenuItem onClick={() => navigate("/about")}>About</MenuItem>
         </MenuContent>
       </CSSTransition>
 

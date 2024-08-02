@@ -246,9 +246,11 @@ const MenuItem = styled.a`
   font-family: "helvetica";
   display: block;
   transition: opacity 0.6s ease, color 0.3s;
+  
 
   &:hover {
     color: #f1f1f1;
+    cursor: pointer;
   }
 `;
 
@@ -443,6 +445,14 @@ function OnBoardingPage() {
 
 
 
+  const handleMenuItemClick = (item) => {
+    if (item === 'About') {
+      navigate('/about');
+    }
+  };
+
+
+
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -520,14 +530,15 @@ function OnBoardingPage() {
       </Header>
 
       <MenuContainer isOpen={isMenuOpen}>
-        {["Login", "About", "Contact"].map((item, index) => (
+        {["Login", "About"].map((item, index) => (
           <MenuItemWrapper
             key={item}
             isHovered={hoveredIndex !== null && hoveredIndex !== index}
             onMouseEnter={() => setHoveredIndex(index)}
             onMouseLeave={() => setHoveredIndex(null)}
           >
-            <MenuItem href="#">{item}</MenuItem>
+          
+          <MenuItem onClick={() => handleMenuItemClick(item)}>{item}</MenuItem>
           </MenuItemWrapper>
         ))}
       </MenuContainer>

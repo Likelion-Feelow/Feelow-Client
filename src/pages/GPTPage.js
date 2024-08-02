@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import styled, { keyframes, css } from 'styled-components';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import EmotionSelection from '../components/Emotion/EndEmotionSelection'; // Adjust the import path as needed
+import LoadingPage from '../pages/LoadingPage'; // Adjust the import path as needed
 
 const Wrapper = styled.div`
   display: flex;
@@ -37,7 +38,7 @@ const TopBox = styled.div`
   height: 13vh;
   background-color: #FFFFFF;
   border: 3px solid #53B7FF;
-  border-radius: 10px;
+  border-radius: 20px;
   position: absolute;
   top: -65px;
   left: 50%;
@@ -53,7 +54,7 @@ const BottomBox = styled.div`
   height: auto; /* Adjust height to content */
   background-color: #FFFFFF;
   border: 2px solid #53B7FF;
-  border-radius: 10px;
+  border-radius: 20px;
   margin-top: 20px;
   display: flex;
   align-items: center;
@@ -185,6 +186,7 @@ const EmotionSelectionWrapper = styled.div`
 
 const GPTPage = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const { emotion, task } = location.state;
   const [feedback, setFeedback] = useState('');
   const [loading, setLoading] = useState(true);
@@ -254,35 +256,41 @@ const GPTPage = () => {
 
   return (
     <Wrapper>
-      <SlideWrapper slide={slide}>
-        <Box>
-          <TopBox>
-            <EmotionText>{emotion}</EmotionText>
-            <NormalText>의 감정을 안고 할 일을 완수했군요!</NormalText>
-          </TopBox>
-          <NormalText2>{loading ? '피드백을 가져오는 중...' : feedback}</NormalText2>
-        </Box>
-        <BottomBox>
-          <Text1>방금 수행한</Text1>
-          <Text2>{task}</Text2>
-          <Text1>가 끝난 후인 지금, 현재 감정을 선택해주세요!</Text1>
-        </BottomBox>
-        <NextButton isVisible={buttonVisible} onClick={handleNextPage}>
-          다음으로
-        </NextButton>
-      </SlideWrapper>
+      {loading ? (
+        <LoadingPage />
+      ) : (
+        <>
+          <SlideWrapper slide={slide}>
+            <Box>
+              <TopBox>
+                <EmotionText>{emotion}</EmotionText>
+                <NormalText>의 감정을 안고 할 일을 완수했군요!</NormalText>
+              </TopBox>
+              <NormalText2>{feedback}</NormalText2>
+            </Box>
+            <BottomBox>
+              <Text1>방금 수행한</Text1>
+              <Text2>{task}</Text2>
+              <Text1>가 끝난 후인 지금, 현재 감정을 선택해주세요!</Text1>
+            </BottomBox>
+            <NextButton isVisible={buttonVisible} onClick={handleNextPage}>
+              다음으로
+            </NextButton>
+          </SlideWrapper>
 
-      <EmotionSelectionWrapper slide={slide}>
-        {slide && (
-          <>
-            <EmotionSelection onEmotionSelect={() => {}} />
-            <PrevNextButtonContainer>
-              <PrevNextButton onClick={handlePreviousPage}>이전으로</PrevNextButton>
-            </PrevNextButtonContainer>
-          </>
-        )}
-      </EmotionSelectionWrapper>
-    </Wrapper>
+          <EmotionSelectionWrapper slide={slide}>
+            {slide && (
+              <>
+                <EmotionSelection onEmotionSelect={() => navigate('/main')} />
+                <PrevNextButtonContainer>
+                  <PrevNextButton onClick={handlePreviousPage}>이전으로</PrevNextButton>
+                </PrevNextButtonContainer>
+            </>
+          )}
+        </EmotionSelectionWrapper>
+      </>
+    )}
+  </Wrapper>
   );
 };
 

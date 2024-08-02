@@ -2,7 +2,9 @@ import React, { useState, useEffect } from 'react';
 import styled, { keyframes } from 'styled-components';
 import { FaClock } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
+// 스타일 컴포넌트 정의
 const MainContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -57,20 +59,37 @@ const LoadingText = styled.div`
 `;
 
 const LogoText = styled.div`
-  position: absolute;
-  top: 3vw;
-  left: 4vw;
+  grid-area: logo;
   font-family: Helvetica, sans-serif;
   color: #53B7FF;
   font-weight: bold;
   font-size: 2vw;
+  margin-bottom: 3vw;
+`;
+
+const EmptyDiv = styled.div`
+  grid-area: ${props => props.gridArea};
 `;
 
 const ResultContainer = styled.div`
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-areas:
+    "logo empty2 empty3 empty4"
+    "empty5 focusTitle focusTime iconArea"
+    "empty6 restTitle restTime iconArea"
+    "reason reason reason reason";
+  grid-template-rows: 1fr 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
   align-items: center;
-  justify-content: center;
+  justify-items: center;
+  gap: 1vw;
+  width: 90%;
+  height: 65%;
+  background-color: white;
+  border-radius: 30px;
+  padding: 2vw;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  margin-top: 2vw;
 `;
 
 const TaskNameText = styled.div`
@@ -78,45 +97,6 @@ const TaskNameText = styled.div`
   color: black;
   padding: 0.5vw 1vw;
   font-size: 2vw;
-  margin: 1vw 0;
-`;
-
-const TaskNameText2 = styled.div`
-  font-family: Helvetica, sans-serif;
-  font-weight: bold;
-  color: white;
-  background-color: #53B7FF;
-  border-radius: 20px;
-  padding: 0.5vw 1vw;
-  font-size: 2vw;
-  margin: 1vw 0;
-`;
-
-const FocusRestContainer = styled.div`
-  background-color: white;
-  border-radius: 30px;
-  padding: 2vw;
-  text-align: center;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  margin-top: 2vw;
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 90%;
-  height: 80%;
-`;
-
-const TextContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-`;
-
-const TimeTextContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  width: 80%;
   margin: 1vw 0;
 `;
 
@@ -129,38 +109,18 @@ const TimeText = styled.div`
   font-size: 2vw;
   font-weight: bold;
   box-shadow: 0 2px 0 rgba(0, 0, 0, 0.1);
-  width: 7vw;
-  text-align: left;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  text-align: center;
 `;
 
 const TimeText2 = styled.div`
   font-family: Helvetica, sans-serif;
   color: black;
   padding: 0.5vw 1vw;
-  font-size: 2vw;
+  font-size: 3vw;
   text-align: center;
   display: flex;
   align-items: center;
   justify-content: center;
-`;
-
-const TimeText3 = styled.div`
-  font-family: Helvetica, sans-serif;
-  color: #53B7FF;
-  background-color: #ECF8FF;
-  border-radius: 20px;
-  padding: 0.5vw 1vw;
-  font-size: 2vw;
-  font-weight: bold;
-  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.1);
-  width: 7vw;
-  text-align: left;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 `;
 
 const StartButton = styled.button`
@@ -172,36 +132,32 @@ const StartButton = styled.button`
   font-family: Helvetica, sans-serif;
   font-weight: bold;
   padding: 1vw 2vw;
-  position: absolute;
-  bottom: -2vw;
-  left: 50%;
-  transform: translateX(-50%);
   cursor: pointer;
   transition: background-color 0.3s;
   &:hover {
     background-color: #3e94cc;
   }
+  grid-area: startButton;
+  margin-top: 2vw;
 `;
 
 const CycleIconContainer = styled.div`
-  position: absolute;
-  right: 2vw;
-  top: 50%;
-  transform: translateY(-50%);
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
+  margin-right: 2vw;
+  margin-top: 2.5vh;
 `;
 
 const CycleIcon = styled.div`
-  font-size: 4vw;
+  font-size: 8vw;
   color: #53B7FF;
   position: relative;
 `;
 
 const CycleText = styled.div`
-  font-size: 3vw;
+  font-size: 5vw;
   color: black;
   position: absolute;
   top: 40%;
@@ -209,87 +165,96 @@ const CycleText = styled.div`
   transform: translate(-50%, -50%);
 `;
 
+const ErrorMessage = styled.div`
+  margin-top: 2vw;
+  font-family: Helvetica, sans-serif;
+  color: red;
+  font-size: 2vw;
+`;
+
+const ReasonContainer = styled.div`
+  grid-area: reason;
+  text-align: center;
+  margin: 0 4vw;
+`;
+
 const Evaluating = ({ selectedEmotion, taskDuration, selectedTask }) => {
   const [loading, setLoading] = useState(true);
   const [pomodoroCycle, setPomodoroCycle] = useState(null);
+  const [error, setError] = useState(null);
+  const [reason, setReason] = useState('');
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const calculatePomodoroCycle = () => {
-      const emotionWeights = {
-        '행복': 1.2,
-        '기쁨': 1.1,
-        '만족': 1.0,
-        '감사': 1.1,
-        '희망': 1.2,
-        '자신감': 1.3,
-        '흥미': 1.4,
-        '열정': 1.5,
-        '자부심': 1.2,
-        '안심': 1.0,
-        '안정': 1.0,
-        '편안': 1.0,
-        '고요': 0.9,
-        '차분': 0.9,
-        '여유': 0.8,
-        '온화': 0.8,
-        '따뜻함': 0.8,
-        '수용': 0.7,
-        '조화': 0.7,
-        '균형': 0.6,
-        '슬픔': 0.5,
-        '절망': 0.4,
-        '침울': 0.4,
-        '낙담': 0.3,
-        '눈물': 0.2,
-        '후회': 0.2,
-        '무기력': 0.1,
-        '고독': 0.1,
-        '상실': 0.1,
-        '비관': 0.1,
-        '걱정': 0.4,
-        '초조': 0.3,
-        '긴장': 0.3,
-        '두려움': 0.2,
-        '공포': 0.2,
-        '당황': 0.2,
-        '염려': 0.2,
-        '불편': 0.1,
-        '근심': 0.1,
-        '불확실': 0.1,
-        '화남': 0.4,
-        '짜증': 0.3,
-        '격노': 0.2,
-        '불쾌': 0.2,
-        '원망': 0.1,
-        '성남': 0.1,
-        '분개': 0.1,
-        '분노2': 0.1,
-        '울분': 0.1,
-        '분통': 0.1,
-        '불안': 0.3,
-      };
-
-      const weight = emotionWeights[selectedEmotion] || 1.0;
-      console.log(`Selected Emotion: ${selectedEmotion}, Weight: ${weight}`);
-
-      const focusTime = Math.min(Math.max(15, weight * 25), 50);
-      console.log(`Calculated Focus Time: ${focusTime} minutes`);
-
-      const breakTime = 5 + (focusTime - 25) / 5;
-      console.log(`Calculated Break Time: ${breakTime} minutes`);
-
-      // 전체 작업 시간을 주어진 포모도로 사이클로 나누어 총 몇 회의 포모도로 사이클이 필요한지 계산
-      const cycles = Math.ceil(taskDuration / (focusTime * 60));
-      console.log(`Calculated Pomodoro Cycles: ${cycles}`);
-
-      // 상태 업데이트
-      setPomodoroCycle({ focusTime, breakTime, cycles });
-      setLoading(false);
+  const fetchPomodoroCycle = async () => {
+    const requestPayload = {
+      model: 'gpt-4-turbo',
+      messages: [
+        {
+          role: 'system',
+          content: 'You are an assistant that provides optimal Pomodoro timer patterns.',
+        },
+        {
+          role: 'user',
+          content: `사용자의 현재 감정이 ${selectedEmotion}이고 작업 시간이 ${taskDuration} 초인 경우, 
+          생산성과 정신 건강을 극대화하기 위해 최적의 포모도로 타이머 패턴을 결정하십시오. 
+          오로지 사용자만을 위한 맞춤 포모도로 타이머로, 가장 일반적인 5분 단위의 시간은 되도록이면 피하십시오.
+          초 단위로 집중 시간, 휴식 시간 및 사이클 수를 숫자로 제공한 다음, 이 권장 사항에 대한 간단한 과학적이고, 심리학적 이유를 한 문장으로 설명하십시오. 
+          결과를 한국어로 제공하십시오.
+          답변은 "(집중 시간), (휴식 시간), (사이클 수), (이유)"의 정확히 똑같은 형식으로 다른 추가적인 글자 없이 제공하십시오.`,
+        },
+      ],
+      max_tokens: 1000,
     };
 
-    setTimeout(calculatePomodoroCycle, 2000); // 계산을 2초 후에 수행 (로딩 화면을 위해)
-  }, [selectedEmotion, taskDuration]);
+    console.log('API Request Payload:', requestPayload);
+
+    try {
+      const response = await axios.post(
+        'https://api.openai.com/v1/chat/completions',
+        requestPayload,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${process.env.REACT_APP_OPENAI_API_KEY}`,
+          },
+        }
+      );
+
+      console.log('API Response:', response.data);
+
+      const result = response.data.choices[0].message.content.trim();
+      console.log('Parsed Result:', result);
+
+      const [focusTime, breakTime, cycles, ...reasonParts] = result.split(',');
+      const reasonText = reasonParts.join(',').trim().replace(/"/g, '');
+
+      if (isNaN(parseFloat(focusTime)) || isNaN(parseFloat(breakTime)) || isNaN(parseFloat(cycles))) {
+        throw new Error('Received invalid numbers from the API');
+      }
+
+      setPomodoroCycle({
+        focusTime: parseFloat(focusTime.trim()),
+        breakTime: parseFloat(breakTime.trim()),
+        cycles: parseFloat(cycles.trim()),
+      });
+      setReason(reasonText);
+      setLoading(false);
+    } catch (error) {
+      console.error('Error fetching Pomodoro cycle:', error);
+      setError('Failed to fetch the Pomodoro cycle. Please try again later.');
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchPomodoroCycle(); // 컴포넌트가 마운트될 때 한 번만 호출
+  }, []); // 빈 배열을 전달하여 의존성 배열로 설정
+
+  const retryFetch = () => {
+    setLoading(true);
+    setError(null);
+    fetchPomodoroCycle(); // 다시 시도 시 바로 fetch 호출
+  };
 
   if (loading) {
     return (
@@ -308,57 +273,60 @@ const Evaluating = ({ selectedEmotion, taskDuration, selectedTask }) => {
     );
   }
 
-  const formatTime = (minutes) => {
-    const hours = Math.floor(minutes / 60);
-    const mins = minutes % 60;
-    return `${hours > 0 ? `${hours} H : ` : ''}${mins > 0 ? `${mins} M` : ''}`;
+  if (error) {
+    return (
+      <MainContainer>
+        <LogoText>Evaluating</LogoText>
+        <CenterContainer>
+        <ErrorMessage>{error}</ErrorMessage>
+          <StartButton onClick={retryFetch}>Retry</StartButton>
+        </CenterContainer>
+      </MainContainer>
+    );
+  }
+
+  const formatTime = (seconds) => {
+    const hours = Math.floor(seconds / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
+    return `${hours > 0 ? `${hours} H ` : ''}${minutes > 0 ? `${minutes} M` : ''}`;
   };
 
   const handleStartButtonClick = () => {
-    console.log('Navigating to /timer with state:', {
-      focusTime: pomodoroCycle.focusTime,
-      breakTime: pomodoroCycle.breakTime,
-      cycles: pomodoroCycle.cycles,
-      selectedTask: selectedTask, // selectedTask를 추가
-    });
     navigate('/timer', {
       state: {
         focusTime: pomodoroCycle.focusTime,
         breakTime: pomodoroCycle.breakTime,
         cycles: pomodoroCycle.cycles,
-        selectedTask: selectedTask, // selectedTask를 추가
-        selectedEmotion: selectedEmotion, // selectedEmotion을 추가
+        selectedTask: selectedTask,
+        selectedEmotion: selectedEmotion,
       },
     });
   };
 
   return (
     <MainContainer>
-      <LogoText>Evaluating</LogoText>
       <ResultContainer>
-        <TextContainer>
-          <TaskNameText>Pattern for</TaskNameText> 
-          <TaskNameText2>{selectedTask.task_name}</TaskNameText2>
-          <TaskNameText>is...</TaskNameText>
-        </TextContainer>
-        <FocusRestContainer>
-          <TimeTextContainer>
-            <TimeText>Focus</TimeText> 
-            <TimeText2>{formatTime(pomodoroCycle.focusTime)}</TimeText2>
-          </TimeTextContainer>
-          <TimeTextContainer>
-            <TimeText3>Rest</TimeText3> 
-            <TimeText2>{formatTime(pomodoroCycle.breakTime)}</TimeText2>
-          </TimeTextContainer>
-          <StartButton onClick={handleStartButtonClick}>START</StartButton>
-          <CycleIconContainer>
-            <CycleIcon>
-              <FaClock />
-              <CycleText>{pomodoroCycle.cycles}</CycleText>
-            </CycleIcon>
-          </CycleIconContainer>
-        </FocusRestContainer>
+        <LogoText>Evaluating</LogoText>
+        <EmptyDiv gridArea="empty2" />
+        <EmptyDiv gridArea="empty3" />
+        <EmptyDiv gridArea="empty4" />
+        <EmptyDiv gridArea="empty5" />
+        <EmptyDiv gridArea="empty6" />
+        <TimeText style={{ gridArea: 'focusTitle' }}>Focus Time</TimeText>
+        <TimeText2 style={{ gridArea: 'focusTime' }}>{formatTime(pomodoroCycle.focusTime)}</TimeText2>
+        <TimeText style={{ gridArea: 'restTitle' }}>Rest Time</TimeText>
+        <TimeText2 style={{ gridArea: 'restTime' }}>{formatTime(pomodoroCycle.breakTime)}</TimeText2>
+        <CycleIconContainer style={{ gridArea: 'iconArea' }}>
+          <CycleIcon>
+            <FaClock />
+            <CycleText>{pomodoroCycle.cycles}</CycleText>
+          </CycleIcon>
+        </CycleIconContainer>
+        <ReasonContainer>
+          <TaskNameText>{reason}</TaskNameText>
+        </ReasonContainer>
       </ResultContainer>
+      <StartButton onClick={handleStartButtonClick}>START</StartButton>
     </MainContainer>
   );
 };

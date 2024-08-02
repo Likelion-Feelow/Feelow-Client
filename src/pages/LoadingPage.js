@@ -8,7 +8,7 @@ const Container = styled.div`
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background-color: #3893FF;
+  background-color: transparent;
 `;
 
 const wave = keyframes`
@@ -26,9 +26,9 @@ const Dots = styled.div`
 `;
 
 const Dot = styled.div`
-  width: 6vw;
-  height: 6vw; /* 높이와 너비를 동일하게 */
-  margin: 0 2vw;
+  width: 3vw;
+  height: 3vw; /* 높이와 너비를 동일하게 */
+  margin: 0 2.5vw;
   background-color: white;
   border-radius: 50%;
   animation: ${wave} 1.5s infinite;
