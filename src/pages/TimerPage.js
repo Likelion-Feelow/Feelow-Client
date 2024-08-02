@@ -200,7 +200,7 @@ const TimerPage = () => {
   const location = useLocation();
   const { focusTime, breakTime, cycles, selectedEmotion, selectedTask } = location.state;
 
-  const [time, setTime] = useState(focusTime * 60);
+  const [time, setTime] = useState(focusTime);
   const [isActive, setIsActive] = useState(false);
   const [isFocus, setIsFocus] = useState(true);
   const [currentCycle, setCurrentCycle] = useState(0);
@@ -217,7 +217,7 @@ const TimerPage = () => {
   const resetTimer = () => {
     setIsActive(false);
     setIsFocus(true);
-    setTime(focusTime * 60);
+    setTime(focusTime);
     setProgress(0);
   };
 
@@ -227,7 +227,7 @@ const TimerPage = () => {
       interval = setInterval(() => {
         setTime(prevTime => {
           const newTime = prevTime - 1;
-          const newProgress = ((isFocus ? focusTime * 60 - newTime : breakTime * 60 - newTime) / (isFocus ? focusTime * 60 : breakTime * 60)) * 100;
+          const newProgress = ((isFocus ? focusTime - newTime : breakTime - newTime) / (isFocus ? focusTime : breakTime)) * 100;
           setProgress(newProgress);
           return newTime;
         });
@@ -238,12 +238,12 @@ const TimerPage = () => {
       setTimeout(() => {
         if (isFocus) {
           setIsFocus(false);
-          setTime(breakTime * 60);
+          setTime(breakTime);
         } else {
           setIsFocus(true);
           setCurrentCycle(currentCycle + 1);
           if (currentCycle < cycles - 1) {
-            setTime(focusTime * 60);
+            setTime(focusTime);
           } else {
             handleComplete();
             return;
@@ -314,7 +314,7 @@ const TimerPage = () => {
           </TimerDisplay>
           <ResetButtonContainer>
             <ResetButton onClick={resetTimer}>
-              <ButtonImage2 src={TimerOn} alt="Reset" />
+            <ButtonImage2 src={TimerOn} alt="Reset" />
             </ResetButton>
           </ResetButtonContainer>
         </Content>
@@ -323,10 +323,4 @@ const TimerPage = () => {
   );
 };
 
-TimerPage.defaultProps = {
-  focusTime: 10,
-  breakTime: 3,
-};
-
 export default TimerPage;
-            

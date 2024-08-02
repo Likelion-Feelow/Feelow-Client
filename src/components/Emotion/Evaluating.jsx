@@ -12,10 +12,12 @@ const MainContainer = styled.div`
   justify-content: center;
   width: 65vw;
   height: 75vh;
+  max-height: 40vw;
   background-color: #ECF8FF;
-  border-radius: 15px;
+  border-radius: 30px;
   padding: 1vw;
   position: relative;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 `;
 
 const CenterContainer = styled.div`
@@ -67,6 +69,17 @@ const LogoText = styled.div`
   margin-bottom: 3vw;
 `;
 
+const LogoText2 = styled.div`
+  top: 2vw;
+  position: absolute;
+  left: 3vw;
+  font-family: Helvetica, sans-serif;
+  color: #53B7FF;
+  font-weight: bold;
+  font-size: 2vw;
+  margin-bottom: 3vw;
+`;
+
 const EmptyDiv = styled.div`
   grid-area: ${props => props.gridArea};
 `;
@@ -78,7 +91,7 @@ const ResultContainer = styled.div`
     "empty5 focusTitle focusTime iconArea"
     "empty6 restTitle restTime iconArea"
     "reason reason reason reason";
-  grid-template-rows: 1fr 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr 3fr;
   grid-template-columns: 1fr 1fr 1fr 1fr;
   align-items: center;
   justify-items: center;
@@ -96,8 +109,9 @@ const TaskNameText = styled.div`
   font-family: Helvetica, sans-serif;
   color: black;
   padding: 0.5vw 1vw;
-  font-size: 2vw;
+  font-size: 1.5vw;
   margin: 1vw 0;
+  font-weight: bold;
 `;
 
 const TimeText = styled.div`
@@ -110,6 +124,7 @@ const TimeText = styled.div`
   font-weight: bold;
   box-shadow: 0 2px 0 rgba(0, 0, 0, 0.1);
   text-align: center;
+  width: 90%;
 `;
 
 const TimeText2 = styled.div`
@@ -127,12 +142,13 @@ const StartButton = styled.button`
   background-color: black;
   color: white;
   border: none;
-  border-radius: 15px;
+  border-radius: 30px;
   font-size: 1.5vw;
   font-family: Helvetica, sans-serif;
   font-weight: bold;
   padding: 1vw 2vw;
   cursor: pointer;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
   transition: background-color 0.3s;
   &:hover {
     background-color: #3e94cc;
@@ -146,7 +162,7 @@ const CycleIconContainer = styled.div`
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  margin-right: 2vw;
+  margin-right: 5vw;
   margin-top: 2.5vh;
 `;
 
@@ -176,6 +192,8 @@ const ReasonContainer = styled.div`
   grid-area: reason;
   text-align: center;
   margin: 0 4vw;
+  overflow: auto;
+  max-height: 20vh;
 `;
 
 const Evaluating = ({ selectedEmotion, taskDuration, selectedTask }) => {
@@ -195,12 +213,14 @@ const Evaluating = ({ selectedEmotion, taskDuration, selectedTask }) => {
         },
         {
           role: 'user',
-          content: `사용자의 현재 감정이 ${selectedEmotion}이고 작업 시간이 ${taskDuration} 초인 경우, 
-          생산성과 정신 건강을 극대화하기 위해 최적의 포모도로 타이머 패턴을 결정하십시오. 
-          오로지 사용자만을 위한 맞춤 포모도로 타이머로, 가장 일반적인 5분 단위의 시간은 되도록이면 피하십시오.
-          초 단위로 집중 시간, 휴식 시간 및 사이클 수를 숫자로 제공한 다음, 이 권장 사항에 대한 간단한 과학적이고, 심리학적 이유를 한 문장으로 설명하십시오. 
+          content: `사용자의 현재 감정이 ${selectedEmotion}이고 총 계획 시간이 ${taskDuration} 초인 경우, 
+          생산성과 정신 건강을 극대화하기 위해 최적의 포모도로 타이머 패턴을 결정하십시오. 또한 ${selectedTask.task_name} 과제의 종류, 내용들도 고려하십시오.
+          오로지 사용자만을 위한 개인 맞춤 포모도로 타이머로, 가장 일반적인 시간 단위인 5분 단위의 시간은 되도록이면 피하십시오.
+          또한, 맞춤형이므로, 일반적인 포모도로 타이머에 대한 개념은 배제하십시오. 필요하다면 휴식 시간이 집중 시간보다 길어지거나 집중 시간이 더 길어지는 등의 변화가 있을 수 있습니다.
+          초 단위로 집중 시간, 휴식 시간 및 사이클 수를 숫자로 제공한 다음, 이 권장 사항에 대한 간단한 과학적이고, 심리학적 이유를 전문 과학 용어를 사용하여 한 문장으로 설명하십시오. 
           결과를 한국어로 제공하십시오.
-          답변은 "(집중 시간), (휴식 시간), (사이클 수), (이유)"의 정확히 똑같은 형식으로 다른 추가적인 글자 없이 제공하십시오.`,
+          답변은 "(집중 시간), (휴식 시간), (사이클 수), (이유)"의 정확히 똑같은 형식으로, 다른 추가적인 글자 없이 제공하십시오.
+          만약 이유에 시간이 들어간다면 시간과 분 단위로 제공하십시오. 존댓말을 사용하십시오.`,
         },
       ],
       max_tokens: 1000,
@@ -259,7 +279,7 @@ const Evaluating = ({ selectedEmotion, taskDuration, selectedTask }) => {
   if (loading) {
     return (
       <MainContainer>
-        <LogoText>Evaluating</LogoText>
+        <LogoText2>Evaluating</LogoText2>
         <CenterContainer>
           <Dots>
             <Dot delay="0s" />
