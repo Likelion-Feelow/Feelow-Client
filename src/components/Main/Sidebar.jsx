@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import styled, { keyframes } from "styled-components";
 import { CSSTransition } from "react-transition-group";
-import TodoList from "./Todo/TodoList";
-import KakaoLogoutButton, { handleLogout } from "./Login/KakaoLogoutButton";
+import TodoList from "../Todo/TodoList";
+import KakaoLogoutButton, { handleLogout } from "../Login/KakaoLogoutButton";
 import { useNavigate } from "react-router-dom";
-import AddTodoButton from "./Todo/AddTodoButton";
+import AddTodoButton from "../Todo/AddTodoButton";
 
 const SidebarContainer = styled.div`
   display: grid;
@@ -22,7 +22,6 @@ const SidebarContainer = styled.div`
 const Sidebar = ({ selectedDate, onAddTodoClick, tasks, setTasks, handleTaskSelect, selectedTask }) => {
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
-  const navigate = useNavigate(); // useNavigate 훅 추가
 
   return (
     <SidebarContainer>
