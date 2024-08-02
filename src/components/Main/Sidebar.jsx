@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import styled, { keyframes } from "styled-components";
 import { CSSTransition } from "react-transition-group";
+import TodoList from "./Todo/TodoList";
+import KakaoLogoutButton, { handleLogout } from "./Login/KakaoLogoutButton";
 import { useNavigate } from "react-router-dom";
-import TodoList from "../Todo/TodoList";
+import AddTodoButton from "./Todo/AddTodoButton";
 
 const SidebarContainer = styled.div`
   display: grid;
@@ -18,6 +20,7 @@ const SidebarContainer = styled.div`
 `;
 
 const Sidebar = ({ selectedDate, onAddTodoClick, tasks, setTasks, handleTaskSelect, selectedTask }) => {
+  const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate(); // useNavigate 훅 추가
 
@@ -30,6 +33,10 @@ const Sidebar = ({ selectedDate, onAddTodoClick, tasks, setTasks, handleTaskSele
       <CSSTransition in={menuOpen} timeout={300} classNames="fade" unmountOnExit>
         <MenuContent>
           <MenuButton onClick={() => setMenuOpen(!menuOpen)}>☰</MenuButton>
+          <MenuItem>Profile</MenuItem>
+          <MenuItem onClick={() => handleLogout(navigate)}>Logout</MenuItem>
+          <MenuItem>About</MenuItem>
+          <KakaoLogoutButton />
           <MenuItem onClick={() => navigate("/main")}>Statistics</MenuItem> {/* Home 클릭 시 navigate 호출 */}
           <MenuItem>Logout</MenuItem>
           <MenuItem onClick={() => navigate("/about")}>About</MenuItem>

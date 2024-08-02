@@ -8,6 +8,8 @@ import AddTodoForm from "../Todo/AddTodoForm.jsx";
 import EmotionSelection from "../Emotion/StartEmotionSelection.jsx";
 import Evaluating from "../Emotion/Evaluating.jsx";
 
+
+
 const Container = styled.div`
   display: grid;
   grid-template-rows: 1fr 6fr;
@@ -44,6 +46,25 @@ const LogoImage = styled.img`
   margin-top: 4vh;
   height: 3vw;
   
+`;
+
+const ProfileImage = styled.img`
+  margin-left: 6vw;
+  height: 5vh;
+  width: 5.1vh;
+`;
+
+const LogoutButton = styled.button`
+  background-color: #53b7ff;
+  border: none;
+  color: white;
+  font-size: 1vw;
+  cursor: pointer;
+  font-family: helvetica;
+  font-weight: bold;
+  border-radius: 20px;
+  padding: 0.8vh 1.5vw;
+  margin-right: 5vw;
 `;
 
 const Main = ({ 
@@ -93,12 +114,17 @@ const Main = ({
           <TodoList 
             selectedDate={selectedDate} 
             tasks={tasks} 
-            setTasks={setTasks} 
+            setTasks={setTasks}
+            addTask={addTask} 
             handleTaskSelect={handleTaskSelect}
           />
         )}
         {view === "add" && (
-          <AddTodoForm onCancel={() => setView("calendar")} addTask={addTask} selectedDate={selectedDate} />
+          <AddTodoForm
+            onCancel={() => setView("calendar")}
+            addTask={addTask}
+            selectedDate={selectedDate}
+          />
         )}
         {view === "evaluating" && <Evaluating selectedTask={selectedTask} selectedEmotion={selectedTask.selectedEmotion} taskDuration={selectedTask.task_duration} />}
       </MainContainer>

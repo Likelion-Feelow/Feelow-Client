@@ -13,33 +13,42 @@ const KakaoLogout = styled.button`
   cursor: pointer;
 `;
 
+export const handleLogout = async (navigate) => {
+  try {
+    const accessToken = localStorage.getItem("access_token");
+    const refreshToken = localStorage.getItem("refresh_token");
+
+    // 백엔드 서버에 로그아웃 요청
+    await axios.post(
+      "http://3.39.201.42:8090/auths/logout",
+      {
+        refresh_token: refreshToken,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+
+    // 클라이언트 측 상태 초기화 및 로컬 스토리지 정리
+    localStorage.removeItem("access_token"); // 저장된 액세스 토큰 삭제
+    localStorage.removeItem("refresh_token"); // 저장된 리프레시 토큰 삭제
+
+    // 홈 페이지로 리디렉션
+    navigate("/login");
+  } catch (error) {
+    console.error("Logout failed", error);
+    alert("로그아웃에 실패하였습니다. 다시 시도해주세요.");
+  }
+};
+
 const KakaoLogoutButton = () => {
   const navigate = useNavigate();
 
-  const handleLogout = async () => {
-    try {
-      // 백엔드 서버에 로그아웃 요청
-      await axios.post("/auths/logout");
-
-      // 클라이언트 측 상태 초기화 및 로컬 스토리지 정리
-      localStorage.removeItem("access_token"); // 저장된 액세스 토큰 삭제
-      localStorage.removeItem("refresh_token"); // 저장된 리프레시 토큰 삭제
-
-      // 카카오 로그아웃
-      window.location.href =
-        "https://kauth.kakao.com/oauth/logout?client_id=YOUR_APP_KEY&logout_redirect_uri=YOUR_REDIRECT_URI";
-
-      // 홈 페이지로 리디렉션
-      navigate("/");
-    } catch (error) {
-      console.error("Logout failed", error);
-      alert("로그아웃에 실패하였습니다. 다시 시도해주세요.");
-    }
-  };
-
   return (
     <>
-      <KakaoLogout onClick={handleLogout}>로그아웃</KakaoLogout>
+      <KakaoLogout onClick={() => handleLogout(navigate)}>로그아웃</KakaoLogout>
     </>
   );
 };

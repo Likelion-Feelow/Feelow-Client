@@ -17,64 +17,46 @@ const KakaoCallback = () => {
             "http://3.39.201.42:8090/auths/kakao/login",
             { access_code: code }
           );
-
+          // 로그인 성공
           if (response.status === 200) {
-            const { access_token: accessToken, refresh_token: refreshToken } = response.data;
+            const { access_token: accessToken, refresh_token: refreshToken } =
+              response.data;
             localStorage.setItem("access_token", accessToken);
-            
-            // refresh token이 존재하는지 확인
-            if (refreshToken) {
-              localStorage.setItem("refresh_token", refreshToken);
-            } else {
-              console.warn("Refresh token is missing in the response");
-            }
-
+            localStorage.setItem("refresh_token", refreshToken);
             navigate("/main");
           }
         } catch (error) {
+          // 로그인 에러 해결 절차
           console.error("Login Error: ", error);
+          // 사용자가 존재하지 않는 경우
+          if (error.response && error.response.status === 404) {
+            const accessToken = error.response.data.access_token;
+            try {
+              // 회원가입 시도
+              const response = await axios.post(
+                "http://3.39.201.42:8090/auths/kakao/register",
+                { access_token: accessToken }
+              );
 
-          if (error.response) {
-            // 서버 응답이 있는 경우
-            console.error("Error Response:", error.response);
-            alert(`Login Error: ${error.response.status} - ${error.response.data.error}`);
-            
-            // 사용자가 존재하지 않는 경우
-            if (error.response.status === 404 && error.response.data.error === "User is not registered. Please register first.") {
-              const accessToken = error.response.data.access_token;
-              const nickname = error.response.data.nickname;
-              try {
-                // 회원가입 시도
-                const response = await axios.post(
-                  "http://3.39.201.42:8090/auths/kakao/register",
-                  { access_token: accessToken, nickname: nickname }
-                );
-
-                if (response.status === 200) {
-                  const { access_token: newAccessToken, refresh_token: newRefreshToken } = response.data;
-                  localStorage.setItem("access_token", newAccessToken);
-
-                  // refresh token이 존재하는지 확인
-                  if (newRefreshToken) {
-                    localStorage.setItem("refresh_token", newRefreshToken);
-                  } else {
-                    console.warn("Refresh token is missing in the registration response");
-                  }
-
-                  navigate("/");
-                }
-              } catch (registerError) {
-                console.error("Registration Error: ", registerError);
-                alert(`Registration Error: ${registerError.response?.status} - ${registerError.response?.data?.message}`);
+              if (response.status === 200) {
+                const {
+                  access_token: newAccessToken,
+                  refresh_token: newRefreshToken,
+                } = response.data;
+                localStorage.setItem("access_token", newAccessToken);
+                localStorage.setItem("refresh_token", newRefreshToken);
+                navigate("/main");
               }
-            } else {
-              console.error("Unexpected Error: ", error.response);
-              alert(`Unexpected Error: ${error.response.status} - ${error.response.data.error}`);
+            } catch (registerError) {
+              console.error("Registration Error: ", registerError);
+              alert("회원가입에 실패하였습니다.");
             }
+          } else if (error.response && error.response.status === 400) {
+            console.error("Bad Request: ", error.response.data);
+            alert("잘못된 요청입니다. 요청 데이터를 확인하세요.");
           } else {
-            // 네트워크 에러 등
-            console.error("Network Error:", error);
-            alert(`Network Error: ${error.message}`);
+            console.error("Unexpected Error: ", error);
+            alert("사용자 인증이 실패하였습니다.");
           }
         }
       }

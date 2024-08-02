@@ -1,6 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
-import { startOfMonth, endOfMonth, eachDayOfInterval, format, isSameDay, addMonths, subMonths } from 'date-fns';
+import React, { useState, useEffect } from "react";
+import styled from "styled-components";
+import {
+  startOfMonth,
+  endOfMonth,
+  eachDayOfInterval,
+  format,
+  isSameDay,
+  addMonths,
+  subMonths,
+} from "date-fns";
 
 // Container for the whole calendar component
 const CalendarContainer = styled.div`
@@ -17,7 +25,7 @@ const CalendarContainer = styled.div`
 const MonthHeader = styled.div`
   grid-column: 1 / 2;
   grid-row: 1 / 2;
-  color: #53B7FF;
+  color: #53b7ff;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -28,26 +36,30 @@ const MonthHeader = styled.div`
 
 // Day of the week header
 const DayHeader = styled.div`
-  color: #53B7FF;
+  color: #53b7ff;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 2vw;
 
-  ${({ isLast }) => isLast && `
+  ${({ isLast }) =>
+    isLast &&
+    `
     border-top-right-radius: 15px;
   `}
 `;
 
 // Week number
 const WeekNumber = styled.div`
-  color: #53B7FF;
+  color: #53b7ff;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 2vw;
 
-  ${({ isLast }) => isLast && `
+  ${({ isLast }) =>
+    isLast &&
+    `
     border-bottom-left-radius: 15px;
   `}
 `;
@@ -61,8 +73,11 @@ const CalendarTile = styled.div`
   padding: 1.5vw 1.5vw;
   font-size: 2vw;
   color: black;
-  background: ${({ $feelings }) => ($feelings ? `linear-gradient(135deg, ${$feelings[0]} 100%, ${$feelings[1]} 30%)` : 'white')}; // 변경된 부분: 두 감정 색상의 그라디언트 사용
-  
+  background: ${({ $feelings }) =>
+    $feelings
+      ? `linear-gradient(135deg, ${$feelings[0]} 100%, ${$feelings[1]} 30%)`
+      : "white"}; // 변경된 부분: 두 감정 색상의 그라디언트 사용
+
   border-radius: 50%; /* Make it circular */
   cursor: pointer;
   opacity: 0.9;
@@ -87,17 +102,17 @@ const CalendarTile = styled.div`
   &:hover {
     filter: brightness(1.1);
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-  } 
+  }
 
   &.today {
-    background: #3893FF !important;
+    background: #3893ff !important;
     color: white !important;
     border-radius: 10px; /* Make it circular */
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
   }
-  
+
   &.selected {
-    background: #FF8C00 !important;
+    background: #ff8c00 !important;
     color: white !important;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
     border-radius: 10px; /* Make it circular */
@@ -108,16 +123,16 @@ const DayContainer = styled.div`
   display: contents;
 `;
 
-const StyledCalendar = ({ 
-  selectedDate, 
-  setSelectedDate 
-}) => {
+const StyledCalendar = ({ selectedDate, setSelectedDate }) => {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [days, setDays] = useState([]);
-  
+
   const [feelings, setFeelings] = useState(() => {
-  const daysArray = eachDayOfInterval({ start: startOfMonth(currentDate), end: endOfMonth(currentDate) });
-  const randomFeelings = {};
+    const daysArray = eachDayOfInterval({
+      start: startOfMonth(currentDate),
+      end: endOfMonth(currentDate),
+    });
+    const randomFeelings = {};
 
     daysArray.forEach((day) => {
       if (day < new Date()) {
@@ -129,19 +144,21 @@ const StyledCalendar = ({
 
         // 감정 점수와 색상 객체 배열
         const feelingScores = [
-          { name: 'happy', score: happy, color: '#FFD89D' }, // Happy
-          { name: 'calm', score: calm, color: '#9DD6FF' },   // Calm
-          { name: 'sad', score: sad, color: '#D39CFF' },     // Sad
-          { name: 'nervous', score: nervous, color: '#C29DFF' }, // Nervous
-          { name: 'anger', score: anger, color: '#FF9D9D' }   // Anger
+          { name: "happy", score: happy, color: "#FFD89D" }, // Happy
+          { name: "calm", score: calm, color: "#9DD6FF" }, // Calm
+          { name: "sad", score: sad, color: "#D39CFF" }, // Sad
+          { name: "nervous", score: nervous, color: "#C29DFF" }, // Nervous
+          { name: "anger", score: anger, color: "#FF9D9D" }, // Anger
         ];
 
         // 점수를 기준으로 정렬
         feelingScores.sort((a, b) => b.score - a.score);
 
         // 가장 높은 두 감정 선택
-        const predominantFeelings = feelingScores.slice(0, 2).map(feeling => feeling.color); // 두 감정 색상 선택
-        randomFeelings[format(day, 'yyyy-MM-dd')] = predominantFeelings; // 색상 배열 저장
+        const predominantFeelings = feelingScores
+          .slice(0, 2)
+          .map((feeling) => feeling.color); // 두 감정 색상 선택
+        randomFeelings[format(day, "yyyy-MM-dd")] = predominantFeelings; // 색상 배열 저장
       }
     });
 
@@ -154,6 +171,11 @@ const StyledCalendar = ({
     const daysArray = eachDayOfInterval({ start, end });
     setDays(daysArray);
   }, [currentDate]);
+
+  const handleDateChange = (date) => {
+    // setActiveStartDate(date);
+    setSelectedDate(date);
+  };
 
   const handlePreviousMonth = () => {
     setCurrentDate(subMonths(currentDate, 1));
@@ -169,7 +191,7 @@ const StyledCalendar = ({
     setSelectedDate(day);
   };
 
-  const monthNumber = format(currentDate, 'M');
+  const monthNumber = format(currentDate, "M");
 
   const getGridRowStart = (date) => {
     const startDay = startOfMonth(currentDate).getDay();
@@ -198,13 +220,21 @@ const StyledCalendar = ({
         {monthNumber}
         <ArrowButton onClick={handleNextMonth}>&gt;</ArrowButton>
       </MonthHeader>
-      {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day, index) => (
-        <DayHeader key={day} style={{ gridColumn: index + 2, gridRow: 1 }} isLast={index === 6}>
+      {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day, index) => (
+        <DayHeader
+          key={day}
+          style={{ gridColumn: index + 2, gridRow: 1 }}
+          isLast={index === 6}
+        >
           {day}
         </DayHeader>
       ))}
       {[...Array(totalWeeks)].map((_, weekIndex) => (
-        <WeekNumber key={weekIndex} style={{ gridRow: weekIndex + 2, gridColumn: 1 }} isLast={weekIndex === totalWeeks - 1}>
+        <WeekNumber
+          key={weekIndex}
+          style={{ gridRow: weekIndex + 2, gridColumn: 1 }}
+          isLast={weekIndex === totalWeeks - 1}
+        >
           {weekIndex + 1}
         </WeekNumber>
       ))}
@@ -213,11 +243,16 @@ const StyledCalendar = ({
           <CalendarTile
             key={day}
             onClick={() => handleDateClick(day)}
-            className={`${isSameDay(day, new Date()) ? 'today' : ''} ${isSameDay(day, selectedDate) ? 'selected' : ''}`}
-            style={{ gridColumn: (day.getDay() + 2), gridRow: getGridRowStart(day) }}
-            $feelings={feelings[format(day, 'yyyy-MM-dd')]}
+            className={`${isSameDay(day, new Date()) ? "today" : ""} ${
+              isSameDay(day, selectedDate) ? "selected" : ""
+            }`}
+            style={{
+              gridColumn: day.getDay() + 2,
+              gridRow: getGridRowStart(day),
+            }}
+            $feelings={feelings[format(day, "yyyy-MM-dd")]}
           >
-            {format(day, 'd')}
+            {format(day, "d")}
           </CalendarTile>
         ))}
       </DayContainer>
