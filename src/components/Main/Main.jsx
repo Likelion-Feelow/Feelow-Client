@@ -1,18 +1,18 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import profile from "../images/SkyBlueProfile.png";
-import logo from "../images/SkyBlueLogo.png";
-import StyledCalendar from "./CalendarSection";
-import TodoList from "./Todo/TodoList";
-import AddTodoForm from "./Todo/AddTodoForm";
-import EmotionSelection from "./EmotionSelection";
-import EvaluatingPage from "../pages/EvaluatingPage";
+import profile from "../../images/SkyBlueProfile.png";
+import logo from "../../images/SkyBlueLogo.png";
+import StyledCalendar from "../Calendar/CalendarSection.jsx";
+import TodoList from "../Todo/TodoList.jsx";
+import AddTodoForm from "../Todo/AddTodoForm.jsx";
+import EmotionSelection from "../Emotion/StartEmotionSelection.jsx";
+import Evaluating from "../Emotion/Evaluating.jsx";
 
 
 
 const Container = styled.div`
   display: grid;
-  grid-template-rows: 1fr 7fr;
+  grid-template-rows: 1fr 6fr;
   grid-template-areas:
     "header"
     "main";
@@ -27,7 +27,7 @@ const MainContainer = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 75vw;
+  width: 100vh;
 `;
 
 const Header = styled.header`
@@ -39,13 +39,13 @@ const Header = styled.header`
   justify-content: center;
   background-color: white;
   padding: 0 0;
-  margin-top: 6vh;
+  
 `;
 
 const LogoImage = styled.img`
-  margin-top: 0vh;
+  margin-top: 4vh;
   height: 3vw;
-  margin-bottom: 1vh;
+  
 `;
 
 const ProfileImage = styled.img`
@@ -82,12 +82,17 @@ const Main = ({
 
     console.log("Main selectedDate:", selectedDate);
     console.log("Main setSelectedDate:", setSelectedDate);
+    console.log("Main selectedTask:", selectedTask);
 
   return (
     <Container>
+
+
       <Header>
         <LogoImage src={logo} alt="Logo" />
       </Header>
+
+
       <MainContainer>
         {view === "calendar" && (
           <StyledCalendar 
@@ -121,8 +126,9 @@ const Main = ({
             selectedDate={selectedDate}
           />
         )}
-        {view === "evaluating" && <EvaluatingPage selectedTask={selectedTask} selectedEmotion={selectedTask.selectedEmotion} taskDuration={selectedTask.task_duration} />}
+        {view === "evaluating" && <Evaluating selectedTask={selectedTask} selectedEmotion={selectedTask.selectedEmotion} taskDuration={selectedTask.task_duration} />}
       </MainContainer>
+      
     </Container>
   );
 };

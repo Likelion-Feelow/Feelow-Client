@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled, { keyframes, css } from 'styled-components';
-import EmotionImg from '../images/EmotionPlus.png';
+import { useNavigate } from 'react-router-dom';
 
 const Container = styled.div`
     display: grid;
@@ -12,10 +12,12 @@ const Container = styled.div`
     
     font-family: Helvetica, sans-serif;
     font-weight: bold;
-    height: 60vh;
-    width: 60vw;
-
-    background-color: #A8E0FF;
+    height: 75vh;
+    width: 65vw;
+    background-color: white;
+    padding: 0 2vw;
+    border-radius: 15px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 `;
 
 const slideDown = keyframes`
@@ -90,17 +92,10 @@ const HeaderTitle = styled.div`
     font-size: 2vw;
     font-weight: bold;
     display: flex;
-
     font-family: Helvetica, sans-serif;
-    color: white;
+    color: #3893FF;
     margin-top: 3vh;
     margin-left: 2vw;
-`;
-
-const Logo = styled.img`
-    height: 11vh;
-    width: 14vw;
-    margin-right: 20px;
 `;
 
 const QuestionContainer = styled.div`
@@ -114,8 +109,9 @@ const QuestionContainer = styled.div`
 const Question = styled.div`
     font-size: 2vw;
     font-family: Helvetica, sans-serif;
-    color: white;
+    color: #3893FF;
     font-weight: bold;
+    margin-left: 8vw;
 `;
 
 const EmotionBlock = styled.div`
@@ -152,9 +148,9 @@ const MainEmotionButton = styled.button`
     background-color: ${props => (props.active && !props.subActive ? '#ffffff' : props.bgColor)};
     border: none;
     border-radius: 30px;
-    padding: 0.7vw;
+    padding: 0.7vh;
     width: 90%;
-    height: 20%;
+    height: 4vw;
     cursor: pointer;
     transition: background-color 0.3s, color 0.3s;
     &:hover {
@@ -174,7 +170,7 @@ const SubEmotionList = styled.div`
     -ms-overflow-style: none;  /* Internet Explorer 10+ */
     transition: height 0.5s ease-in-out;
     ${props => props.active && css`
-        height: 29vh;
+        height: 35vh;
         animation: ${slideUp} 0.5s ease-in;
     `}
     &::-webkit-scrollbar {
@@ -229,8 +225,11 @@ const NextButton = styled.button`
     margin-left: 1vw;
     cursor: pointer;
     transition: background-color 0.3s;
-    opacity: ${props => (props.visible ? 1 : 0)};
-    animation: ${props => (props.visible ? fadeIn : fadeOut)} 0.5s;
+    opacity: 0;
+    ${({ visible }) => visible && css`
+        opacity: 1;
+        animation: ${fadeIn} 0.5s forwards;
+    `}
     &:hover {
         background-color: #2869B8;
     }
@@ -244,92 +243,106 @@ const emotions = [
     { main: '평온', sub: ['안정', '편안', '고요', '차분', '여유', '온화', '따뜻함', '수용', '조화', '균형'], bgColor: '#FF9DC6', subColor: '#FFD7FD', subBgColor: '#FFECF5', fontColor: '#FF4A96' },
     { main: '우울', sub: ['슬픔', '절망', '침울', '낙담', '눈물', '후회', '무기력', '고독', '상실', '비관'], bgColor: '#67BFFF', subColor: '#8BB3FF', subBgColor: '#ECF8FF', fontColor: '#0094FF' },
     { main: '불안', sub: ['걱정', '초조', '긴장', '두려움', '공포', '당황', '염려', '불편', '근심', '불확실'], bgColor: '#C29DFF', subColor: '#E5C5FF', subBgColor: '#ECEEFF', fontColor: '#853AFF' },
-    { main: '분노', sub: ['화남', '짜증', '격노', '불쾌', '원망', '성남', '분개', '분노2', '울분', '분통'], bgColor: '#FF9D9D', subColor: '#FF9292', subBgColor: '#FFECEC', fontColor: '#FF4E4E' },
+    { main: '분노', sub: ['화남', '짜증', '격노', '불쾌', '원망', '성남', '분개', '대노', '울분', '분통'], bgColor: '#FF9D9D', subColor: '#FF9292', subBgColor: '#FFECEC', fontColor: '#FF4E4E' },
 ];
 
-const EmotionSelection = ({ onEmotionSelect }) => {
+const EmotionSelection = ({ onEmotionSelect, selectedTask }) => {
+    const navigate = useNavigate();
     const [activeEmotion, setActiveEmotion] = useState('');
     const [selectedEmotion, setSelectedEmotion] = useState('');
     const [confirmedEmotionColor, setConfirmedEmotionColor] = useState('#3893FF');
-const [showNextButton, setShowNextButton] = useState(false);
+    const [showNextButton, setShowNextButton] = useState(false);
 
-const handleMainEmotionClick = (emotion) => {
-    if (activeEmotion === emotion) {
+    useEffect(() => {
+        // 작업이 변경될 때 상태 초기화
         setActiveEmotion('');
         setSelectedEmotion('');
         setConfirmedEmotionColor('#3893FF');
         setShowNextButton(false);
-    } else {
-        setActiveEmotion(emotion);
-        setSelectedEmotion(emotion);
-        const selectedMainEmotion = emotions.find(e => e.main === emotion);
-        setConfirmedEmotionColor(selectedMainEmotion ? selectedMainEmotion.bgColor : '#3893FF');
-        setShowNextButton(true);
-    }
-};
+    }, [selectedTask]);
 
-const handleSubEmotionClick = (subEmotion) => {
-    if (selectedEmotion === subEmotion) {
-        setSelectedEmotion('');
-        setConfirmedEmotionColor('#3893FF');
-        setShowNextButton(false);
-    } else {
-        setSelectedEmotion(subEmotion);
-        const selectedMainEmotion = emotions.find(e => e.sub.includes(subEmotion));
-        setConfirmedEmotionColor(selectedMainEmotion ? selectedMainEmotion.bgColor : '#3893FF');
-        setShowNextButton(true);
-    }
-};
+    const handleMainEmotionClick = (emotion) => {
+        if (activeEmotion === emotion) {
+            setActiveEmotion('');
+            setSelectedEmotion('');
+            setConfirmedEmotionColor('#3893FF');
+            setShowNextButton(false);
+        } else {
+            setActiveEmotion(emotion);
+            setSelectedEmotion(emotion);
+            const selectedMainEmotion = emotions.find(e => e.main === emotion);
+            setConfirmedEmotionColor(selectedMainEmotion ? selectedMainEmotion.bgColor : '#3893FF');
+            setShowNextButton(true);
+        }
+    };
 
-return (
-    <Container>
-        <Header>
-            <HeaderTitle>Emotion</HeaderTitle>
-        </Header>
-        
-        <QuestionContainer>
-            <Question>
-                현재의 감정은 어떤가요?
-            </Question>
+    const handleSubEmotionClick = (subEmotion) => {
+        if (selectedEmotion === subEmotion) {
+            setSelectedEmotion('');
+            setConfirmedEmotionColor('#3893FF');
+            setShowNextButton(false);
+        } else {
+            setSelectedEmotion(subEmotion);
+            const selectedMainEmotion = emotions.find(e => e.sub.includes(subEmotion));
+            setConfirmedEmotionColor(selectedMainEmotion ? selectedMainEmotion.bgColor : '#3893FF');
+            setShowNextButton(true);
+        }
+    };
 
-            <ConfirmButton bgColor={confirmedEmotionColor} color={confirmedEmotionColor ? '#ffffff' : 'white'}>
-                {selectedEmotion || '감정'}
-            </ConfirmButton>
+    const handleNextClick = () => {
+        onEmotionSelect(selectedEmotion);
+        navigate('/main');
+    };
 
-            <NextButton visible={showNextButton} onClick={() => alert('Next button clicked!')}>다음으로</NextButton>
-        </QuestionContainer>
+    return (
+        <Container>
+            <Header>
+                <HeaderTitle>Emotion</HeaderTitle>
+            </Header>
+            
+            <QuestionContainer>
+                <Question>
+                    할 일이 끝난 현재의 감정은 어떤가요?
+                </Question>
 
-        <EmotionContainer>
-            {emotions.map((emotion, index) => (
-                <EmotionBlock key={index}>
-                    <MainEmotionButton
-                        bgColor={emotion.bgColor}
-                        onClick={() => handleMainEmotionClick(emotion.main)}
-                        active={activeEmotion === emotion.main}
-                        subActive={selectedEmotion && emotion.sub.includes(selectedEmotion)}
-                    >
-                        {emotion.main}
-                    </MainEmotionButton>
-                    <SubEmotionList data-emotion-list active={activeEmotion === emotion.main} >
-                        {emotion.sub.map((subEmotion, subIndex) => (
-                            <SubEmotionButton
-                                key={subIndex}
-                                bgColor={emotion.bgColor}
-                                subColor={emotion.subColor}
-                                subBgColor={emotion.subBgColor}
-                                fontColor={emotion.fontColor}
-                                onClick={() => handleSubEmotionClick(subEmotion)}
-                                active={selectedEmotion === subEmotion}
-                            >
-                                {subEmotion}
-                            </SubEmotionButton>
-                        ))}
-                    </SubEmotionList>
-                </EmotionBlock>
-            ))}
-        </EmotionContainer>
-    </Container>
-);
+                <ConfirmButton bgColor={confirmedEmotionColor} color={confirmedEmotionColor ? '#ffffff' : 'white'}>
+                    {selectedEmotion || '감정'}
+                </ConfirmButton>
+
+                <NextButton visible={showNextButton} onClick={handleNextClick}>다음으로</NextButton>
+            </QuestionContainer>
+
+            <EmotionContainer>
+                {emotions.map((emotion, index) => (
+                    <EmotionBlock key={index}>
+                        <MainEmotionButton
+                            bgColor={emotion.bgColor}
+                            onClick={() => handleMainEmotionClick(emotion.main)}
+                            active={activeEmotion === emotion.main}
+                            subActive={selectedEmotion && emotion.sub.includes(selectedEmotion)}
+                        >
+                            {emotion.main}
+                        </MainEmotionButton>
+                        <SubEmotionList data-emotion-list active={activeEmotion === emotion.main} >
+                            {emotion.sub.map((subEmotion, subIndex) => (
+                                <SubEmotionButton
+                                    key={subIndex}
+                                    bgColor={emotion.bgColor}
+                                    subColor={emotion.subColor}
+                                    subBgColor={emotion.subBgColor}
+                                    fontColor={emotion.fontColor}
+                                    onClick={() => handleSubEmotionClick(subEmotion)}
+                                    active={selectedEmotion === subEmotion}
+                                >
+                                    {subEmotion}
+                                </SubEmotionButton>
+                            ))}
+                        </SubEmotionList>
+                    </EmotionBlock>
+                ))}
+            </EmotionContainer>
+        </Container>
+    );
 }
 
 export default EmotionSelection;

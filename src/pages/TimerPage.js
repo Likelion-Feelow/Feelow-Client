@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { useLocation } from 'react-router-dom'; // React Router DOM import
+import { useLocation, useNavigate } from 'react-router-dom';
 
 import PauseImage from '../images/Pause.png';
 import TimerOn from '../images/TimerOn.png';
@@ -11,37 +11,64 @@ const Wrapper = styled.div`
   align-items: center;
   justify-content: center;
   height: 100vh;
-  background-color: #3893FF;
+  background-color: #88D4FE;
 `;
 
 const Box = styled.div`
   width: 60vw;
-  height: 65vh;
+  height: 40vw;
   background-color: #FFFFFF;
   border-radius: 20px;
   display: grid;
-  grid-template-rows: 1fr 9fr;
+  grid-template-rows: auto auto 1fr;
+  grid-template-areas:
+    'progress'
+    'dots'
+    'content';
 `;
 
 const ProgressBarContainer = styled.div`
+  grid-area: progress;
   width: 100%;
-  height: 100%;
+  height: 3vw;
   background-color: #FFFFFF;
   border-radius: 20px 20px 0 0;
   overflow: hidden;
   position: relative;
+  border-bottom: 5px solid #88D4FE;
 `;
 
 const ProgressBar = styled.div`
   height: 100%;
-  background-color: #70BBFF;
+  background-color: #BDE7FF;
   width: ${props => props.progress}%;
   transition: width 1s linear;
+  position: relative;
+`;
+
+const DotsContainer = styled.div`
+  grid-area: dots;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start; /* Align to the left */
+  width: 100%;
+  margin-left: 1.5vw;
+  margin-top: 1.5vw;
+`;
+
+const Dot = styled.div`
+  width: 2vw;
+  height: 2vw;
+  margin-right: 10px;
+  border-radius: 50%;
+  background-color: ${props => (props.completed ? '#3893FF' : '#FFFFFF')};
+  border: 4px solid #88D4FE;
+  transition: background-color 0.5s;
 `;
 
 const Content = styled.div`
+  grid-area: content;
   padding: 20px;
-  border-top: 5px solid #3893FF;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -49,77 +76,59 @@ const Content = styled.div`
   position: relative;
 `;
 
-const DotsContainer = styled.div`
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  width: 100%;
-  padding-left: 20px;
-  margin-bottom: 20px;
-`;
-
-const Dot = styled.div`
-  width: 4vh;
-  height: 4vh;
-  margin-right: 10px;
-  border-radius: 50%;
-  background-color: ${props => (props.completed ? '#3893FF' : '#FFFFFF')};
-  border: 4px solid #3893FF;
-  transition: background-color 0.5s;
-`;
-
 const TimerDisplay = styled.div`
   font-family: 'Helvetica', sans-serif;
   font-weight: bold;
   font-size: 10vw;
   color: #000000;
-  width: 25vw;
-  height: 20vh;
-  padding: 4vh 7vw;
-  border: 5px solid #3893FF;
+  width: 40vw;
+  height: 20vw;
+  border: 5px solid #88D4FE;
   border-radius: 30px;
   background-color: #FFFFFF;
   display: flex;
   align-items: center;
   justify-content: center;
   margin-bottom: 20px;
-  position: relative;
+  position: relative; /* Add relative positioning */
   text-align: center;
   line-height: 1;
+  flex-direction: column; /* Ensure the elements inside are stacked vertically */
 `;
 
 const FocusText = styled.div`
   position: absolute;
-  top: -4.3vh;
+  top: -2.3vw;
   left: 50%;
   transform: translateX(-50%);
   color: white;
   font-size: 2vw;
   font-weight: bold;
   font-family: 'Helvetica', sans-serif;
-  background-color: #3893FF;
+  background-color: #88D4FE;
   border-radius: 40px;
-  padding: 2vh 2vw;
+  padding: 1vw 2vw;
 `;
 
 const TimerButtonContainer = styled.div`
   display: flex;
-  position: absolute;
-  bottom: -2.8vh;
-  width: 100%;
   justify-content: center;
   gap: 4vw;
+  position: absolute;
+  bottom: -1.7vw; /* Position above the border */
+  left: 50%;
+  transform: translateX(-50%);
 `;
 
 const TimerButton = styled.button`
-  width: 8vw;
-  height: 5vh;
+  width: 10vw;
+  height: 3vw;
   font-size: 2vw;
   cursor: pointer;
   color: white;
   font-weight: bold;
   font-family: 'Helvetica', sans-serif;
-  background-color: #3893FF;
+  background-color: #88D4FE;
   border: none;
   border-radius: 30px;
   display: flex;
@@ -127,27 +136,31 @@ const TimerButton = styled.button`
   justify-content: center;
 `;
 
+const ResetButtonContainer = styled.div`
+  margin-top: 1.5vw; /* Add margin to position below the timer buttons */
+  width: 100%;
+  display: flex;
+  justify-content: center;
+`;
+
 const ResetButton = styled.button`
-  width: 8vw;
-  height: 5vh;
   font-size: 2vw;
   cursor: pointer;
   font-weight: bold;
   font-family: 'Helvetica', sans-serif;
-  background-color: white;  
+  background-color: white;
   border: none;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-top: 2vh;
 `;
 
 const ButtonImage = styled.img`
-  width: 2.5vh;
+  width: 1.5vw;
 `;
 
 const ButtonImage2 = styled.img`
-  width: 6vh;
+  width: 2.3vw;
 `;
 
 const Colon = styled.div`
@@ -171,17 +184,27 @@ const TimeView = styled.div`
 `;
 
 const TimerPage = () => {
+  const skipTime = (seconds) => {
+    setTime(prevTime => Math.max(prevTime - seconds, 0));
+  };
+
+  useEffect(() => {
+    window.skipTime = skipTime;
+    return () => {
+      delete window.skipTime;
+    };
+  }, []);
+
+  const navigate = useNavigate();
+
   const location = useLocation();
-  const { focusTime, breakTime } = location.state;
-  const [time, setTime] = useState(focusTime * 60);
+  const { focusTime, breakTime, cycles, selectedEmotion, selectedTask } = location.state;
+
+  const [time, setTime] = useState(focusTime);
   const [isActive, setIsActive] = useState(false);
   const [isFocus, setIsFocus] = useState(true);
-  const [cycles, setCycles] = useState(0);
+  const [currentCycle, setCurrentCycle] = useState(0);
   const [progress, setProgress] = useState(0);
-
-  const toggleTimer = () => {
-    setIsActive(!isActive);
-  };
 
   const pauseTimer = () => {
     setIsActive(false);
@@ -194,7 +217,7 @@ const TimerPage = () => {
   const resetTimer = () => {
     setIsActive(false);
     setIsFocus(true);
-    setTime(focusTime * 60);
+    setTime(focusTime);
     setProgress(0);
   };
 
@@ -204,28 +227,49 @@ const TimerPage = () => {
       interval = setInterval(() => {
         setTime(prevTime => {
           const newTime = prevTime - 1;
-          const newProgress = ((isFocus ? focusTime * 60 - newTime : breakTime * 60 - newTime) / (isFocus ? focusTime * 60 : breakTime * 60)) * 100;
+          const newProgress = ((isFocus ? focusTime - newTime : breakTime - newTime) / (isFocus ? focusTime : breakTime)) * 100;
           setProgress(newProgress);
           return newTime;
         });
       }, 1000);
     } else if (time === 0) {
       clearInterval(interval);
-      setProgress(100); // Ensure the progress bar is at 100%
+      setProgress(100);
       setTimeout(() => {
         if (isFocus) {
           setIsFocus(false);
-          setTime(breakTime * 60);
+          setTime(breakTime);
         } else {
           setIsFocus(true);
-          setCycles(cycles + 1);
-          setTime(focusTime * 60);
+          setCurrentCycle(currentCycle + 1);
+          if (currentCycle < cycles - 1) {
+            setTime(focusTime);
+          } else {
+            handleComplete();
+            return;
+          }
         }
         setProgress(0);
       }, 1000);
     }
     return () => clearInterval(interval);
-  }, [isActive, time, isFocus, cycles, focusTime, breakTime]);
+  }, [isActive, time, isFocus, currentCycle, focusTime, breakTime]);
+
+  const handleComplete = () => {
+    setIsActive(false);
+    navigate('/feedback', {
+      state: {
+        emotion: selectedEmotion,
+        task: selectedTask.task_name,
+      },
+    });
+  };
+
+  useEffect(() => {
+    if (time === 0 && !isActive) {
+      handleComplete();
+    }
+  }, [time, isActive]);
 
   const formatTime = (seconds) => {
     const minutes = String(Math.floor(seconds / 60)).padStart(2, '0');
@@ -248,36 +292,35 @@ const TimerPage = () => {
         <ProgressBarContainer>
           <ProgressBar progress={progress} />
         </ProgressBarContainer>
+
+        <DotsContainer>
+          {Array.from({ length: cycles }).map((_, index) => (
+            <Dot key={index} completed={currentCycle > index} />
+          ))}
+        </DotsContainer>
+
         <Content>
-          <DotsContainer>
-            <Dot completed={cycles > 0} />
-            <Dot completed={cycles > 1} />
-            <Dot completed={cycles > 2} />
-          </DotsContainer>
           <TimerDisplay>
             {formatTime(time)}
             <FocusText>{isFocus ? 'Focus' : 'Break'}</FocusText>
             <TimerButtonContainer>
               <TimerButton onClick={pauseTimer}>
-                <ButtonImage src={PauseImage} alt="Pause" />
+                <ButtonImage src={StartImage} alt="Pause" />
               </TimerButton>
               <TimerButton onClick={startTimer}>
-                <ButtonImage src={StartImage} alt="Start" />
+                <ButtonImage src={PauseImage} alt="Start" />
               </TimerButton>
             </TimerButtonContainer>
           </TimerDisplay>
-          <ResetButton onClick={resetTimer}>
+          <ResetButtonContainer>
+            <ResetButton onClick={resetTimer}>
             <ButtonImage2 src={TimerOn} alt="Reset" />
-          </ResetButton>
+            </ResetButton>
+          </ResetButtonContainer>
         </Content>
       </Box>
     </Wrapper>
   );
-};
-
-TimerPage.defaultProps = {
-  focusTime: 10, // Default focus time in minutes
-  breakTime: 3,  // Default break time in minutes
 };
 
 export default TimerPage;

@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import Main from "../components/Main";
-import Sidebar from "../components/Sidebar";
-import EmotionSelection from "../components/EmotionSelection"; // 추가
+import Main from "../components/Main/Main";
+import Sidebar from "../components/Main/Sidebar";
+import EmotionSelection from "../components/Emotion/StartEmotionSelection"; // 추가
 
 function MainPage() {
   const [view, setView] = useState('calendar');
@@ -21,9 +21,12 @@ function MainPage() {
     setView('emotion'); // 선택된 작업이 있을 때 emotion 화면으로 전환
   };
 
-  const handleEmotionSelect = (emotion) => {
-    setSelectedEmotion(emotion);
-    setCurrentStep("evaluating");
+  const handleEmotionSelect = (selectedEmotion) => {
+    if (selectedTask) {
+      selectedTask.selectedEmotion = selectedEmotion;
+      console.log("Task after emotion select:", selectedTask);
+      setCurrentStep("evaluating");
+    }
   };
 
   return (
@@ -58,4 +61,5 @@ const Container = styled.div`
   grid-template-areas: 'main sidebar';
   grid-template-columns: 3fr 1fr;
   height: 100vh;
+  width: 100vw;
 `;
