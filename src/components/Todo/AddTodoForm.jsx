@@ -72,7 +72,7 @@ const AddTodoForm = ({ onCancel, addTask, selectedDate }) => {
             max="59"
             required
           />
-          <TimeInput 
+          {/* <TimeInput 
             type="number" 
             value={seconds} 
             onChange={(e) => setSeconds(e.target.value)} 
@@ -80,7 +80,7 @@ const AddTodoForm = ({ onCancel, addTask, selectedDate }) => {
             min="0" 
             max="59"
             required
-          />
+          /> */}
         </TimeInputContainer>
 
         <Label>설명</Label>

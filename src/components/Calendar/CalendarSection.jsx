@@ -69,7 +69,7 @@ const CalendarTile = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 1vh 3vh;
+  margin: 1vh 2vw;
   padding: 1.5vw 1.5vw;
   font-size: 2vw;
   color: black;

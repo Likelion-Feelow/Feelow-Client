@@ -39,32 +39,15 @@ const Header = styled.header`
   justify-content: center;
   background-color: white;
   padding: 0 0;
-  
 `;
 
 const LogoImage = styled.img`
   margin-top: 4vh;
   height: 3vw;
   
-`;
-
-const ProfileImage = styled.img`
-  margin-left: 6vw;
-  height: 5vh;
-  width: 5.1vh;
-`;
-
-const LogoutButton = styled.button`
-  background-color: #53b7ff;
-  border: none;
-  color: white;
-  font-size: 1vw;
-  cursor: pointer;
-  font-family: helvetica;
-  font-weight: bold;
-  border-radius: 20px;
-  padding: 0.8vh 1.5vw;
-  margin-right: 5vw;
+  @media (max-width: 75vw) {
+    height: 10vw;
+  }
 `;
 
 const Main = ({ 

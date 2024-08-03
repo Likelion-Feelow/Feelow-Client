@@ -13,31 +13,29 @@ const Container = styled.div`
   height: 100vh;
   background-color: white;
   font-family: Helvetica, Arial, sans-serif;
-  padding: 20px; /* 모바일 뷰에서의 패딩 추가 */
 `;
 
 const LoginImage = styled.img`
-  width: 50vw;
-  max-width: 400px; /* 최대 너비 설정 */
-  margin-bottom: 24px;
+  width: 40vw;
+  margin-bottom: 3vw;
 `;
 
 const InputContainer = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
+  
   margin-bottom: 16px;
-  width: 40vw;
-  max-width: 500px; /* 최대 너비 설정 */
+  width: 30vw;
 `;
 
 const InputText = styled.div`
-  font-size: 1.5vw;
-  margin-right: 3vw;
+  font-size: 2.5vw;
+  margin-right: 1.5vw;
   width: 5vw;
   color: #3893ff;
   font-weight: bold;
-  
+  text-align: right;
 `;
 
 const InputField = styled.input`
@@ -56,35 +54,37 @@ const ButtonRow = styled.div`
   display: flex;
   justify-content: space-between;
   width: 23vw;
-  max-width: 300px; /* 최대 너비 설정 */
   margin-top: 16px;
 `;
 
 const Button = styled.button`
-  padding: 1vh 1.5vw;
-  background-color: #3893ff;
-  color: white;
-  border:none;
-  
-  border-radius: 20px;
-  cursor: pointer;
-  font-size: 2vw;
-  font-weight: bold;
-  min-width: 100px; /* 최소 너비 설정 */
-`;
-
-const Button2 = styled.button`
-  padding: 1vh 1.5vw;
+  padding: 1vh 2vw;
   background-color: #3893ff;
   color: white;
   border: none;
-  
-  
   border-radius: 20px;
   cursor: pointer;
   font-size: 2vw;
   font-weight: bold;
-  min-width: 100px; /* 최소 너비 설정 */
+
+  &:hover {
+    background-color: #2d72cc;
+  }
+`;
+
+const Button2 = styled.button`
+  padding: 1vh 2vw;
+  background-color: #3893ff;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 2vw;
+  font-weight: bold;
+
+  &:hover {
+    background-color: #2d72cc;
+  }
 `;
 
 const LoginPage = () => {

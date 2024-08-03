@@ -118,6 +118,10 @@ const ListContainer = styled.div`
   padding: 10px;
   position: relative;
 
+  text-align: center;
+
+  font-size: 1vw;
+
   .fade-enter {
     opacity: 0;
   }

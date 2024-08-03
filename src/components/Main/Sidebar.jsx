@@ -32,12 +32,9 @@ const Sidebar = ({ selectedDate, onAddTodoClick, tasks, setTasks, handleTaskSele
       <CSSTransition in={menuOpen} timeout={300} classNames="fade" unmountOnExit>
         <MenuContent>
           <MenuButton onClick={() => setMenuOpen(!menuOpen)}>☰</MenuButton>
-          <MenuItem>Profile</MenuItem>
           <MenuItem onClick={() => handleLogout(navigate)}>Logout</MenuItem>
-          <MenuItem>About</MenuItem>
-          <KakaoLogoutButton />
+          {/* <KakaoLogoutButton /> */}
           <MenuItem onClick={() => navigate("/main")}>Statistics</MenuItem> {/* Home 클릭 시 navigate 호출 */}
-          <MenuItem>Logout</MenuItem>
           <MenuItem onClick={() => navigate("/about")}>About</MenuItem>
         </MenuContent>
       </CSSTransition>
@@ -105,6 +102,7 @@ const Title = styled.h2`
   padding: 5px 10px;
   margin: 0 2vw;
   border-radius: 10px;
+  
 `;
 
 const TodoListContainer = styled.div`
