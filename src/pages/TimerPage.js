@@ -16,7 +16,7 @@ const Wrapper = styled.div`
 
 const Box = styled.div`
   width: 60vw;
-  height: 40vw;
+  height: 45vw;
   background-color: #FFFFFF;
   border-radius: 20px;
   display: grid;
@@ -35,7 +35,7 @@ const ProgressBarContainer = styled.div`
   border-radius: 20px 20px 0 0;
   overflow: hidden;
   position: relative;
-  border-bottom: 5px solid #88D4FE;
+  border-bottom: 0.3vw solid #88D4FE;
 `;
 
 const ProgressBar = styled.div`
@@ -83,7 +83,7 @@ const TimerDisplay = styled.div`
   color: #000000;
   width: 40vw;
   height: 20vw;
-  border: 5px solid #88D4FE;
+  border: 0.3vw solid #88D4FE;
   border-radius: 30px;
   background-color: #FFFFFF;
   display: flex;
@@ -137,10 +137,13 @@ const TimerButton = styled.button`
 `;
 
 const ResetButtonContainer = styled.div`
-  margin-top: 1.5vw; /* Add margin to position below the timer buttons */
+  margin-top: 28vw; /* Add margin to position below the timer buttons */
   width: 100%;
   display: flex;
+  position: absolute;
   justify-content: center;
+  align-items: center;
+
 `;
 
 const ResetButton = styled.button`

@@ -39,6 +39,7 @@ const Box = styled.div`
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Increased shadow strength */
   position: relative;
   margin-bottom: 2vw;
+  margin-top: 2vw;
   animation: ${fadeIn} 0.5s ease-in-out; /* Add fade-in animation */
 `;
 
@@ -48,7 +49,7 @@ const TopBox = styled.div`
   background-color: #53B7FF;
   border-radius: 20px;
   position: absolute;
-  top: -65px;
+  margin-top: -35vh; /* Adjusted margin */
   left: 50%;
   transform: translateX(-50%);
   display: flex;

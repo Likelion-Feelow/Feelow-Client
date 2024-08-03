@@ -40,7 +40,7 @@ const wave = keyframes`
 const Dots = styled.div`
   display: flex;
   align-items: center;
-  margin-bottom: 8vh;
+  margin-bottom: 4vh;
 `;
 
 const Dot = styled.div`

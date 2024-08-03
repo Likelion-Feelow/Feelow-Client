@@ -24,15 +24,17 @@ const Container = styled.div`
 const MainContainer = styled.div`
   grid-area: main;
   display: flex;
+  height: 100%;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 100vh;
+  width: 100%;
 `;
 
 const Header = styled.header`
   grid-area: header;
   width: 100%;
+  height: 100%;
   color: white;
   display: flex;
   align-items: center;
