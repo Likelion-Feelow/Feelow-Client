@@ -99,9 +99,11 @@ const NormalText2 = styled.div`
 `;
 
 const FeedbackBox = styled.div`
-  margin-top: 2vw;  
-  display: flex;  
+  margin-top: 2vw;
+  display: flex;
   width: 80%;
+  max-height: 15vh; /* Set maximum height */
+  overflow-y: auto; /* Enable vertical scroll if content exceeds the max height */
 `;
 
 const Text1 = styled.div`
@@ -280,11 +282,11 @@ const GPTPage = () => {
               <TopBox>
                 <EmotionText>{emotion}</EmotionText>
                 <NormalText>의 감정을 안고, 할 일을 완수했군요!</NormalText>
-              </TopBox>
+                </TopBox>
               <FeedbackBox>
                 <NormalText2>{feedback}</NormalText2>
               </FeedbackBox>
-              </Box>
+            </Box>
             <BottomBox>
               <Text2>{task}</Text2>
               <Text1> 완료!</Text1>
@@ -311,3 +313,5 @@ const GPTPage = () => {
 };
 
 export default GPTPage;
+
+/////////////
