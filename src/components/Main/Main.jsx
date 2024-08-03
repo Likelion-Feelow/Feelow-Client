@@ -7,6 +7,7 @@ import TodoList from "../Todo/TodoList.jsx";
 import AddTodoForm from "../Todo/AddTodoForm.jsx";
 import EmotionSelection from "../Emotion/StartEmotionSelection.jsx";
 import Evaluating from "../Emotion/Evaluating.jsx";
+import { useNavigate } from "react-router-dom";
 
 
 
@@ -46,6 +47,7 @@ const Header = styled.header`
 const LogoImage = styled.img`
   margin-top: 4vh;
   height: 3vw;
+  cursor: pointer;
   
   @media (max-width: 75vw) {
     height: 10vw;
@@ -65,6 +67,8 @@ const Main = ({
     handleEmotionSelect, // Make sure this prop is passed from the parent component
   }) => {
 
+    const navigate = useNavigate();
+
     console.log("Main selectedDate:", selectedDate);
     console.log("Main setSelectedDate:", setSelectedDate);
     console.log("Main selectedTask:", selectedTask);
@@ -74,7 +78,7 @@ const Main = ({
 
 
       <Header>
-        <LogoImage src={logo} alt="Logo" />
+        <LogoImage onClick={() => navigate('/onboarding')} src={logo} alt="Logo" />
       </Header>
 
 
