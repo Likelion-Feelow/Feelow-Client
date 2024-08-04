@@ -5,9 +5,11 @@ import logo from "../../images/SkyBlueLogo.png";
 import StyledCalendar from "../Calendar/CalendarSection.jsx";
 import TodoList from "../Todo/TodoList.jsx";
 import AddTodoForm from "../Todo/AddTodoForm.jsx";
-import EmotionSelection from "../Emotion/StartEmotionSelection.jsx";
+// import EmotionSelection from "../Emotion/StartEmotionSelection.jsx";
 import Evaluating from "../Emotion/Evaluating.jsx";
 import { useNavigate } from "react-router-dom";
+import StartEmotionSelection from "../Emotion/StartEmotionSelection.jsx";
+import EndEmotionSelection from "../Emotion/EndEmotionSelection.jsx";
 
 
 
@@ -64,7 +66,8 @@ const Main = ({
     setTasks,
     handleTaskSelect,
     selectedTask,
-    handleEmotionSelect, // Make sure this prop is passed from the parent component
+    handleStartEmotionSelect,
+    handleEndEmotionSelect
   }) => {
 
     const navigate = useNavigate();
@@ -90,12 +93,21 @@ const Main = ({
             tasks={tasks}
           />
         )}
-        {view === "emotion" && selectedTask && (
-        <EmotionSelection 
+        {view === "startEmotion" && selectedTask && (
+        <StartEmotionSelection
           selectedTask={selectedTask} 
           onEmotionSelect={(selectedEmotion) => {
-            handleEmotionSelect(selectedEmotion);
+            handleStartEmotionSelect(selectedEmotion);
             setView("evaluating");
+          }} 
+        />
+        )}
+        {view === "endEmotion" && selectedTask && (
+        <EndEmotionSelection
+          selectedTask={selectedTask} 
+          onEmotionSelect={(selectedEmotion) => {
+            handleEndEmotionSelect(selectedEmotion);
+            setView("calendar");
           }} 
         />
         )}
