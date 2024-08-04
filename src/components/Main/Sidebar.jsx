@@ -34,7 +34,7 @@ const Sidebar = ({ selectedDate, onAddTodoClick, tasks, setTasks, handleTaskSele
           <MenuButton onClick={() => setMenuOpen(!menuOpen)}>☰</MenuButton>
           <MenuItem onClick={() => handleLogout(navigate)}>Logout</MenuItem>
           {/* <KakaoLogoutButton /> */}
-          <MenuItem onClick={() => navigate("/main")}>Statistics</MenuItem> {/* Home 클릭 시 navigate 호출 */}
+          <MenuItem onClick={() => navigate("/profile")}>Profile</MenuItem> {/* Home 클릭 시 navigate 호출 */}
           <MenuItem onClick={() => navigate("/about")}>About</MenuItem>
         </MenuContent>
       </CSSTransition>

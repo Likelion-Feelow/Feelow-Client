@@ -1,9 +1,233 @@
-function ProfilePage() {
-  return (
-    <div>
+import React, { useState, useEffect } from 'react';
+import styled, { keyframes, css } from 'styled-components';
 
-    </div>
-  )
+const fadeIn = keyframes`
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+`;
+
+const emotions = [
+  { main: '긍정', bgColor: '#FFD89D', fontColor: '#FFA51E', quote: '긍정적인 생각은 부정적인 생각보다 모든 것을 더 잘하게 만듭니다.' },
+  { main: '평온', bgColor: '#FF9DC6', fontColor: '#FF4A96', quote: '평온은 내부에서 나옵니다. 외부에서 찾지 마십시오.' },
+  { main: '우울', bgColor: '#67BFFF', fontColor: '#0094FF', quote: '가장 어두운 밤도 끝나고 해가 뜹니다.' },
+  { main: '불안', bgColor: '#C29DFF', fontColor: '#853AFF', quote: '어려움이 당신을 불안하게 하지 마십시오; 결국, 가장 어두운 밤에 별이 더 밝게 빛납니다.' },
+  { main: '분노', bgColor: '#FF9D9D', fontColor: '#FF4E4E', quote: '분노와 원망, 질투는 다른 사람의 마음을 바꾸지 않습니다 - 오직 당신의 마음만 바꿉니다.' },
+];
+
+const statsQuotes = {
+  집중: '집중은 모든 성취의 시작입니다.',
+  휴식: '휴식은 모든 에너지의 근원입니다.',
+  감정: '감정은 삶의 색을 더해줍니다.'
+};
+
+const ProfileContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
+  background-color: #d9f1ff;
+  opacity: 0;
+  ${({ isVisible }) => isVisible && css`
+    animation: ${fadeIn} 1s forwards;
+  `}
+`;
+
+const MainContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+`;
+
+const InfoContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  justify-content: flex-start;
+  margin-bottom: 20px;
+  gap: 10px;
+`;
+
+const Name = styled.div`
+  font-size: 2em;
+  font-weight: bold;
+`;
+
+const Age = styled.div`
+  font-size: 1.5em;
+`;
+
+const Job = styled.div`
+  font-size: 1em;
+`;
+
+const StatsContainer = styled.div`
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  width: 80vw;
+`;
+
+const InfoGridItem = styled.div`
+  grid-column: span 4;
+`;
+
+const StatBlock = styled.div`
+  background: ${(props) => props.bgColor || '#fff'};
+  border-radius: 15px;
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  font-size: 1em;
+  color: ${(props) => props.fontColor || '#000'};
+  height: 30vh;
+  perspective: 1000px;
+  position: relative;
+  cursor: pointer;
+  transform-style: preserve-3d;
+  transition: transform 0.6s;
+
+  ${({ isFlipped }) => isFlipped && css`
+    transform: rotateY(180deg);
+  `}
+`;
+
+const GradientStatBlock = styled(StatBlock)`
+  background: linear-gradient(45deg, #FFD89D, #FF9DC6, #67BFFF, #C29DFF, #FF9D9D);
+  color: #000;
+`;
+
+const StatBlockInner = styled.div`
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  transition: transform 0.6s;
+  transform-style: preserve-3d;
+`;
+
+const StatFront = styled.div`
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+`;
+
+const StatBack = styled.div`
+  position: absolute;
+  width: 80%;
+  height: 80%;
+  backface-visibility: hidden;
+  background-color: #fff;
+  color: #000;
+  transform: rotateY(180deg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 15px;
+  padding: 1vw;
+  text-align: center;
+  margin: auto;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+`;
+
+const StatTitle = styled.div`
+  font-size: 1em;
+  margin-bottom: 5px;
+`;
+
+const StatValue = styled.div`
+  font-size: 1.2em;
+  font-weight: bold;
+`;
+
+function ProfilePage() {
+  const [isVisible, setIsVisible] = useState(false);
+  const [flipped, setFlipped] = useState(Array(9).fill(false));
+
+  const handleFlip = (index) => {
+    setFlipped(prevFlipped => {
+      const newFlipped = [...prevFlipped];
+      newFlipped[index] = !newFlipped[index];
+      return newFlipped;
+    });
+  };
+
+  useEffect(() => {
+    setIsVisible(true);
+  }, []);
+
+  return (
+    <ProfileContainer isVisible={isVisible}>
+      <MainContainer>
+        <StatsContainer>
+          <InfoGridItem>
+            <InfoContainer>
+              <Name>홍길동</Name>
+              <Age>30</Age>
+              <Job>개발자</Job>
+            </InfoContainer>
+          </InfoGridItem>
+          <StatBlock onClick={() => handleFlip(0)} isFlipped={flipped[0]} bgColor="#fff" fontColor="#000">
+            <StatBlockInner>
+              <StatFront>
+                <StatTitle>총 집중 시간</StatTitle>
+                <StatValue>100시간</StatValue>
+              </StatFront>
+              <StatBack>{statsQuotes.집중}</StatBack>
+            </StatBlockInner>
+          </StatBlock>
+          <GradientStatBlock onClick={() => handleFlip(1)} isFlipped={flipped[1]}>
+            <StatBlockInner>
+              <StatFront>
+                <StatTitle>감정 입력 횟수</StatTitle>
+                <StatValue>93회</StatValue>
+              </StatFront>
+              <StatBack>{statsQuotes.감정}</StatBack>
+            </StatBlockInner>
+          </GradientStatBlock>
+          {emotions.map((emotion, index) => (
+            <StatBlock
+              key={index + 2}
+              bgColor={emotion.bgColor}
+              fontColor={emotion.fontColor}
+              onClick={() => handleFlip(index + 2)}
+              isFlipped={flipped[index + 2]}
+            >
+              <StatBlockInner>
+                <StatFront>
+                  <StatTitle>{emotion.main} 횟수</StatTitle>
+                  <StatValue>{index * 10 + 10}회</StatValue>
+                </StatFront>
+                <StatBack>{emotion.quote}</StatBack>
+              </StatBlockInner>
+            </StatBlock>
+          ))}
+          <StatBlock onClick={() => handleFlip(7)} isFlipped={flipped[7]} bgColor="#fff" fontColor="#000">
+            <StatBlockInner>
+              <StatFront>
+                <StatTitle>총 휴식 시간</StatTitle>
+                <StatValue>50시간</StatValue>
+              </StatFront>
+              <StatBack>{statsQuotes.휴식}</StatBack>
+            </StatBlockInner>
+          </StatBlock>
+        </StatsContainer>
+      </MainContainer>
+    </ProfileContainer>
+  );
 }
 
 export default ProfilePage;

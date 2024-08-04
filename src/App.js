@@ -10,6 +10,7 @@ import LoadingPage from "./pages/LoadingPage";
 import GPTPage from "./pages/GPTPage";
 import AboutPage from "./pages/AboutPage";
 import SignUpPage from "./pages/SignUpPage";
+import ProfilePage from "./pages/ProfilePage";
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
           <Route path="/signup" element={<SignUpPage />} />
           <Route path="/feedback" element={<GPTPage />} />
           <Route path="/about" element={<AboutPage />} />
+          <Route path="/profile" element={<ProfilePage />} />
         </Routes>
     </Router>
   );
