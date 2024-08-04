@@ -395,6 +395,7 @@ const FinalBackgroundText = styled.div`
     display: inline-block;
     animation: ${wave2} 3s infinite;
     animation-delay: calc(0.1s * var(--index));
+  }
 `;
 
 const FinalBackgroundButton = styled.button`

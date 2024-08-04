@@ -108,7 +108,12 @@ const LoginPage = () => {
         console.error('로그인 실패');
       }
     } catch (error) {
-      console.error('로그인 중 오류 발생:', error);
+      if (error.response && error.response.status === 404) {
+        alert('로그인 실패: 회원가입을 해주세요!')
+      } else {
+        console.error('로그인 중 오류 발생:', error);
+        alert('로그인 중 오류가 발생했습니다. 나중에 다시 시도해주세요.');
+      }
     }
   };
 

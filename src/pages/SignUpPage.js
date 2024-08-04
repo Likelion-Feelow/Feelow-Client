@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
 import Logo from '../images/Logo.png'; // Adjust the import path as needed
+import { useNavigate } from 'react-router-dom';
 
 const Container = styled.div`
   display: flex;
@@ -76,9 +77,10 @@ const Message = styled.p`
 `;
 
 const SignUpPage = () => {
-  const [name, setName] = useState('');
-  const [age, setAge] = useState('');
-  const [job, setJob] = useState('');
+  const navigate = useNavigate();
+  // const [name, setName] = useState('');
+  // const [age, setAge] = useState('');
+  // const [job, setJob] = useState('');
   const [nickname, setNickname] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
@@ -87,9 +89,9 @@ const SignUpPage = () => {
     e.preventDefault();
 
     const requestBody = {
-      name: name.trim(),
-      age: age.trim(),
-      job: job.trim(),
+      // name: name.trim(),
+      // age: age.trim(),
+      // job: job.trim(),
       nickname: nickname.trim(),
       password: password.trim(),
     };
@@ -98,12 +100,16 @@ const SignUpPage = () => {
       const response = await axios.post('http://3.39.201.42:8090/auths/register', requestBody);
       if (response.status === 201) {
         setMessage(`사용자 ${response.data.nickname}가 성공적으로 등록되었습니다!`);
+        alert(message);
+        navigate('/login');
       } else {
         setMessage('회원가입에 실패했습니다. 다시 시도해 주세요.');
+        alert(message);
       }
     } catch (error) {
       console.error('에러 발생:', error);
       setMessage('문제가 발생했습니다. 다시 시도해 주세요.');
+      alert(message);
     }
   };
 
@@ -111,7 +117,7 @@ const SignUpPage = () => {
     <Container>
       <SignUpImage src={Logo} alt="Sign Up" />
 
-      <InputContainer>
+      {/* <InputContainer>
         <InputText>이름</InputText>
         <InputField 
           type="text" 
@@ -139,10 +145,10 @@ const SignUpPage = () => {
           onChange={(e) => setJob(e.target.value)} 
           required 
         />
-      </InputContainer>
+      </InputContainer> */}
 
       <InputContainer>
-        <InputText>닉네임</InputText>
+        <InputText>ID</InputText>
         <InputField 
           type="text" 
           value={nickname} 
@@ -152,7 +158,7 @@ const SignUpPage = () => {
       </InputContainer>
 
       <InputContainer>
-        <InputText>비밀번호</InputText>
+        <InputText>PW</InputText>
         <InputField 
           type="password" 
           value={password} 
@@ -162,10 +168,8 @@ const SignUpPage = () => {
       </InputContainer>
 
       <ButtonRow>
-        <Button onClick={handleSignUp}>회원가입</Button>
+        <Button onClick={handleSignUp}>회원가입 하기</Button>
       </ButtonRow>
-
-      {message && <Message>{message}</Message>}
     </Container>
   );
 };
