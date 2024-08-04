@@ -17,7 +17,7 @@ const CalendarContainer = styled.div`
   grid-template-rows: repeat(7, 1fr);
   font-family: Helvetica, sans-serif;
   font-weight: bold;
-  height: 100%; /* Make the calendar height responsive */
+  
   width: 100%; /* Set a maximum width */
 `;
 
