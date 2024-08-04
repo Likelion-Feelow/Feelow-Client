@@ -17,7 +17,7 @@ const CalendarContainer = styled.div`
   grid-template-rows: repeat(7, 1fr);
   font-family: Helvetica, sans-serif;
   font-weight: bold;
-  height: 100% /* Make the calendar height responsive */
+  height: 100%; /* Make the calendar height responsive */
   width: 100%; /* Set a maximum width */
 `;
 
@@ -269,7 +269,8 @@ const AppContainer = styled.div`
 const ArrowButton = styled.button`
   background: none;
   border: none;
-  color: white;
+  color: #53b7ff;
+  font-weight: 600;
   font-size: 1.5rem;
   cursor: pointer;
 `;
