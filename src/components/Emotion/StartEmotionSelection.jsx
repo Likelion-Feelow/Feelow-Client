@@ -246,7 +246,7 @@ const emotions = [
     { main: '분노', sub: ['화남', '짜증', '격노', '불쾌', '원망', '성남', '분개', '대노', '울분', '분통'], bgColor: '#FF9D9D', subColor: '#FF9292', subBgColor: '#FFECEC', fontColor: '#FF4E4E' },
 ];
 
-const EmotionSelection = ({ onEmotionSelect, selectedTask }) => {
+const StartEmotionSelection = ({ onEmotionSelect, selectedTask }) => {
     const [activeEmotion, setActiveEmotion] = useState('');
     const [selectedEmotion, setSelectedEmotion] = useState('');
     const [confirmedEmotionColor, setConfirmedEmotionColor] = useState('#3893FF');
@@ -339,4 +339,4 @@ const EmotionSelection = ({ onEmotionSelect, selectedTask }) => {
     );
 }
 
-export default EmotionSelection;
+export default StartEmotionSelection;

@@ -3,6 +3,23 @@ import styled, { keyframes } from "styled-components";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 import axios from 'axios';
 
+const emotions = [
+  { main: '긍정', sub: ['행복', '기쁨', '만족', '감사', '희망', '자신감', '흥미', '열정', '자부심', '안심'], bgColor: '#FFD89D', subColor: '#FFF7EC', subBgColor: '#FFF7EC', fontColor: '#FFA51E' },
+  { main: '평온', sub: ['안정', '편안', '고요', '차분', '여유', '온화', '따뜻함', '수용', '조화', '균형'], bgColor: '#FF9DC6', subColor: '#FFD7FD', subBgColor: '#FFECF5', fontColor: '#FF4A96' },
+  { main: '우울', sub: ['슬픔', '절망', '침울', '낙담', '눈물', '후회', '무기력', '고독', '상실', '비관'], bgColor: '#67BFFF', subColor: '#8BB3FF', subBgColor: '#ECF8FF', fontColor: '#0094FF' },
+  { main: '불안', sub: ['걱정', '초조', '긴장', '두려움', '공포', '당황', '염려', '불편', '근심', '불확실'], bgColor: '#C29DFF', subColor: '#E5C5FF', subBgColor: '#ECEEFF', fontColor: '#853AFF' },
+  { main: '분노', sub: ['화남', '짜증', '격노', '불쾌', '원망', '성남', '분개', '대노', '울분', '분통'], bgColor: '#FF9D9D', subColor: '#FF9292', subBgColor: '#FFECEC', fontColor: '#FF4E4E' },
+];
+
+const getEmotionColor = (emotion) => {
+  for (let emotionCategory of emotions) {
+      if (emotionCategory.main === emotion || emotionCategory.sub.includes(emotion)) {
+          return emotionCategory.bgColor;
+      }
+  }
+  return '#FFFFFF'; // 기본 색상
+};
+
 const TodoList = ({ selectedDate, tasks, setTasks, addTask, handleTaskSelect, selectedTask }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -30,6 +47,7 @@ const TodoList = ({ selectedDate, tasks, setTasks, addTask, handleTaskSelect, se
         });
 
         const tasksForSelectedDate = response.data.filter(task => task.date === formattedDate);
+        console.log(tasksForSelectedDate);
 
         setTasks(tasksForSelectedDate);
         setShowNoTaskMessage(tasksForSelectedDate.length === 0);
@@ -97,7 +115,7 @@ const TodoList = ({ selectedDate, tasks, setTasks, addTask, handleTaskSelect, se
                 onClick={() => handleTaskSelect(task)} 
                 selected={selectedTask && selectedTask.id === task.id}
               >
-                <Circle selected={selectedTask && selectedTask.id === task.id} />
+                <Circle selected={selectedTask && selectedTask.id === task.id} color={getEmotionColor(task.current_emotion)} />
                 <TaskContent>
                   <TaskName>{task.task_name}</TaskName>
                   <TaskDescription>{task.task_description}</TaskDescription>
@@ -209,13 +227,36 @@ const TaskItem = styled.div`
 `;
 
 const Circle = styled.div`
-  width: 1.5vw;
+width: 1.5vw;
   height: 1.5vw;
+  position: relative;
   border: 2.5px solid ${({ selected }) => (selected ? '#4285f4' : '#9CDBFF')};
   border-radius: 50%;
   margin-right: 1vw;
   margin-left: 1vw;
-  background-color: ${({ selected }) => (selected ? '#4285f4' : 'transparent')};
+  background-color: transparent;
+
+  &::before {
+    content: '';
+    position: absolute;
+    width: 50%;
+    height: 100%;
+    background-color: ${({ startColor }) => startColor};
+    border-top-left-radius: 50%;
+    border-bottom-left-radius: 50%;
+    left: 0;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    width: 50%;
+    height: 100%;
+    background-color: ${({ endColor }) => endColor};
+    border-top-right-radius: 50%;
+    border-bottom-right-radius: 50%;
+    right: 0;
+  }
 `;
 
 const TaskContent = styled.div`
