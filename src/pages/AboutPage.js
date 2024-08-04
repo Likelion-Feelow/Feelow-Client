@@ -31,7 +31,7 @@ const Wrapper = styled.div`
   align-items: center;
   justify-content: center;
   height: 100vh;
-  background-color: #53B7FF;
+  background-color: #D9F1FF;
   font-family: 'Helvetica', sans-serif;
   visibility: hidden;
   ${({ isVisible }) => isVisible && css`
