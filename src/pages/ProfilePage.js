@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled, { keyframes, css } from 'styled-components';
+import axios from 'axios';
 
 const fadeIn = keyframes`
   from {
@@ -142,20 +143,28 @@ function ProfilePage() {
 
     const fetchData = async () => {
       try {
-        const response = await fetch('/tasks/static/?year=2023&month=8&day=4', {
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = today.getMonth() + 1;
+        const day = today.getDate();
+        const accessToken = localStorage.getItem('access_token');
+
+        console.log(`Requesting data for ${year}-${month}-${day}`);
+
+        const response = await axios.get(`http://3.39.201.42:8090/tasks/static/?year=${year}&month=${month}&day=${day}`, {
           headers: {
-            'Authorization': 'Bearer accessToken'
+            'Authorization': `Bearer ${accessToken}`
           }
         });
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const contentType = response.headers.get('content-type');
-        if (!contentType || !contentType.includes('application/json')) {
-          throw new TypeError("Received response is not JSON");
-        }
-        const data = await response.json();
-        setStats(data);
+
+        console.log('Response data:', response.data);
+
+        setStats({
+          nickname: response.data.nickname,
+          total_focus_time: response.data.total_focus_time,
+          total_break_time: response.data.total_break_time,
+          emotion_counts: response.data.emotion_counts
+        });
       } catch (error) {
         setError(error.message);
         console.error('Error fetching data:', error);
@@ -184,6 +193,7 @@ function ProfilePage() {
   return (
     <ProfileContainer isVisible={isVisible}>
       <MainContainer>
+        <h1>{stats.nickname}님의 통계</h1>
         <StatsContainer>
           <StatBlock onClick={() => handleFlip(0)} isFlipped={flipped[0]} bgColor="#fff" fontColor="#000">
             <StatBlockInner>
@@ -229,7 +239,7 @@ function ProfilePage() {
               <StatBack>{statsQuotes.휴식}</StatBack>
             </StatBlockInner>
           </StatBlock>
-          </StatsContainer>
+        </StatsContainer>
       </MainContainer>
     </ProfileContainer>
   );

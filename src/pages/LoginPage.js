@@ -94,10 +94,13 @@ const LoginPage = () => {
 
   const handleLogin = async () => {
     try {
+      console.log('로그인 시도 중...');
       const response = await axios.post('http://3.39.201.42:8090/auths/login', {
         nickname,
         password
       });
+
+      console.log('로그인 응답:', response);
 
       if (response.status === 200) {
         const { access_token, refresh_token } = response.data;
@@ -108,10 +111,10 @@ const LoginPage = () => {
         console.error('로그인 실패');
       }
     } catch (error) {
+      console.error('로그인 중 오류 발생:', error);
       if (error.response && error.response.status === 404) {
         alert('로그인 실패: 회원가입을 해주세요!')
       } else {
-        console.error('로그인 중 오류 발생:', error);
         alert('로그인 중 오류가 발생했습니다. 나중에 다시 시도해주세요.');
       }
     }
