@@ -115,7 +115,7 @@ const Main = ({
             selectedDate={selectedDate}
           />
         )}
-        {view === "evaluating" && <Evaluating selectedTask={selectedTask} selectedEmotion={selectedTask.selectedEmotion} taskDuration={selectedTask.task_duration} />}
+        {view === "evaluating" && <Evaluating selectedTask={selectedTask} selectedEmotion={selectedTask.selectedEmotion} taskDuration={selectedTask.task_duration} onCancel={() => setView("calendar")} />}
       </MainContainer>
       
     </Container>

@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import styled, { keyframes } from 'styled-components';
-import { FaClock } from 'react-icons/fa';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import React, { useState, useEffect } from "react";
+import styled, { keyframes } from "styled-components";
+import { FaClock } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 // 스타일 컴포넌트 정의
 const MainContainer = styled.div`
@@ -13,7 +13,7 @@ const MainContainer = styled.div`
   width: 65vw;
   height: 75vh;
   max-height: 40vw;
-  background-color: #ECF8FF;
+  background-color: #ecf8ff;
   border-radius: 30px;
   padding: 1vw;
   position: relative;
@@ -47,10 +47,10 @@ const Dot = styled.div`
   width: 2vw;
   height: 2vw;
   margin: 0 4vw;
-  background-color: #53B7FF;
+  background-color: #53b7ff;
   border-radius: 50%;
   animation: ${wave} 1.5s infinite;
-  animation-delay: ${props => props.delay};
+  animation-delay: ${(props) => props.delay};
 `;
 
 const LoadingText = styled.div`
@@ -63,7 +63,7 @@ const LoadingText = styled.div`
 const LogoText = styled.div`
   grid-area: logo;
   font-family: Helvetica, sans-serif;
-  color: #53B7FF;
+  color: #53b7ff;
   font-weight: bold;
   font-size: 2vw;
   margin-bottom: 3vw;
@@ -74,14 +74,14 @@ const LogoText2 = styled.div`
   position: absolute;
   left: 3vw;
   font-family: Helvetica, sans-serif;
-  color: #53B7FF;
+  color: #53b7ff;
   font-weight: bold;
   font-size: 2vw;
   margin-bottom: 3vw;
 `;
 
 const EmptyDiv = styled.div`
-  grid-area: ${props => props.gridArea};
+  grid-area: ${(props) => props.gridArea};
 `;
 
 const ResultContainer = styled.div`
@@ -119,7 +119,7 @@ const TaskNameText = styled.div`
 const TimeText = styled.div`
   font-family: Helvetica, sans-serif;
   color: white;
-  background-color: #53B7FF;
+  background-color: #53b7ff;
   border-radius: 20px;
   padding: 0.5vw 1vw;
   font-size: 2vw;
@@ -131,8 +131,8 @@ const TimeText = styled.div`
 
 const TimeText3 = styled.div`
   font-family: Helvetica, sans-serif;
-  color: #53B7FF;
-  background-color: #ECF8FF;
+  color: #53b7ff;
+  background-color: #ecf8ff;
   border-radius: 20px;
   padding: 0.5vw 1vw;
   font-size: 2vw;
@@ -141,7 +141,6 @@ const TimeText3 = styled.div`
   text-align: center;
   width: 90%;
 `;
-
 
 const TimeText2 = styled.div`
   font-family: Helvetica, sans-serif;
@@ -172,6 +171,24 @@ const StartButton = styled.button`
   grid-area: startButton;
   margin-top: 2vw;
 `;
+const CancelButton = styled.button`
+  background-color: black;
+  color: white;
+  border: none;
+  border-radius: 30px;
+  font-size: 1.5vw;
+  font-family: Helvetica, sans-serif;
+  font-weight: bold;
+  padding: 1vw 2vw;
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.3s;
+  &:hover {
+    background-color: #3e94cc;
+  }
+  grid-area: startButton;
+  margin-top: 2vw;
+`;
 
 const CycleIconContainer = styled.div`
   display: flex;
@@ -184,7 +201,7 @@ const CycleIconContainer = styled.div`
 
 const CycleIcon = styled.div`
   font-size: 8vw;
-  color: #53B7FF;
+  color: #53b7ff;
   position: relative;
 `;
 
@@ -214,23 +231,29 @@ const ReasonContainer = styled.div`
   word-wrap: break-word; /* This ensures that long words will break and wrap to the next line */
 `;
 
-const Evaluating = ({ selectedEmotion, taskDuration, selectedTask }) => {
+const Evaluating = ({
+  selectedEmotion,
+  taskDuration,
+  selectedTask,
+  onCancel,
+}) => {
   const [loading, setLoading] = useState(true);
   const [pomodoroCycle, setPomodoroCycle] = useState(null);
   const [error, setError] = useState(null);
-  const [reason, setReason] = useState('');
+  const [reason, setReason] = useState("");
   const navigate = useNavigate();
 
   const fetchPomodoroCycle = async () => {
     const requestPayload = {
-      model: 'gpt-4-turbo',
+      model: "gpt-4-turbo",
       messages: [
         {
-          role: 'system',
-          content: 'You are an assistant that provides optimal Pomodoro timer patterns.',
+          role: "system",
+          content:
+            "You are an assistant that provides optimal Pomodoro timer patterns.",
         },
         {
-          role: 'user',
+          role: "user",
           content: `사용자의 현재 감정이 ${selectedEmotion}이고 총 계획 시간이 ${taskDuration} 초인 경우, 
           생산성과 정신 건강을 극대화하기 위해 최적의 포모도로 타이머 패턴을 결정하십시오. 또한 ${selectedTask.task_name} 과제의 종류, 내용들도 고려하십시오.
           오로지 사용자만을 위한 개인 맞춤 포모도로 타이머로, 가장 일반적인 시간 단위인 5분 단위의 시간은 되도록이면 피하십시오.
@@ -245,30 +268,34 @@ const Evaluating = ({ selectedEmotion, taskDuration, selectedTask }) => {
       max_tokens: 1000,
     };
 
-    console.log('API Request Payload:', requestPayload);
+    console.log("API Request Payload:", requestPayload);
 
     try {
       const response = await axios.post(
-        'https://api.openai.com/v1/chat/completions',
+        "https://api.openai.com/v1/chat/completions",
         requestPayload,
         {
           headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${process.env.REACT_APP_OPENAI_API_KEY}`,
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${process.env.REACT_APP_OPENAI_API_KEY}`,
           },
         }
       );
 
-      console.log('API Response:', response.data);
+      console.log("API Response:", response.data);
 
       const result = response.data.choices[0].message.content.trim();
-      console.log('Parsed Result:', result);
+      console.log("Parsed Result:", result);
 
-      const [focusTime, breakTime, cycles, ...reasonParts] = result.split(',');
-      const reasonText = reasonParts.join(',').trim().replace(/"/g, '');
+      const [focusTime, breakTime, cycles, ...reasonParts] = result.split(",");
+      const reasonText = reasonParts.join(",").trim().replace(/"/g, "");
 
-      if (isNaN(parseFloat(focusTime)) || isNaN(parseFloat(breakTime)) || isNaN(parseFloat(cycles))) {
-        throw new Error('Received invalid numbers from the API');
+      if (
+        isNaN(parseFloat(focusTime)) ||
+        isNaN(parseFloat(breakTime)) ||
+        isNaN(parseFloat(cycles))
+      ) {
+        throw new Error("Received invalid numbers from the API");
       }
 
       setPomodoroCycle({
@@ -279,8 +306,8 @@ const Evaluating = ({ selectedEmotion, taskDuration, selectedTask }) => {
       setReason(reasonText);
       setLoading(false);
     } catch (error) {
-      console.error('Error fetching Pomodoro cycle:', error);
-      setError('Failed to fetch the Pomodoro cycle. Please try again later.');
+      console.error("Error fetching Pomodoro cycle:", error);
+      setError("Failed to fetch the Pomodoro cycle. Please try again later.");
       setLoading(false);
     }
   };
@@ -317,7 +344,7 @@ const Evaluating = ({ selectedEmotion, taskDuration, selectedTask }) => {
       <MainContainer>
         <LogoText>Evaluating</LogoText>
         <CenterContainer>
-        <ErrorMessage>{error}</ErrorMessage>
+          <ErrorMessage>{error}</ErrorMessage>
           <StartButton onClick={retryFetch}>Retry</StartButton>
         </CenterContainer>
       </MainContainer>
@@ -327,11 +354,13 @@ const Evaluating = ({ selectedEmotion, taskDuration, selectedTask }) => {
   const formatTime = (seconds) => {
     const hours = Math.floor(seconds / 3600);
     const minutes = Math.floor((seconds % 3600) / 60);
-    return `${hours > 0 ? `${hours} H ` : ''}${minutes > 0 ? `${minutes} M` : ''}`;
+    return `${hours > 0 ? `${hours} H ` : ""}${
+      minutes > 0 ? `${minutes} M` : ""
+    }`;
   };
 
   const handleStartButtonClick = () => {
-    navigate('/timer', {
+    navigate("/timer", {
       state: {
         focusTime: pomodoroCycle.focusTime,
         breakTime: pomodoroCycle.breakTime,
@@ -351,11 +380,15 @@ const Evaluating = ({ selectedEmotion, taskDuration, selectedTask }) => {
         <EmptyDiv gridArea="empty4" />
         <EmptyDiv gridArea="empty5" />
         <EmptyDiv gridArea="empty6" />
-        <TimeText style={{ gridArea: 'focusTitle' }}>Focus Time</TimeText>
-        <TimeText2 style={{ gridArea: 'focusTime' }}>{formatTime(pomodoroCycle.focusTime)}</TimeText2>
-        <TimeText3 style={{ gridArea: 'restTitle' }}>Rest Time</TimeText3>
-        <TimeText2 style={{ gridArea: 'restTime' }}>{formatTime(pomodoroCycle.breakTime)}</TimeText2>
-        <CycleIconContainer style={{ gridArea: 'iconArea' }}>
+        <TimeText style={{ gridArea: "focusTitle" }}>Focus Time</TimeText>
+        <TimeText2 style={{ gridArea: "focusTime" }}>
+          {formatTime(pomodoroCycle.focusTime)}
+        </TimeText2>
+        <TimeText3 style={{ gridArea: "restTitle" }}>Rest Time</TimeText3>
+        <TimeText2 style={{ gridArea: "restTime" }}>
+          {formatTime(pomodoroCycle.breakTime)}
+        </TimeText2>
+        <CycleIconContainer style={{ gridArea: "iconArea" }}>
           <CycleIcon>
             <FaClock />
             <CycleText>{pomodoroCycle.cycles}</CycleText>
@@ -365,7 +398,10 @@ const Evaluating = ({ selectedEmotion, taskDuration, selectedTask }) => {
           <TaskNameText>{reason}</TaskNameText>
         </ReasonContainer>
       </ResultContainer>
-      <StartButton onClick={handleStartButtonClick}>START</StartButton>
+      <div style={{ display: 'flex', gap: '30px' }}>
+        <StartButton onClick={handleStartButtonClick}>START</StartButton>
+        <CancelButton onClick={onCancel}>취소</CancelButton>
+      </div>
     </MainContainer>
   );
 };

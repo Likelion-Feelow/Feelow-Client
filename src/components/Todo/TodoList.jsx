@@ -45,6 +45,29 @@ const TodoList = ({ selectedDate, tasks, setTasks, addTask, handleTaskSelect, se
     fetchTasks();
   }, [selectedDate, setTasks]);
 
+  const handleDeleteTask = async (taskId) => {
+    try {
+      const accessToken = localStorage.getItem('access_token');
+
+      if (!accessToken) {
+        throw new Error("Access token is missing");
+      }
+
+      await axios.delete(`http://3.39.201.42:8090/tasks/${taskId}`, {
+        headers: {
+          'Authorization': `Bearer ${accessToken}`
+        }
+      });
+
+      // Remove the task from the tasks array
+      setTasks(prevTasks => prevTasks.filter(task => task.id !== taskId));
+    } catch (error) {
+      setError("할 일을 삭제하는 데 문제가 발생했습니다.");
+      console.log("Error deleting task:", error);
+    }
+  };
+
+
   const formatDuration = (seconds) => {
     const hrs = Math.floor(seconds / 3600);
     const mins = Math.floor((seconds % 3600) / 60);
@@ -80,6 +103,7 @@ const TodoList = ({ selectedDate, tasks, setTasks, addTask, handleTaskSelect, se
                   <TaskDescription>{task.task_description}</TaskDescription>
                   <TaskTime>예상 시간: {formatDuration(task.task_duration)}</TaskTime>
                 </TaskContent>
+                <DeleteButton onClick={(e) => { e.stopPropagation(); handleDeleteTask(task.id); }}>삭제</DeleteButton>
               </TaskItem>
             </CSSTransition>
           ))
@@ -138,6 +162,26 @@ const ListContainer = styled.div`
   }
 `;
 
+
+const DeleteButton = styled.button`
+  display: none;
+  background-color: lightgray;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 10px;
+  cursor: pointer;
+  margin-left: 10px;
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%); /* 버튼을 수직으로 가운데 정렬합니다 */
+
+  &:hover {
+    background-color: #ff1a1a;
+  }
+`; 
+
 const TaskItem = styled.div`
   display: flex;
   align-items: center;
@@ -149,10 +193,19 @@ const TaskItem = styled.div`
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   margin: 1.5vh 2vw;
   cursor: pointer;
+  position: relative;
+  overflow: hidden; /* 이 줄을 추가하여 자식 요소가 범위를 벗어나지 않도록 합니다 */
+
   ${({ selected }) => selected && `
     background-color: #f0f8ff;
     border-color: #4285f4;
   `}
+
+  &:hover {
+    ${DeleteButton} {
+      display: block;
+    }
+  }
 `;
 
 const Circle = styled.div`
