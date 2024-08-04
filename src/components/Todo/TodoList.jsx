@@ -3,7 +3,7 @@ import styled, { keyframes } from "styled-components";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 import axios from 'axios';
 
-const TodoList = ({ selectedDate, tasks, setTasks, addTask, handleTaskSelect, selectedTask }) => {
+const TodoList = ({ selectedDate, tasks, setTasks, handleTaskSelect, selectedTask }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [showNoTaskMessage, setShowNoTaskMessage] = useState(false);
@@ -66,7 +66,6 @@ const TodoList = ({ selectedDate, tasks, setTasks, addTask, handleTaskSelect, se
       console.log("Error deleting task:", error);
     }
   };
-
 
   const formatDuration = (seconds) => {
     const hrs = Math.floor(seconds / 3600);
@@ -138,13 +137,42 @@ const fadeOut = keyframes`
   }
 `;
 
+const slideIn = keyframes`
+  from {
+    right: -50px;
+    opacity: 0;
+  }
+  to {
+    right: 10px;
+    opacity: 1;
+  }
+`;
+
+const slideOut = keyframes`
+  from {
+    right: 10px;
+    opacity: 1;
+  }
+  to {
+    right: -50px;
+    opacity: 0;
+  }
+`;
+
 const ListContainer = styled.div`
-  padding: 10px;
+  padding: 1vw;
   position: relative;
-
   text-align: center;
-
   font-size: 1vw;
+  height: 100%;
+
+  overflow-y: auto;
+  scrollbar-width: none; /* For Firefox */
+  -ms-overflow-style: none;  /* For Internet Explorer and Edge */
+  
+  &::-webkit-scrollbar {
+    display: none; /* For Chrome, Safari, and Opera */
+  }
 
   .fade-enter {
     opacity: 0;
@@ -162,9 +190,7 @@ const ListContainer = styled.div`
   }
 `;
 
-
 const DeleteButton = styled.button`
-  display: none;
   background-color: lightgray;
   color: white;
   border: none;
@@ -173,37 +199,46 @@ const DeleteButton = styled.button`
   cursor: pointer;
   margin-left: 10px;
   position: absolute;
-  right: 10px;
+  right: -50px;
   top: 50%;
-  transform: translateY(-50%); /* 버튼을 수직으로 가운데 정렬합니다 */
+  font-size: 1vw;
+  transform: translateY(-50%);
+  opacity: 0;
 
   &:hover {
     background-color: #ff1a1a;
   }
-`; 
+`;
 
 const TaskItem = styled.div`
   display: flex;
   align-items: center;
-  padding: 10px;
-  margin-bottom: 10px;
+  padding: 1vw;
+  min-height: 6vw;
   border: 1px solid #ddd;
   border-radius: 20px;
   background-color: white;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   margin: 1.5vh 2vw;
+  text-align: left;
   cursor: pointer;
   position: relative;
-  overflow: hidden; /* 이 줄을 추가하여 자식 요소가 범위를 벗어나지 않도록 합니다 */
+  overflow: hidden;
 
   ${({ selected }) => selected && `
     background-color: #f0f8ff;
-    border-color: #4285f4;
+    border-color: #0C98FF;
   `}
 
   &:hover {
     ${DeleteButton} {
-      display: block;
+      animation: ${slideIn} 0.3s forwards;
+    }
+  }
+
+  &:not(:hover) {
+    ${DeleteButton} {
+      animation: ${slideOut} 0.3s forwards;
     }
   }
 `;
@@ -211,11 +246,11 @@ const TaskItem = styled.div`
 const Circle = styled.div`
   width: 1.5vw;
   height: 1.5vw;
-  border: 2.5px solid ${({ selected }) => (selected ? '#4285f4' : '#9CDBFF')};
+  border: 2.5px solid ${({ selected }) => (selected ? '#0C98FF' : '#9CDBFF')};
   border-radius: 50%;
   margin-right: 1vw;
   margin-left: 1vw;
-  background-color: ${({ selected }) => (selected ? '#4285f4' : 'transparent')};
+  background-color: ${({ selected }) => (selected ? '#0C98FF' : 'transparent')};
 `;
 
 const TaskContent = styled.div`

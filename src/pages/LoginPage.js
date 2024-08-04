@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import Logo from "../images/Logo.png";
-import KakaoLoginButton from "../components/Login/KakaoLoginButton";
 import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 
@@ -22,43 +21,44 @@ const LoginImage = styled.img`
 
 const InputContainer = styled.div`
   display: flex;
-  flex-direction: row;
   align-items: center;
-  
   margin-bottom: 16px;
   width: 30vw;
+  position: relative;
 `;
 
 const InputText = styled.div`
   font-size: 2.5vw;
-  margin-right: 1.5vw;
-  width: 5vw;
   color: #3893ff;
   font-weight: bold;
+  position: absolute;
+  left: 0;
+  width: 7vw;
   text-align: right;
 `;
 
 const InputField = styled.input`
-  padding: 10px;
+  padding: 1vw;
   border: 1px solid #ccc;
   border-radius: 20px;
   height: 3vh;
-  font-size: 16px;
+  font-size: 1.5vw;
   background-color: #3893ff;
   color: white;
   flex: 1;
-  min-width: 150px; /* 최소 너비 설정 */
+  margin-left: 8vw; /* Adjust this value if needed */
+  text-align: left;
 `;
 
 const ButtonRow = styled.div`
   display: flex;
   justify-content: space-between;
   width: 23vw;
-  margin-top: 16px;
+  margin-top: 4vw;
 `;
 
 const Button = styled.button`
-  padding: 1vh 2vw;
+  padding: 1.5vh 2vw;
   background-color: #3893ff;
   color: white;
   border: none;
@@ -66,7 +66,7 @@ const Button = styled.button`
   cursor: pointer;
   font-size: 2vw;
   font-weight: bold;
-
+  
   &:hover {
     background-color: #2d72cc;
   }
@@ -145,7 +145,7 @@ const LoginPage = () => {
       </ButtonRow>
 
       {/* 카카오 로그인 */}
-      <KakaoLoginButton />
+      {/* <KakaoLoginButton /> */}
     </Container>
   );
 };

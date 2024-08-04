@@ -45,37 +45,11 @@ const MainContainer = styled.div`
   justify-content: center;
 `;
 
-const InfoContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: flex-end;
-  justify-content: flex-start;
-  margin-bottom: 20px;
-  gap: 10px;
-`;
-
-const Name = styled.div`
-  font-size: 2em;
-  font-weight: bold;
-`;
-
-const Age = styled.div`
-  font-size: 1.5em;
-`;
-
-const Job = styled.div`
-  font-size: 1em;
-`;
-
 const StatsContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 20px;
   width: 80vw;
-`;
-
-const InfoGridItem = styled.div`
-  grid-column: span 4;
 `;
 
 const StatBlock = styled.div`
@@ -85,9 +59,10 @@ const StatBlock = styled.div`
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   font-size: 1em;
   color: ${(props) => props.fontColor || '#000'};
-  height: 30vh;
-  perspective: 1000px;
+  height: 0;
+  padding-bottom: 100%;
   position: relative;
+  perspective: 1000px;
   cursor: pointer;
   transform-style: preserve-3d;
   transition: transform 0.6s;
@@ -120,12 +95,15 @@ const StatFront = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  padding: 10px;
+  box-sizing: border-box;
+  border-radius: 15px;
 `;
 
 const StatBack = styled.div`
   position: absolute;
-  width: 80%;
-  height: 80%;
+  width: 90%;
+  height: 90%;
   backface-visibility: hidden;
   background-color: #fff;
   color: #000;
@@ -134,28 +112,58 @@ const StatBack = styled.div`
   align-items: center;
   justify-content: center;
   border-radius: 15px;
-  padding: 1vw;
-  text-align: center;
-  margin: auto;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
+  padding: 10px;
+  box-sizing: border-box;
+  top: 5%;
+  left: 5%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  font-size: 1.5vw;
 `;
 
 const StatTitle = styled.div`
-  font-size: 1em;
+  font-size: calc(0.3em + 1vw);
   margin-bottom: 5px;
 `;
 
 const StatValue = styled.div`
-  font-size: 1.2em;
+  font-size: calc(0.8em + 1vw);
   font-weight: bold;
 `;
 
 function ProfilePage() {
   const [isVisible, setIsVisible] = useState(false);
-  const [flipped, setFlipped] = useState(Array(9).fill(false));
+  const [flipped, setFlipped] = useState(Array(8).fill(false));
+  const [stats, setStats] = useState(null);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    setIsVisible(true);
+
+    const fetchData = async () => {
+      try {
+        const response = await fetch('/tasks/static/?year=2023&month=8&day=4', {
+          headers: {
+            'Authorization': 'Bearer accessToken'
+          }
+        });
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const contentType = response.headers.get('content-type');
+        if (!contentType || !contentType.includes('application/json')) {
+          throw new TypeError("Received response is not JSON");
+        }
+        const data = await response.json();
+        setStats(data);
+      } catch (error) {
+        setError(error.message);
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const handleFlip = (index) => {
     setFlipped(prevFlipped => {
@@ -165,26 +173,23 @@ function ProfilePage() {
     });
   };
 
-  useEffect(() => {
-    setIsVisible(true);
-  }, []);
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
+
+  if (!stats) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <ProfileContainer isVisible={isVisible}>
       <MainContainer>
         <StatsContainer>
-          <InfoGridItem>
-            <InfoContainer>
-              <Name>홍길동</Name>
-              <Age>30</Age>
-              <Job>개발자</Job>
-            </InfoContainer>
-          </InfoGridItem>
           <StatBlock onClick={() => handleFlip(0)} isFlipped={flipped[0]} bgColor="#fff" fontColor="#000">
             <StatBlockInner>
               <StatFront>
                 <StatTitle>총 집중 시간</StatTitle>
-                <StatValue>100시간</StatValue>
+                <StatValue>{stats.total_focus_time}분</StatValue>
               </StatFront>
               <StatBack>{statsQuotes.집중}</StatBack>
             </StatBlockInner>
@@ -193,7 +198,7 @@ function ProfilePage() {
             <StatBlockInner>
               <StatFront>
                 <StatTitle>감정 입력 횟수</StatTitle>
-                <StatValue>93회</StatValue>
+                <StatValue>{Object.values(stats.emotion_counts).reduce((a, b) => a + b, 0)}회</StatValue>
               </StatFront>
               <StatBack>{statsQuotes.감정}</StatBack>
             </StatBlockInner>
@@ -209,7 +214,7 @@ function ProfilePage() {
               <StatBlockInner>
                 <StatFront>
                   <StatTitle>{emotion.main} 횟수</StatTitle>
-                  <StatValue>{index * 10 + 10}회</StatValue>
+                  <StatValue>{stats.emotion_counts[emotion.main] || 0}회</StatValue>
                 </StatFront>
                 <StatBack>{emotion.quote}</StatBack>
               </StatBlockInner>
@@ -219,12 +224,12 @@ function ProfilePage() {
             <StatBlockInner>
               <StatFront>
                 <StatTitle>총 휴식 시간</StatTitle>
-                <StatValue>50시간</StatValue>
+                <StatValue>{stats.total_break_time}분</StatValue>
               </StatFront>
               <StatBack>{statsQuotes.휴식}</StatBack>
             </StatBlockInner>
           </StatBlock>
-        </StatsContainer>
+          </StatsContainer>
       </MainContainer>
     </ProfileContainer>
   );

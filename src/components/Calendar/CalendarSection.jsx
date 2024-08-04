@@ -69,7 +69,7 @@ const CalendarTile = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 1vh 2vw;
+  margin: 0.49vw 2vw;
   padding: 1.5vw 1.5vw;
   font-size: 2vw;
   color: black;
@@ -269,7 +269,7 @@ const AppContainer = styled.div`
 const ArrowButton = styled.button`
   background: none;
   border: none;
-  color: #53b7ff;
+  color: white;
   font-weight: 600;
   font-size: 1.5rem;
   cursor: pointer;

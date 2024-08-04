@@ -123,7 +123,8 @@ const FormContainer = styled.div`
   border-radius: 10px;
   padding: 2vh 3vw;
   background-color: #ECF8FF;
-  width: 60%;
+  width: 80%;
+  height: 70%;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   animation: ${fadeIn} 0.5s ease-in-out; /* 페이드 인 애니메이션 추가 */
 `;
@@ -140,6 +141,8 @@ const Form = styled.form`
   grid-area: form;
   display: flex;
   flex-direction: column;
+  width: 100%;
+  height: 100%;
 `;
 
 const Label = styled.label`

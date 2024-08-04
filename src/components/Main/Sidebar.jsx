@@ -1,14 +1,14 @@
 import React, { useState } from "react";
-import styled, { keyframes } from "styled-components";
+import styled from "styled-components";
 import { CSSTransition } from "react-transition-group";
 import TodoList from "../Todo/TodoList";
-import KakaoLogoutButton, { handleLogout } from "../Login/KakaoLogoutButton";
+import { handleLogout } from "../Login/KakaoLogoutButton";
 import { useNavigate } from "react-router-dom";
 import AddTodoButton from "../Todo/AddTodoButton";
 
 const SidebarContainer = styled.div`
   display: grid;
-  grid-template-rows: 10vh 6vh auto 1fr;
+  grid-template-rows: 10vh 6vh 70vh auto;
   grid-template-areas:
     "menu"
     "header"
@@ -33,16 +33,15 @@ const Sidebar = ({ selectedDate, onAddTodoClick, tasks, setTasks, handleTaskSele
         <MenuContent>
           <MenuButton onClick={() => setMenuOpen(!menuOpen)}>☰</MenuButton>
           <MenuItem onClick={() => handleLogout(navigate)}>Logout</MenuItem>
-          {/* <KakaoLogoutButton /> */}
-          <MenuItem onClick={() => navigate("/profile")}>Profile</MenuItem> {/* Home 클릭 시 navigate 호출 */}
+          <MenuItem onClick={() => navigate("/profile")}>Profile</MenuItem>
           <MenuItem onClick={() => navigate("/about")}>About</MenuItem>
         </MenuContent>
       </CSSTransition>
 
-      <CSSTransition in={!menuOpen} timeout={300} classNames="fade" unmountOnExit>
+      {!menuOpen && (
         <Content>
           <Header>
-            <Title>To Do List</Title>
+            <Title>To Do</Title>
           </Header>
 
           <TodoListContainer>
@@ -50,18 +49,16 @@ const Sidebar = ({ selectedDate, onAddTodoClick, tasks, setTasks, handleTaskSele
               selectedDate={selectedDate} 
               tasks={tasks} 
               setTasks={setTasks} 
-              handleTaskSelect={handleTaskSelect} // 추가: 작업 선택 핸들러 전달
-              selectedTask={selectedTask} // 추가: 선택된 작업 전달
+              handleTaskSelect={handleTaskSelect} 
+              selectedTask={selectedTask} 
             />
           </TodoListContainer>
 
-          <CSSTransition key={selectedDate} timeout={{ enter: 300, exit: 80 }} classNames="fade">
-            <AddTodoButtonContainer>
-              <AddToDoButton onClick={onAddTodoClick}>+</AddToDoButton>
-            </AddTodoButtonContainer>
-          </CSSTransition>
+          <AddTodoButtonContainer>
+            <AddToDoButton onClick={onAddTodoClick}>+</AddToDoButton>
+          </AddTodoButtonContainer>
         </Content>
-      </CSSTransition>
+      )}
     </SidebarContainer>
   );
 };
@@ -95,19 +92,20 @@ const Header = styled.div`
 `;
 
 const Title = styled.h2`
-  font-size:  2vw;
+  font-size: 2vw;
   font-weight: bold;
   color: #53b7ff;
   margin: 0;
   padding: 5px 10px;
   margin: 0 2vw;
   border-radius: 10px;
-  
+  font-family: "Krona One";
 `;
 
 const TodoListContainer = styled.div`
   grid-area: todolist;
   margin-top: 15px;
+  margin-bottom: 3.5vw;
 `;
 
 const AddTodoButtonContainer = styled.div`
@@ -116,21 +114,6 @@ const AddTodoButtonContainer = styled.div`
   display: flex;
   text-align: center;
   justify-content: center;
-
-  &.fade-enter {
-    opacity: 0;
-  }
-  &.fade-enter-active {
-    opacity: 1;
-    transition: opacity 500ms;
-  }
-  &.fade-exit {
-    opacity: 1;
-  }
-  &.fade-exit-active {
-    opacity: 0;
-    transition: opacity 300ms;
-  }
 `;
 
 const AddToDoButton = styled.button`
@@ -146,8 +129,8 @@ const AddToDoButton = styled.button`
   align-items: center;
   justify-content: center;
   outline: none;
-
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+
   &:hover {
     background-color: #4285f4;
     color: white;
@@ -166,6 +149,7 @@ const MenuContent = styled.div`
   align-items: left;
   justify-content: center;
   box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+  z-index: 5;
 
   &.fade-enter {
     opacity: 0;
@@ -186,7 +170,7 @@ const MenuContent = styled.div`
 const MenuItem = styled.div`
   color: white;
   padding-left: 3vw;
-  font-family: helvetica;
+  font-family: Helvetica;
   font-weight: bold;
   cursor: pointer;
   &:hover {
@@ -197,20 +181,9 @@ const MenuItem = styled.div`
 `;
 
 const Content = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  display: contents;
+  grid-area: 2 / 1 / 5 / 2;
   background-color: #d9f1ff;
-  display: grid;
-  grid-template-rows: 10vh 6vh auto 1fr;
-  grid-template-areas:
-    "menu"
-    "header"
-    "todolist"
-    "addtodobutton";
-  z-index: 5;
 
   &.fade-enter {
     opacity: 0;
