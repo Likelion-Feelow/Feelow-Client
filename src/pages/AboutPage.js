@@ -46,9 +46,13 @@ const Content = styled.div`
   border-radius: 20px;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
   width: 50vw;
-  max-height: 65vh;
+  max-height: 70vh;
   text-align: center;
   overflow-y: auto;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  scrollbar-width: none;
 `;
 
 const Title = styled.h1`
@@ -56,7 +60,7 @@ const Title = styled.h1`
   flex-direction: column;
   align-items: center;
   font-size: 3vw;
-  margin-bottom: 1vw;
+  margin-bottom: 3vw;
   font-weight: bold;
   color: #53B7FF;
 `;
@@ -75,7 +79,7 @@ const Letter = styled.span`
 const Subtitle = styled.h2`
   color: #3893FF;
   font-size: 2vw;
-  margin-bottom: 2vw;
+  margin-bottom: 3vw;
   font-weight: bold;
 `;
 
@@ -88,9 +92,12 @@ const Subtitle2 = styled.h3`
 const MemberList = styled.div`
   display: flex;
   overflow-x: auto;
-  width: 100%;
-  padding: 1vw 0;
+  width: 90%;
+  padding: 2vw 0.5vw;
   margin-bottom: 2vw;
+  margin: 0 auto;
+  
+  
   &::-webkit-scrollbar {
     display: none;
   }
@@ -102,7 +109,7 @@ const Card = styled.div`
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   min-width: 10vw;
-  height: 15vw;
+  height: 14vw;
   padding: 1vw;
   display: flex;
   flex-direction: column;
@@ -114,7 +121,7 @@ const Card = styled.div`
   margin: 0 1vw;
   
   &:hover {
-    transform: scale(1.3);
+    transform: scale(1.2);
   }
 `;
 
@@ -155,8 +162,8 @@ const CardBack = styled.div`
 const Avatar = styled.img`
   background-color: white;
   border-radius: 50%;
-  width: 5vw;
-  height: 5vw;
+  width: 6vw;
+  height: 6vw;
   object-fit: cover;
   margin-bottom: 1vw;
   margin-top: 1vw;
@@ -174,8 +181,13 @@ const Text = styled.p`
   margin-bottom: 2vw;
 `;
 
-const RoleText = styled.div`\
+const RoleText = styled.div`
   font-size: 1.2vw;
+`;
+
+const BackText = styled.div`
+  font-size: 1vw;
+  padding: 1vw;
 `;
 
 const colors = [
@@ -211,7 +223,7 @@ const AboutPage = () => {
     { name: '안재경', role: 'Project Manager', description: '안재경은 프로젝트 매니저로 팀을 이끌고 있습니다.' },
     { name: '강유민', role: 'Designer', description: '강유민은 디자이너로, 디자인을 담당하고 있습니다.' },
     { name: '김동욱', role: 'Frontend', description: '김동욱은 프론트엔드 개발을 담당하고 있습니다.' },
-    { name: '엄경호', role: 'Frontend', description: '기술로 치유하는 정신건강' },
+    { name: '엄경호', role: 'Frontend', description: '엄경호는 프론트엔드 개발을 담당하고 있습니다.' },
     { name: '변희민', role: 'Backend', description: '변희민은 백엔드 개발을 담당하고 있습니다.' },
     { name: '오연서', role: 'Backend', description: '오연서는 백엔드 개발을 담당하고 있습니다.' },
   ];
@@ -255,7 +267,7 @@ const AboutPage = () => {
                   </MemberInfo>
                 </CardFront>
                 <CardBack>
-                  {member.description}
+                  <BackText>{member.description}</BackText>
                 </CardBack>
               </CardInner>
             </Card>

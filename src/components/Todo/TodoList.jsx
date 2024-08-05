@@ -232,8 +232,8 @@ const DeleteButton = styled.button`
   background-size: contain;
   border: none;
   border-radius: 50%;
-  width: 5vw;
-  height: 5vw;
+  width: 3vw;
+  height: 3vw;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -242,12 +242,8 @@ const DeleteButton = styled.button`
   position: absolute;
   
   top: 50%;
-  transform: translate(20%, -50%);
+  transform: translate(-20%, -50%);
   opacity: 0;
-
-  // &:hover {
-  //   scale: 1.1;
-  // }
 `;
 
 const TaskItem = styled.div`
@@ -290,6 +286,7 @@ const Circle = styled.div`
   border-radius: 50%;
   margin-right: 1vw;
   margin-left: 1vw;
+  flex-shrink: 0; // Add this line to prevent shrinking
   ${({ currentEmotion, changedEmotion, selected }) => {
     if (currentEmotion && changedEmotion) {
       return `
@@ -313,6 +310,7 @@ const Circle = styled.div`
 
 const TaskContent = styled.div`
   flex-grow: 1;
+  padding: 1vw 1vw;
 `;
 
 const TaskName = styled.h3`
@@ -322,6 +320,7 @@ const TaskName = styled.h3`
 
 const TaskDescription = styled.p`
   margin: 5px 0;
+  
   color: #666;
 `;
 
@@ -340,6 +339,8 @@ const NoTaskMessage = styled.p`
   color: #999;
   text-align: center;
   margin-top: 20px;
+  font-weight: bold;
+  font-size: 1vw;
 `;
 
 const LoadingMessage = styled.p`
@@ -347,5 +348,5 @@ const LoadingMessage = styled.p`
   text-align: center;
   margin-top: 20px;
   font-weight: bold;
-  font-size: 16px;
+  font-size: 1vw;
 `;
