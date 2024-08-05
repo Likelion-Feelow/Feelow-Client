@@ -9,6 +9,16 @@ import {
   addMonths,
   subMonths,
 } from "date-fns";
+import api from "../../api"; // 설정된 Axios 인스턴스 임포트
+
+// 감정별 색상 매핑
+const emotionColors = {
+  "긍정": "#FFD89D",
+  "평온": "#9DD6FF",
+  "우울": "#D39CFF",
+  "불안": "#C29DFF",
+  "분노": "#FF9D9D",
+};
 
 // Container for the whole calendar component
 const CalendarContainer = styled.div`
@@ -17,8 +27,7 @@ const CalendarContainer = styled.div`
   grid-template-rows: repeat(7, 1fr);
   font-family: Helvetica, sans-serif;
   font-weight: bold;
-  
-  width: 100%; /* Set a maximum width */
+  width: 100%;
 `;
 
 // Header for the month
@@ -30,7 +39,6 @@ const MonthHeader = styled.div`
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  
   font-size: 4vw;
 `;
 
@@ -73,18 +81,12 @@ const CalendarTile = styled.div`
   padding: 1.5vw 1.5vw;
   font-size: 2vw;
   color: black;
-  background: ${({ $feelings }) =>
-    $feelings
-      ? `linear-gradient(135deg, ${$feelings[0]} 100%, ${$feelings[1]} 30%)`
-      : "white"}; // 변경된 부분: 두 감정 색상의 그라디언트 사용
-
+  background: ${({ $feelingColor }) => $feelingColor || "white"};
   border-radius: 50%; /* Make it circular */
   cursor: pointer;
   opacity: 0.9;
   transition: all 0.3s ease;
-
   box-sizing: border-box;
-
 
   &::before {
     content: '';
@@ -126,54 +128,38 @@ const DayContainer = styled.div`
 const StyledCalendar = ({ selectedDate, setSelectedDate }) => {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [days, setDays] = useState([]);
-
-  const [feelings, setFeelings] = useState(() => {
-    const daysArray = eachDayOfInterval({
-      start: startOfMonth(currentDate),
-      end: endOfMonth(currentDate),
-    });
-    const randomFeelings = {};
-
-    daysArray.forEach((day) => {
-      if (day < new Date()) {
-        const happy = Math.random() * 10;
-        const calm = Math.random() * (10 - happy);
-        const sad = Math.random() * (10 - happy - calm);
-        const nervous = Math.random() * (10 - happy - calm - sad);
-        const anger = 10 - happy - calm - sad - nervous;
-
-        // 감정 점수와 색상 객체 배열
-        const feelingScores = [
-          { name: "happy", score: happy, color: "#FFD89D" }, // Happy
-          { name: "calm", score: calm, color: "#9DD6FF" }, // Calm
-          { name: "sad", score: sad, color: "#D39CFF" }, // Sad
-          { name: "nervous", score: nervous, color: "#C29DFF" }, // Nervous
-          { name: "anger", score: anger, color: "#FF9D9D" }, // Anger
-        ];
-
-        // 점수를 기준으로 정렬
-        feelingScores.sort((a, b) => b.score - a.score);
-
-        // 가장 높은 두 감정 선택
-        const predominantFeelings = feelingScores
-          .slice(0, 2)
-          .map((feeling) => feeling.color); // 두 감정 색상 선택
-        randomFeelings[format(day, "yyyy-MM-dd")] = predominantFeelings; // 색상 배열 저장
-      }
-    });
-
-    return randomFeelings;
-  });
+  const [feelings, setFeelings] = useState({});
+  const [tasks, setTasks] = useState([]);
 
   useEffect(() => {
+    const fetchEmotionData = async () => {
+      const year = currentDate.getFullYear();
+      const month = currentDate.getMonth() + 1;
+
+      try {
+        const response = await api.get(`/calendar/?year=${year}&month=${month}`);
+        console.log('Fetched calendar data:', response.data);
+
+        const emotionData = response.data.calendars.reduce((acc, day) => {
+          acc[day.date] = emotionColors[day.superior_emotion] || null;
+          return acc;
+        }, {});
+
+        setFeelings(emotionData);
+      } catch (error) {
+        console.error("Error fetching emotion data:", error);
+      }
+    };
+
     const start = startOfMonth(currentDate);
     const end = endOfMonth(currentDate);
     const daysArray = eachDayOfInterval({ start, end });
     setDays(daysArray);
+
+    fetchEmotionData();
   }, [currentDate]);
 
   const handleDateChange = (date) => {
-    // setActiveStartDate(date);
     setSelectedDate(date);
   };
 
@@ -185,10 +171,34 @@ const StyledCalendar = ({ selectedDate, setSelectedDate }) => {
     setCurrentDate(addMonths(currentDate, 1));
   };
 
-  const handleDateClick = (day) => {
-    console.log("handleDateClick called with:", day);
-    console.log("setSelectedDate in handleDateClick:", setSelectedDate);
+  const handleDateClick = async (day) => {
     setSelectedDate(day);
+    const formattedDate = format(day, "yyyy-MM-dd");
+  
+    try {
+      // Fetch calendar data for the selected month
+      const calendarResponse = await api.get(`/calendar/?year=${day.getFullYear()}&month=${day.getMonth() + 1}`);
+      
+      // Log the full response from the calendar API for debugging
+      console.log('Calendar API Response:', calendarResponse);
+  
+      const { calendars, today_tasks } = calendarResponse.data;
+  
+      // Log the calendars array
+      console.log('Calendars:', calendars);
+  
+      // Log the today_tasks array
+      console.log('Today Tasks:', today_tasks);
+  
+      // Find the specific day's data in the calendars response
+      const dayData = calendars.find(d => d.date === formattedDate);
+      console.log('Superior Emotion:', dayData?.superior_emotion);
+  
+      setTasks(today_tasks);
+  
+    } catch (error) {
+      console.error(`Error fetching data for ${formattedDate}:`, error);
+    }
   };
 
   const monthNumber = format(currentDate, "M");
@@ -202,13 +212,12 @@ const StyledCalendar = ({ selectedDate, setSelectedDate }) => {
   const getTotalWeeks = () => {
     const start = startOfMonth(currentDate);
     const end = endOfMonth(currentDate);
-    const startDay = start.getDay(); // 월의 첫 번째 날의 요일
-    const totalDays = end.getDate(); // 월의 총 일 수
-    const endDay = end.getDay(); // 월의 마지막 날의 요일
+    const startDay = start.getDay();
+    const totalDays = end.getDate();
+    const endDay = end.getDay();
 
-    // 주 수 계산
     const totalWeeks = Math.ceil((totalDays + startDay) / 7);
-    return totalWeeks > 6 ? 6 : totalWeeks; // 6주 초과하지 않도록
+    return totalWeeks > 6 ? 6 : totalWeeks;
   };
 
   const totalWeeks = getTotalWeeks();
@@ -250,7 +259,7 @@ const StyledCalendar = ({ selectedDate, setSelectedDate }) => {
               gridColumn: day.getDay() + 2,
               gridRow: getGridRowStart(day),
             }}
-            $feelings={feelings[format(day, "yyyy-MM-dd")]}
+            $feelingColor={feelings[format(day, "yyyy-MM-dd")]}
           >
             {format(day, "d")}
           </CalendarTile>

@@ -184,6 +184,8 @@ const Section = styled.div`
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  position: relative; /* position 설정을 추가 */
+  z-index: 1; /* 기본 z-index 값을 낮게 설정 */
 `;
 
 const Header = styled.header`
@@ -194,7 +196,7 @@ const Header = styled.header`
   height: 5vh;
   position: sticky;
   top: 0;
-  z-index: 1000;
+  z-index: 1003;
 `;
 
 const Logo = styled.div`
@@ -207,6 +209,8 @@ const MenuButton = styled.div`
   font-size: 2.5vw;
   cursor: pointer;
   color: ${({ isOpen }) => (isOpen ? "white" : "black")};
+  z-index: 1002; 
+  position: relative; /* 상대 위치 설정 */
 `;
 
 const MenuContainer = styled.div`
@@ -222,6 +226,8 @@ const MenuContainer = styled.div`
   display: flex;
   align-items: flex-end; /* 아이템을 우측 정렬 */
   justify-content: center;
+  z-index: 1001; /* z-index 값을 높여 메뉴바가 항상 위에 보이도록 설정 */
+
 
   ${({ isOpen }) =>
     isOpen &&
@@ -234,6 +240,7 @@ const MenuItemWrapper = styled.div`
   display: flex;
   transition: opacity 0.6s ease;
   opacity: ${({ isHovered }) => (isHovered ? 0.4 : 1)};
+
 `;
 
 const MenuItem = styled.a`

@@ -204,7 +204,7 @@ const EmotionSelectionWrapper = styled.div`
 const GPTPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { emotion, task } = location.state;
+  const { emotion, task, focusTime, breakTime, cycles, selectedTask } = location.state;
   const [feedback, setFeedback] = useState('');
   const [loading, setLoading] = useState(true);
   const [buttonVisible, setButtonVisible] = useState(false);
@@ -271,6 +271,49 @@ const GPTPage = () => {
     setSlide(false); // Trigger slide down animation
   };
 
+  const handleEmotionSelect = async (selectedEmotion) => {
+    const accessToken = localStorage.getItem('access_token');
+
+    const requestData = slide
+      ? {
+          changed_emotion: selectedEmotion,
+          focus_time: focusTime,
+          break_time: breakTime
+        }
+      : {
+          current_emotion: selectedEmotion
+        };
+
+    try {
+      const response = await axios.patch(
+        `http://3.39.201.42:8090/tasks/${selectedTask.id}`,
+        requestData,
+        {
+          headers: {
+            'Authorization': `Bearer ${accessToken}`
+          }
+        }
+      );
+      console.log('Server response:', response.data);
+
+      if (slide) {
+        navigate('/main', {
+          state: {
+            focusTime,
+            breakTime,
+            cycles,
+            emotion: selectedEmotion,
+            selectedTask,
+          },
+        });
+      } else {
+        setSlide(true); // Move to the next step
+      }
+    } catch (error) {
+      console.error('Error updating emotion:', error);
+    }
+  };
+
   return (
     <Wrapper>
       {loading ? (
@@ -282,7 +325,7 @@ const GPTPage = () => {
               <TopBox>
                 <EmotionText>{emotion}</EmotionText>
                 <NormalText>의 감정을 안고, 할 일을 완수했군요!</NormalText>
-                </TopBox>
+              </TopBox>
               <FeedbackBox>
                 <NormalText2>{feedback}</NormalText2>
               </FeedbackBox>
@@ -299,7 +342,9 @@ const GPTPage = () => {
           <EmotionSelectionWrapper slide={slide}>
             {slide && (
               <>
-                <EmotionSelection onEmotionSelect={() => navigate('/main')} />
+                <EmotionSelection 
+                  onEmotionSelect={handleEmotionSelect}
+                />
                 <PrevNextButtonContainer>
                   <PrevNextButton onClick={handlePreviousPage}>이전으로</PrevNextButton>
                 </PrevNextButtonContainer>

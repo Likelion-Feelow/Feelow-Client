@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import PauseImage from '../images/Pause.png';
-import TimerOn from '../images/TimerOn.png';
 import StartImage from '../images/Start.png';
 
 const Wrapper = styled.div`
@@ -16,7 +15,7 @@ const Wrapper = styled.div`
 
 const Box = styled.div`
   width: 60vw;
-  height: 45vw;
+  height: 40vw;
   background-color: #FFFFFF;
   border-radius: 20px;
   display: grid;
@@ -50,7 +49,7 @@ const DotsContainer = styled.div`
   grid-area: dots;
   display: flex;
   align-items: center;
-  justify-content: flex-start; /* Align to the left */
+  justify-content: flex-start;
   width: 100%;
   margin-left: 1.5vw;
   margin-top: 1.5vw;
@@ -74,6 +73,7 @@ const Content = styled.div`
   align-items: center;
   justify-content: center;
   position: relative;
+  margin-bottom: 3vw;
 `;
 
 const TimerDisplay = styled.div`
@@ -90,10 +90,10 @@ const TimerDisplay = styled.div`
   align-items: center;
   justify-content: center;
   margin-bottom: 20px;
-  position: relative; /* Add relative positioning */
+  position: relative;
   text-align: center;
   line-height: 1;
-  flex-direction: column; /* Ensure the elements inside are stacked vertically */
+  flex-direction: column;
 `;
 
 const FocusText = styled.div`
@@ -115,7 +115,7 @@ const TimerButtonContainer = styled.div`
   justify-content: center;
   gap: 4vw;
   position: absolute;
-  bottom: -1.7vw; /* Position above the border */
+  bottom: -1.7vw;
   left: 50%;
   transform: translateX(-50%);
 `;
@@ -136,34 +136,24 @@ const TimerButton = styled.button`
   justify-content: center;
 `;
 
-const ResetButtonContainer = styled.div`
-  margin-top: 28vw; /* Add margin to position below the timer buttons */
-  width: 100%;
-  display: flex;
-  position: absolute;
-  justify-content: center;
-  align-items: center;
-
-`;
-
-const ResetButton = styled.button`
-  font-size: 2vw;
-  cursor: pointer;
-  font-weight: bold;
-  font-family: 'Helvetica', sans-serif;
-  background-color: white;
-  border: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
-
 const ButtonImage = styled.img`
   width: 1.5vw;
 `;
 
-const ButtonImage2 = styled.img`
-  width: 2.3vw;
+const ResetButton = styled.button`
+  width: 10vw;
+  height: 3vw;
+  font-size: 2vw;
+  cursor: pointer;
+  color: white;
+  font-weight: bold;
+  font-family: 'Helvetica', sans-serif;
+  background-color: #88D4FE;
+  border: none;
+  border-radius: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 
 const Colon = styled.div`
@@ -199,7 +189,6 @@ const TimerPage = () => {
   }, []);
 
   const navigate = useNavigate();
-
   const location = useLocation();
   const { focusTime, breakTime, cycles, selectedEmotion, selectedTask } = location.state;
 
@@ -260,10 +249,22 @@ const TimerPage = () => {
 
   const handleComplete = () => {
     setIsActive(false);
+    console.log("Navigating with state:", {
+      emotion: selectedTask.current_emotion,
+      task: selectedTask.task_name,
+      focusTime,
+      breakTime,
+      cycles,
+      selectedTask,
+    });
     navigate('/feedback', {
       state: {
-        emotion: selectedEmotion,
+        emotion: selectedTask.current_emotion,
         task: selectedTask.task_name,
+        focusTime,
+        breakTime,
+        cycles,
+        selectedTask,
       },
     });
   };
@@ -307,19 +308,14 @@ const TimerPage = () => {
             {formatTime(time)}
             <FocusText>{isFocus ? 'Focus' : 'Break'}</FocusText>
             <TimerButtonContainer>
-              <TimerButton onClick={pauseTimer}>
-                <ButtonImage src={StartImage} alt="Pause" />
+              <TimerButton onClick={isActive ? pauseTimer : startTimer}>
+                <ButtonImage src={isActive ? PauseImage : StartImage} alt={isActive ? "Pause" : "Start"} />
               </TimerButton>
-              <TimerButton onClick={startTimer}>
-                <ButtonImage src={PauseImage} alt="Start" />
-              </TimerButton>
+              <ResetButton onClick={resetTimer}>
+                RESET
+              </ResetButton>
             </TimerButtonContainer>
           </TimerDisplay>
-          <ResetButtonContainer>
-            <ResetButton onClick={resetTimer}>
-            <ButtonImage2 src={TimerOn} alt="Reset" />
-            </ResetButton>
-          </ResetButtonContainer>
         </Content>
       </Box>
     </Wrapper>

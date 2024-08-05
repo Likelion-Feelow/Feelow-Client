@@ -8,15 +8,25 @@ const AddTodoForm = ({ onCancel, addTask, selectedDate }) => {
   const [minutes, setMinutes] = useState('');
   const [seconds, setSeconds] = useState('');
   const [taskDescription, setTaskDescription] = useState('');
-  // const formattedDate = selectedDate.toISOString().split('T')[0];
 
   // 로컬 시간대로 날짜 포맷팅
   const formattedDate = selectedDate.toLocaleDateString('en-CA'); // 'en-CA' 포맷은 'YYYY-MM-DD' 형식으로 출력
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    const totalDuration = (parseInt(hours) * 3600) + (parseInt(minutes) * 60) + parseInt(seconds);
+
+    // 각 시간 필드가 비어 있는 경우 0으로 설정
+    const hoursValue = hours === '' ? 0 : parseInt(hours);
+    const minutesValue = minutes === '' ? 0 : parseInt(minutes);
+    const secondsValue = seconds === '' ? 0 : parseInt(seconds);
+
+    const totalDuration = (hoursValue * 3600) + (minutesValue * 60) + secondsValue;
+
+    // 0시간 0분 0초인 경우 추가하지 않음
+    if (totalDuration === 0) {
+      alert("시간을 설정해주세요.");
+      return;
+    }
 
     const newTask = {
       date: formattedDate,
@@ -61,7 +71,6 @@ const AddTodoForm = ({ onCancel, addTask, selectedDate }) => {
             onChange={(e) => setHours(e.target.value)} 
             placeholder="H" 
             min="0"
-            required
           />
           <TimeInput 
             type="number" 
@@ -70,7 +79,6 @@ const AddTodoForm = ({ onCancel, addTask, selectedDate }) => {
             placeholder="M" 
             min="0" 
             max="59"
-            required
           />
           <TimeInput 
             type="number" 
@@ -79,7 +87,6 @@ const AddTodoForm = ({ onCancel, addTask, selectedDate }) => {
             placeholder="S" 
             min="0" 
             max="59"
-            required
           />
         </TimeInputContainer>
 
@@ -87,7 +94,6 @@ const AddTodoForm = ({ onCancel, addTask, selectedDate }) => {
         <Textarea 
           value={taskDescription} 
           onChange={(e) => setTaskDescription(e.target.value)}
-          required
         />
         
         <ButtonContainer>
@@ -212,7 +218,7 @@ const Button = styled.button`
   }
 `;
 
-const  CancelButton = styled.button`
+const CancelButton = styled.button`
   width: 5vw;
   height: 4vh;
   border: none;

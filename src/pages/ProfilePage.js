@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled, { keyframes, css } from 'styled-components';
-import axios from 'axios';
+import api from '../api'; // 설정된 Axios 인스턴스 임포트
 
 const fadeIn = keyframes`
   from {
@@ -153,17 +153,11 @@ function ProfilePage() {
         const month = today.getMonth() + 1;
         const yesterday = today.getDate() - 1;
 
-        const accessToken = localStorage.getItem('access_token');
-
         console.log(`Requesting data for ${year}-${month}-01 to ${year}-${month}-${yesterday}`);
 
         const requests = [];
         for (let day = 1; day <= yesterday; day++) {
-          const request = axios.get(`http://3.39.201.42:8090/tasks/static/?year=${year}&month=${month}&day=${day}`, {
-            headers: {
-              'Authorization': `Bearer ${accessToken}`
-            }
-          });
+          const request = api.get(`/tasks/static/?year=${year}&month=${month}&day=${day}`);
           requests.push(request);
         }
 
@@ -211,6 +205,19 @@ function ProfilePage() {
     });
   };
 
+  const formatTime = (totalSeconds) => {
+    const hours = Math.floor(totalSeconds / 3600);
+    const minutes = Math.floor((totalSeconds % 3600) / 60);
+    const seconds = totalSeconds % 60;
+
+    const parts = [];
+    if (hours > 0) parts.push(`${hours}시간`);
+    if (minutes > 0) parts.push(`${minutes}분`);
+    if (seconds > 0) parts.push(`${seconds}초`);
+
+    return parts.join(' ');
+  };
+
   if (error) {
     return <div>Error: {error}</div>;
   }
@@ -228,7 +235,7 @@ function ProfilePage() {
             <StatBlockInner>
               <StatFront>
                 <StatTitle>총 집중 시간</StatTitle>
-                <StatValue>{stats.total_focus_time}분</StatValue>
+                <StatValue>{formatTime(stats.total_focus_time)}</StatValue>
               </StatFront>
               <StatBack>{statsQuotes.집중}</StatBack>
             </StatBlockInner>
@@ -279,7 +286,7 @@ function ProfilePage() {
             <StatBlockInner>
               <StatFront>
                 <StatTitle>총 휴식 시간</StatTitle>
-                <StatValue>{stats.total_break_time}분</StatValue>
+                <StatValue>{formatTime(stats.total_break_time)}</StatValue>
               </StatFront>
               <StatBack>{statsQuotes.휴식}</StatBack>
             </StatBlockInner>

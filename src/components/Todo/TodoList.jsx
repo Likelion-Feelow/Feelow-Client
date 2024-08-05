@@ -13,9 +13,9 @@ const emotions = [
 
 const getEmotionColor = (emotion) => {
   for (let emotionCategory of emotions) {
-      if (emotionCategory.main === emotion || emotionCategory.sub.includes(emotion)) {
-          return emotionCategory.bgColor;
-      }
+    if (emotionCategory.main === emotion || emotionCategory.sub.includes(emotion)) {
+      return emotionCategory.bgColor;
+    }
   }
   return '#FFFFFF'; // 기본 색상
 };
@@ -47,7 +47,12 @@ const TodoList = ({ selectedDate, tasks, setTasks, addTask, handleTaskSelect, se
         });
 
         const tasksForSelectedDate = response.data.filter(task => task.date === formattedDate);
+        
         console.log(tasksForSelectedDate);
+        
+        tasksForSelectedDate.forEach(task => {
+          console.log(`Task: ${task.task_name}, Focus Time: ${task.focus_time}, Break Time: ${task.break_time}`);
+        });
 
         setTasks(tasksForSelectedDate);
         setShowNoTaskMessage(tasksForSelectedDate.length === 0);
@@ -114,7 +119,11 @@ const TodoList = ({ selectedDate, tasks, setTasks, addTask, handleTaskSelect, se
                 onClick={() => handleTaskSelect(task)} 
                 selected={selectedTask && selectedTask.id === task.id}
               >
-                <Circle selected={selectedTask && selectedTask.id === task.id} color={getEmotionColor(task.current_emotion)} />
+                <Circle 
+                  selected={selectedTask && selectedTask.id === task.id} 
+                  currentEmotion={task.current_emotion} 
+                  changedEmotion={task.changed_emotion} 
+                />
                 <TaskContent>
                   <TaskName>{task.task_name}</TaskName>
                   <TaskDescription>{task.task_description}</TaskDescription>
@@ -217,10 +226,10 @@ const DeleteButton = styled.button`
   cursor: pointer;
   margin-left: 10px;
   position: absolute;
-  right: -50px;
+    right: -50px;
   top: 50%;
-  font-size: 1vw;
-  transform: translateY(-50%);
+  font-size: 1.2vw;
+  transform: translate(-20%, -50%);
   opacity: 0;
 
   &:hover {
@@ -262,36 +271,22 @@ const TaskItem = styled.div`
 `;
 
 const Circle = styled.div`
-width: 1.5vw;
+  width: 1.5vw;
   height: 1.5vw;
   position: relative;
-  border: 2.5px solid ${({ selected }) => (selected ? '#4285f4' : '#9CDBFF')};
   border-radius: 50%;
   margin-right: 1vw;
   margin-left: 1vw;
-  background-color: transparent;
-
-  &::before {
-    content: '';
-    position: absolute;
-    width: 50%;
-    height: 100%;
-    background-color: ${({ startColor }) => startColor};
-    border-top-left-radius: 50%;
-    border-bottom-left-radius: 50%;
-    left: 0;
-  }
-
-  &::after {
-    content: '';
-    position: absolute;
-    width: 50%;
-    height: 100%;
-    background-color: ${({ endColor }) => endColor};
-    border-top-right-radius: 50%;
-    border-bottom-right-radius: 50%;
-    right: 0;
-  }
+  ${({ currentEmotion, changedEmotion, selected }) =>
+    currentEmotion && changedEmotion
+      ? `
+        background: linear-gradient(135deg, ${getEmotionColor(currentEmotion)} 50%, ${getEmotionColor(changedEmotion)} 50%);
+        border: none;
+      `
+      : `
+        background-color: ${getEmotionColor(currentEmotion || changedEmotion)};
+        border: 2.5px solid ${selected ? '#4285f4' : '#9CDBFF'};
+      `}
 `;
 
 const TaskContent = styled.div`
@@ -311,6 +306,12 @@ const TaskDescription = styled.p`
 const TaskTime = styled.p`
   margin: 0;
   color: #999;
+`;
+
+const TaskFocusBreak = styled.p`
+  margin: 0;
+  color: #666;
+  font-size: 0.9vw;
 `;
 
 const NoTaskMessage = styled.p`

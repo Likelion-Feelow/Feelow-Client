@@ -1,8 +1,9 @@
+// MainPage.js
 import React, { useState } from "react";
 import styled from "styled-components";
 import Main from "../components/Main/Main";
 import Sidebar from "../components/Main/Sidebar";
-import axios from "axios";
+import api from "../api"; // 설정된 Axios 인스턴스 임포트
 import EmotionSelection from "../components/Emotion/StartEmotionSelection"; // 추가
 
 function MainPage() {
@@ -39,8 +40,8 @@ function MainPage() {
 
       // 서버에 PATCH 요청 보내기
       try {
-        const response = await axios.patch(
-          `http://3.39.201.42:8090/tasks/${updatedTask.id}`,
+        const response = await api.patch(
+          `/tasks/${updatedTask.id}`,
           {
             current_emotion: selectedEmotion,
             changed_emotion: selectedEmotion,
@@ -79,8 +80,8 @@ function MainPage() {
 
       // 서버에 PATCH 요청 보내기
       try {
-        const response = await axios.patch(
-          `http://3.39.201.42:8090/tasks/${updatedTask.id}`,
+        const response = await api.patch(
+          `/tasks/${updatedTask.id}`,
           {
             current_emotion: selectedEmotion
           },

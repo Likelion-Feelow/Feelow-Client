@@ -4,7 +4,7 @@ import styled, { keyframes, css } from 'styled-components';
 import DW from '../images/profileIMG/DW.jpeg';
 import HM from '../images/profileIMG/HM.jpeg';
 import YS from '../images/profileIMG/YS.jpeg';
-import YM from '../images/profileIMG/YM.jpeg';
+import YM from '../images/profileIMG/YM.png';
 import JK from '../images/profileIMG/JK.png';
 import KH from '../images/profileIMG/KH.jpeg';
 
@@ -185,7 +185,7 @@ const emotions = [
   { main: '분노', bgColor: '#FF9D9D', fontColor: '#FF4E4E' },
 ];
 
-const memberImages = [JK, HM, YS, YM, DW, KH];
+const memberImages = [JK, YM, DW, KH, HM, YS];
 
 const AboutPage = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -204,11 +204,11 @@ const AboutPage = () => {
 
   const members = [
     { name: '안재경', role: 'Project Manager', description: '안재경은 프로젝트 매니저로 팀을 이끌고 있습니다.' },
-    { name: '변희민', role: 'Backend', description: '변희민은 백엔드 개발을 담당하고 있습니다.' },
-    { name: '오연서', role: 'Backend', description: '오연서는 백엔드 개발을 담당하고 있습니다.' },
     { name: '강유민', role: 'Designer', description: '강유민은 디자이너로, 디자인을 담당하고 있습니다.' },
     { name: '김동욱', role: 'Frontend', description: '김동욱은 프론트엔드 개발을 담당하고 있습니다.' },
     { name: '엄경호', role: 'Frontend', description: '엄경호는 프론트엔드 개발을 담당하고 있습니다.' },
+    { name: '변희민', role: 'Backend', description: '변희민은 백엔드 개발을 담당하고 있습니다.' },
+    { name: '오연서', role: 'Backend', description: '오연서는 백엔드 개발을 담당하고 있습니다.' },
   ];
 
   return (

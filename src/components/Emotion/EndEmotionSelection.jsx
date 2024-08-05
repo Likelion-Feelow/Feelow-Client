@@ -291,7 +291,6 @@ const EndEmotionSelection = ({ onEmotionSelect, selectedTask }) => {
 
     const handleNextClick = () => {
         onEmotionSelect(selectedEmotion);
-        navigate('/main');
     };
 
     return (
