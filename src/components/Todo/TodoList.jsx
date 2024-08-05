@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import styled, { keyframes } from "styled-components";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
-import axios from 'axios';
 import deleteIMG from '../../images/Delete.png';
+import api from '../../api'; // api.js 파일을 import 합니다.
 
 const emotions = [
   { main: '긍정', sub: ['행복', '기쁨', '만족', '감사', '희망', '자신감', '흥미', '열정', '자부심', '안심'], bgColor: '#FFD89D', subColor: '#FFF7EC', subBgColor: '#FFF7EC', fontColor: '#FFA51E' },
@@ -35,17 +35,7 @@ const TodoList = ({ selectedDate, tasks, setTasks, addTask, handleTaskSelect, se
         const day = selectedDate.getDate();
         const formattedDate = `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
 
-        const accessToken = localStorage.getItem('access_token');
-
-        if (!accessToken) {
-          throw new Error("Access token is missing");
-        }
-
-        const response = await axios.get(`http://3.39.201.42:8090/tasks/?year=${year}&month=${month}&day=${day}`, {
-          headers: {
-            'Authorization': `Bearer ${accessToken}`
-          }
-        });
+        const response = await api.get(`/tasks/?year=${year}&month=${month}&day=${day}`);
 
         const tasksForSelectedDate = response.data.filter(task => task.date === formattedDate);
         
@@ -80,17 +70,7 @@ const TodoList = ({ selectedDate, tasks, setTasks, addTask, handleTaskSelect, se
 
   const handleDeleteTask = async (taskId) => {
     try {
-      const accessToken = localStorage.getItem('access_token');
-
-      if (!accessToken) {
-        throw new Error("Access token is missing");
-      }
-
-      await axios.delete(`http://3.39.201.42:8090/tasks/${taskId}`, {
-        headers: {
-          'Authorization': `Bearer ${accessToken}`
-        }
-      });
+      await api.delete(`/tasks/${taskId}`);
 
       // Remove the task from the tasks array
       setTasks(prevTasks => prevTasks.filter(task => task.id !== taskId));
@@ -320,7 +300,6 @@ const TaskName = styled.h3`
 
 const TaskDescription = styled.p`
   margin: 5px 0;
-  
   color: #666;
 `;
 
