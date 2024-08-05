@@ -36,7 +36,7 @@ function MainPage() {
       // 업데이트된 작업을 로컬 상태에 저장
       setSelectedTask(updatedTask);
       setTasks(
-        tasks.map((task) => (task.task_id === updatedTask.task_id ? updatedTask : task))
+        tasks.map((task) => (task.id === updatedTask.id ? updatedTask : task))
       );
       console.log("Task after start emotion select:", updatedTask);
   
@@ -45,9 +45,9 @@ function MainPage() {
   
       // 서버에 PATCH 요청 보내기
       try {
-        console.log("Sending PATCH request for task ID:", updatedTask.task_id); // 추가된 로그
+        console.log("Sending PATCH request for task ID:", updatedTask.id); // 추가된 로그
         const response = await api.patch(
-          `/tasks/${updatedTask.task_id}`,
+          `/tasks/${updatedTask.id}`,
           {
             current_emotion: selectedEmotion,
             // changed_emotion: selectedEmotion, 

@@ -284,12 +284,4 @@ const ArrowButton = styled.button`
   cursor: pointer;
 `;
 
-const App = () => {
-  return (
-    <AppContainer>
-      <StyledCalendar />
-    </AppContainer>
-  );
-};
-
 export default StyledCalendar;
