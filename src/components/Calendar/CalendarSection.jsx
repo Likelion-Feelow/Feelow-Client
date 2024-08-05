@@ -77,8 +77,8 @@ const CalendarTile = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 0.49vw 2vw;
-  padding: 1.5vw 1.5vw;
+  margin: 0.4vw 2vw;
+  padding: 1.3vw 1.3vw;
   font-size: 2vw;
   color: black;
   background: ${({ $feelingColor }) => $feelingColor || "white"};
