@@ -249,7 +249,7 @@ const DeleteButton = styled.button`
 const TaskItem = styled.div`
   display: flex;
   align-items: center;
-  padding: 1vw;
+  padding: 0.8vh 1vw;
   min-height: 6vw;
   border: 1px solid #ddd;
   border-radius: 20px;

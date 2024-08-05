@@ -8,7 +8,7 @@ import AddTodoButton from "../Todo/AddTodoButton";
 
 const SidebarContainer = styled.div`
   display: grid;
-  grid-template-rows: 10vh 6vh 70vh auto;
+  grid-template-rows: 10vh 6vh auto auto;
   grid-template-areas:
     "menu"
     "header"
@@ -106,6 +106,7 @@ const TodoListContainer = styled.div`
   grid-area: todolist;
   margin-top: 15px;
   margin-bottom: 3.5vw;
+  max-height: 55vh;
 `;
 
 const AddTodoButtonContainer = styled.div`
