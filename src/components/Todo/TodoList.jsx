@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import styled, { keyframes } from "styled-components";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 import axios from 'axios';
+import deleteIMG from '../../images/Delete.png';
 
 const emotions = [
   { main: '긍정', sub: ['행복', '기쁨', '만족', '감사', '희망', '자신감', '흥미', '열정', '자부심', '안심'], bgColor: '#FFD89D', subColor: '#FFF7EC', subBgColor: '#FFF7EC', fontColor: '#FFA51E' },
@@ -227,31 +228,26 @@ const ListContainer = styled.div`
 `;
 
 const DeleteButton = styled.button`
-  background-color: #ff4e4e;
-  color: white;
+  background: url(${deleteIMG}) no-repeat center center;
+  background-size: contain;
   border: none;
   border-radius: 50%;
-  width: 2vw;
-  height: 2vw;
+  width: 5vw;
+  height: 5vw;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   margin-left: 10px;
   position: absolute;
-  right: -50px;
+  
   top: 50%;
-  font-size: 1.5vw;
-  transform: translate(-20%, -50%);
+  transform: translate(20%, -50%);
   opacity: 0;
 
-  &:hover {
-    background-color: #ff1a1a;
-  }
-
-  &::before {
-    content: "-";
-  }
+  // &:hover {
+  //   scale: 1.1;
+  // }
 `;
 
 const TaskItem = styled.div`
@@ -294,16 +290,25 @@ const Circle = styled.div`
   border-radius: 50%;
   margin-right: 1vw;
   margin-left: 1vw;
-  ${({ currentEmotion, changedEmotion, selected }) =>
-    currentEmotion && changedEmotion
-      ? `
+  ${({ currentEmotion, changedEmotion, selected }) => {
+    if (currentEmotion && changedEmotion) {
+      return `
         background: linear-gradient(135deg, ${getEmotionColor(currentEmotion)} 50%, ${getEmotionColor(changedEmotion)} 50%);
         border: none;
-      `
-      : `
-        background-color: ${getEmotionColor(currentEmotion || changedEmotion)};
+      `;
+    } else if (currentEmotion || changedEmotion) {
+      const emotionColor = getEmotionColor(currentEmotion || changedEmotion);
+      return `
+        background: linear-gradient(135deg, ${emotionColor} 50%, transparent 50%);
         border: 2.5px solid ${selected ? '#4285f4' : '#9CDBFF'};
-      `}
+      `;
+    } else {
+      return `
+        background-color: transparent;
+        border: 2.5px solid ${selected ? '#4285f4' : '#9CDBFF'};
+      `;
+    }
+  }}
 `;
 
 const TaskContent = styled.div`

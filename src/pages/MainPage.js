@@ -50,7 +50,7 @@ function MainPage() {
           `/tasks/${updatedTask.task_id}`,
           {
             current_emotion: selectedEmotion,
-            changed_emotion: selectedEmotion, ////////////////////
+            // changed_emotion: selectedEmotion, 
             focus_time: 0,
             break_time: 0
           },
