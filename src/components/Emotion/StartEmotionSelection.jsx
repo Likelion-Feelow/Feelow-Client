@@ -11,7 +11,7 @@ const Container = styled.div`
     
     font-family: Helvetica, sans-serif;
     font-weight: bold;
-    height: 75vh;
+    height: 70vh;
     width: 65vw;
     background-color: #A8E0FF;
     padding: 1vw;
