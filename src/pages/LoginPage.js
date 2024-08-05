@@ -29,24 +29,25 @@ const InputContainer = styled.div`
 
 const InputText = styled.div`
   font-size: 2.5vw;
+  margin-right: 1.5vw;
   color: #3893ff;
   font-weight: bold;
   position: absolute;
   left: 0;
   width: 7vw;
-  text-align: right;
+  text-align: left;
 `;
 
 const InputField = styled.input`
   padding: 1vw;
   border: 1px solid #ccc;
   border-radius: 20px;
-  height: 3vh;
+  height: 2vw;
   font-size: 1.5vw;
-  background-color: #3893ff;
-  color: white;
+  background-color: rgb(230, 237, 254);
+  color: black;
   flex: 1;
-  margin-left: 8vw; /* Adjust this value if needed */
+  margin-left: 6vw; /* Adjust this value if needed */
   text-align: left;
 `;
 

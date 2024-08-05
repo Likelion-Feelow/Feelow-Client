@@ -14,8 +14,8 @@ import api from "../../api"; // 설정된 Axios 인스턴스 임포트
 // 감정별 색상 매핑
 const emotionColors = {
   "긍정": "#FFD89D",
-  "평온": "#9DD6FF",
-  "우울": "#D39CFF",
+  "평온": "#FF9DC6",
+  "우울": "#9DD6FF",
   "불안": "#C29DFF",
   "분노": "#FF9D9D",
 };

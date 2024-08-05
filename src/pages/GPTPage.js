@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import styled, { keyframes, css } from 'styled-components';
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import api from '../api';  // API 서버 요청을 위한 axios 인스턴스
 import EmotionSelection from '../components/Emotion/EndEmotionSelection'; // Adjust the import path as needed
 import LoadingPage from '../pages/LoadingPage'; // Adjust the import path as needed
 
@@ -28,7 +29,7 @@ const Wrapper = styled.div`
 
 const Box = styled.div`
   width: 48vw;
-  height: 35vh; /* Adjusted to a fixed height */
+  height: 37vh; /* Adjusted to a fixed height */
   background-color: #FFFFFF;
   border-radius: 20px;
   display: flex;
@@ -272,89 +273,82 @@ const GPTPage = () => {
   };
 
   const handleEmotionSelect = async (selectedEmotion) => {
-    const accessToken = localStorage.getItem('access_token');
-
     const requestData = slide
       ? {
-          changed_emotion: selectedEmotion,
-          focus_time: focusTime,
-          break_time: breakTime
-        }
-      : {
-          current_emotion: selectedEmotion
-        };
-
-    try {
-      const response = await axios.patch(
-        `http://3.39.201.42:8090/tasks/${selectedTask.id}`,
-        requestData,
-        {
-          headers: {
-            'Authorization': `Bearer ${accessToken}`
-          }
-        }
-      );
-      console.log('Server response:', response.data);
-
-      if (slide) {
-        navigate('/main', {
-          state: {
-            focusTime,
-            breakTime,
-            cycles,
-            emotion: selectedEmotion,
-            selectedTask,
-          },
-        });
-      } else {
-        setSlide(true); // Move to the next step
+        changed_emotion: selectedEmotion,
+        focus_time: focusTime,
+        break_time: breakTime
       }
-    } catch (error) {
-      console.error('Error updating emotion:', error);
+    : {
+        current_emotion: selectedEmotion
+      };
+
+  try {
+    const response = await api.patch(
+      `/tasks/${selectedTask.id}`,
+      requestData
+    );
+    console.log('Server response:', response.data);
+
+    if (slide) {
+      navigate('/main', {
+        state: {
+          focusTime,
+          breakTime,
+          cycles,
+          emotion: selectedEmotion,
+          selectedTask,
+        },
+      });
+    } else {
+      setSlide(true); // Move to the next step
     }
-  };
+  } catch (error) {
+    console.error('Error updating emotion:', error);
+  }
+};
 
-  return (
-    <Wrapper>
-      {loading ? (
-        <LoadingPage />
-      ) : (
-        <>
-          <SlideWrapper slide={slide}>
-            <Box>
-              <TopBox>
-                <EmotionText>{emotion}</EmotionText>
-                <NormalText>의 감정을 안고, 할 일을 완수했군요!</NormalText>
-              </TopBox>
-              <FeedbackBox>
-                <NormalText2>{feedback}</NormalText2>
-              </FeedbackBox>
-            </Box>
-            <BottomBox>
-              <Text2>{task}</Text2>
-              <Text1> 완료!</Text1>
-            </BottomBox>
-            <NextButton isVisible={buttonVisible} onClick={handleNextPage}>
-              현재 감정을 선택해주세요.
-            </NextButton>
-          </SlideWrapper>
+return (
+  <Wrapper>
+    {loading ? (
+      <LoadingPage />
+    ) : (
+      <>
+        <SlideWrapper slide={slide}>
+          <Box>
+            <TopBox>
+              <EmotionText>{emotion}</EmotionText>
+              <NormalText>의 감정을 안고, 할 일을 완수했군요!</NormalText>
+            </TopBox>
+            <FeedbackBox>
+              <NormalText2>{feedback}</NormalText2>
+            </FeedbackBox>
+          </Box>
+          <BottomBox>
+            <Text2>{task}</Text2>
+            <Text1> 완료!</Text1>
+          </BottomBox>
+          <NextButton isVisible={buttonVisible} onClick={handleNextPage}>
+            현재 감정을 선택해주세요.
+          </NextButton>
+        </SlideWrapper>
 
-          <EmotionSelectionWrapper slide={slide}>
-            {slide && (
-              <>
-                <EmotionSelection 
-                  onEmotionSelect={handleEmotionSelect}
-                />
-                <PrevNextButtonContainer>
-                  <PrevNextButton onClick={handlePreviousPage}>이전으로</PrevNextButton>
-                </PrevNextButtonContainer>
-              </>
-            )}
-          </EmotionSelectionWrapper>
-        </>
-      )}
-    </Wrapper>
-  );
+        <EmotionSelectionWrapper slide={slide}>
+          {slide && (
+            <>
+              <EmotionSelection 
+                onEmotionSelect={handleEmotionSelect}
+              />
+              <PrevNextButtonContainer>
+                <PrevNextButton onClick={handlePreviousPage}>이전으로</PrevNextButton>
+              </PrevNextButtonContainer>
+            </>
+          )}
+        </EmotionSelectionWrapper>
+      </>
+    )}
+  </Wrapper>
+);
 };
 
 export default GPTPage;

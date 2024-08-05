@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import styled, { keyframes, css } from 'styled-components';
 import { useNavigate } from 'react-router-dom';
+import api from '../../api';
+import axios from 'axios';
 
 const Container = styled.div`
     display: grid;
@@ -289,9 +291,33 @@ const EndEmotionSelection = ({ onEmotionSelect, selectedTask }) => {
         }
     };
 
-    const handleNextClick = () => {
-        onEmotionSelect(selectedEmotion);
-    };
+    const handleNextClick = async () => {
+        try {
+          const refreshToken = localStorage.getItem('refresh_token');
+          if (!refreshToken) {
+            throw new Error('No refresh token found');
+          }
+      
+          // Refresh token request
+          const response = await axios.post('http://3.39.201.42:8090/api/token/refresh/', {
+            refresh: refreshToken,
+          });
+      
+          const newAccessToken = response.data.access;
+          localStorage.setItem('access_token', newAccessToken);
+      
+          // Update the Authorization header for the api instance
+          api.defaults.headers.common['Authorization'] = `Bearer ${newAccessToken}`;
+      
+          // Proceed with selecting emotion after refreshing token
+          onEmotionSelect(selectedEmotion);
+        } catch (error) {
+          console.error('Error refreshing token:', error);
+          // Handle token refresh error, e.g., navigate to login page
+          navigate('/login');
+        }
+      };
+
 
     return (
         <Container>

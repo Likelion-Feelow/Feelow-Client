@@ -49,8 +49,8 @@ const MainContainer = styled.div`
 const StatsContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 20px;
-  width: 80vw;
+  gap: 3vw;
+  width: 60vw;
 `;
 
 const StatBlock = styled.div`

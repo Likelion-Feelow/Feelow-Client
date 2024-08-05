@@ -138,7 +138,7 @@ const TodoList = ({ selectedDate, tasks, setTasks, addTask, handleTaskSelect, se
                   <TaskDescription>{task.task_description}</TaskDescription>
                   <TaskTime>예상 시간: {formatDuration(task.task_duration)}</TaskTime>
                 </TaskContent>
-                <DeleteButton onClick={(e) => { e.stopPropagation(); handleDeleteTask(task.id); }}>삭제</DeleteButton>
+                <DeleteButton onClick={(e) => { e.stopPropagation(); handleDeleteTask(task.id); }} />
               </TaskItem>
             </CSSTransition>
           ))
@@ -206,7 +206,7 @@ const ListContainer = styled.div`
   scrollbar-width: none; /* For Firefox */
   -ms-overflow-style: none;  /* For Internet Explorer and Edge */
   
-    &::-webkit-scrollbar {
+  &::-webkit-scrollbar {
     display: none; /* For Chrome, Safari, and Opera */
   }
 
@@ -227,22 +227,30 @@ const ListContainer = styled.div`
 `;
 
 const DeleteButton = styled.button`
-  background-color: lightgray;
+  background-color: #ff4e4e;
   color: white;
   border: none;
-  border-radius: 5px;
-  padding: 5px 10px;
+  border-radius: 50%;
+  width: 2vw;
+  height: 2vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
   margin-left: 10px;
   position: absolute;
   right: -50px;
   top: 50%;
-  font-size: 1.2vw;
+  font-size: 1.5vw;
   transform: translate(-20%, -50%);
   opacity: 0;
 
   &:hover {
     background-color: #ff1a1a;
+  }
+
+  &::before {
+    content: "-";
   }
 `;
 

@@ -10,7 +10,6 @@ const Container = styled.div`
   align-items: center;
   justify-content: center;
   height: 100vh;
-  width: 100vw;
   background-color: white;
   font-family: Helvetica, Arial, sans-serif;
 `;
@@ -22,41 +21,45 @@ const SignUpImage = styled.img`
 
 const InputContainer = styled.div`
   display: flex;
-  flex-direction: row;
   align-items: center;
   margin-bottom: 16px;
   width: 30vw;
+  position: relative;
 `;
 
 const InputText = styled.div`
-  font-size: 2vw;
+  font-size: 2.5vw;
   margin-right: 1.5vw;
-  width: 8vw;
   color: #3893ff;
   font-weight: bold;
-  text-align: right;
+  position: absolute;
+  left: 0;
+  width: 7vw;
+  text-align: left;
 `;
 
 const InputField = styled.input`
-  padding: 10px;
+  padding: 1vw;
   border: 1px solid #ccc;
   border-radius: 20px;
   height: 2vw;
   font-size: 1.5vw;
-  background-color: #3893ff;
-  color: white;
+  background-color: rgb(230, 237, 254);
+  color: black;
   flex: 1;
+  margin-left: 6vw; /* Adjust this value if needed */
+  text-align: left;
 `;
 
 const ButtonRow = styled.div`
   display: flex;
   justify-content: center;
   width: 23vw;
-  margin-top: 3vw;
+  margin-top: 4vw;
 `;
 
 const Button = styled.button`
-  padding: 1vh 2vw;
+  padding: 1.5vh 2vw;
   background-color: #3893ff;
   color: white;
   border: none;
@@ -78,9 +81,6 @@ const Message = styled.p`
 
 const SignUpPage = () => {
   const navigate = useNavigate();
-  // const [name, setName] = useState('');
-  // const [age, setAge] = useState('');
-  // const [job, setJob] = useState('');
   const [nickname, setNickname] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
@@ -89,9 +89,6 @@ const SignUpPage = () => {
     e.preventDefault();
 
     const requestBody = {
-      // name: name.trim(),
-      // age: age.trim(),
-      // job: job.trim(),
       nickname: nickname.trim(),
       password: password.trim(),
     };
@@ -117,36 +114,6 @@ const SignUpPage = () => {
     <Container>
       <SignUpImage src={Logo} alt="Sign Up" />
 
-      {/* <InputContainer>
-        <InputText>이름</InputText>
-        <InputField 
-          type="text" 
-          value={name} 
-          onChange={(e) => setName(e.target.value)} 
-          required 
-        />
-      </InputContainer>
-
-      <InputContainer>
-        <InputText>나이</InputText>
-        <InputField 
-          type="text" 
-          value={age} 
-          onChange={(e) => setAge(e.target.value)} 
-          required 
-        />
-      </InputContainer>
-
-      <InputContainer>
-        <InputText>직업</InputText>
-        <InputField 
-          type="text" 
-          value={job} 
-          onChange={(e) => setJob(e.target.value)} 
-          required 
-        />
-      </InputContainer> */}
-
       <InputContainer>
         <InputText>ID</InputText>
         <InputField 
@@ -168,8 +135,10 @@ const SignUpPage = () => {
       </InputContainer>
 
       <ButtonRow>
-        <Button onClick={handleSignUp}>회원가입 하기</Button>
+        <Button onClick={handleSignUp}>Submit</Button>
       </ButtonRow>
+
+      {message && <Message>{message}</Message>}
     </Container>
   );
 };
