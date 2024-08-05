@@ -277,7 +277,8 @@ const GPTPage = () => {
       ? {
         changed_emotion: selectedEmotion,
         focus_time: focusTime,
-        break_time: breakTime
+        break_time: breakTime,
+        cycle_count: cycles
       }
     : {
         current_emotion: selectedEmotion
