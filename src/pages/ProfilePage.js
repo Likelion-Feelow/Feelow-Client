@@ -159,7 +159,8 @@ function ProfilePage() {
         const aggregatedStats = {
           total_focus_time: 0,
           total_break_time: 0,
-          emotion_counts: {}
+          emotion_counts: {},
+          nickname: ''
         };
 
         for (let day = 1; day <= yesterday; day++) {
@@ -168,12 +169,15 @@ function ProfilePage() {
         }
 
         const responses = await Promise.all(requests);
-        console.log("responses: ",responses)
+        console.log("responses: ", responses)
 
         responses.forEach(response => {
+          if (!aggregatedStats.nickname) {
+            aggregatedStats.nickname = response.data.nickname;
+          }
           aggregatedStats.total_focus_time += response.data.total_focus_time;
           aggregatedStats.total_break_time += response.data.total_break_time;
-          
+
           Object.keys(response.data.emotion_counts).forEach(emotion => {
             if (!aggregatedStats.emotion_counts[emotion]) {
               aggregatedStats.emotion_counts[emotion] = 0;
@@ -183,7 +187,7 @@ function ProfilePage() {
         });
 
         setStats({
-          nickname: responses[0].data.nickname,
+          nickname: aggregatedStats.nickname,
           total_focus_time: aggregatedStats.total_focus_time,
           total_break_time: aggregatedStats.total_break_time,
           emotion_counts: aggregatedStats.emotion_counts,
