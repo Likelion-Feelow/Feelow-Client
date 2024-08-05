@@ -156,17 +156,19 @@ function ProfilePage() {
         console.log(`Requesting data for ${year}-${month}-01 to ${year}-${month}-${yesterday}`);
 
         const requests = [];
+        const aggregatedStats = {
+          total_focus_time: 0,
+          total_break_time: 0,
+          emotion_counts: {}
+        };
+
         for (let day = 1; day <= yesterday; day++) {
           const request = api.get(`/tasks/static/?year=${year}&month=${month}&day=${day}`);
           requests.push(request);
         }
 
         const responses = await Promise.all(requests);
-        const aggregatedStats = {
-          total_focus_time: 0,
-          total_break_time: 0,
-          emotion_counts: {}
-        };
+        console.log("responses: ",responses)
 
         responses.forEach(response => {
           aggregatedStats.total_focus_time += response.data.total_focus_time;

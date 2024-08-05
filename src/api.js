@@ -12,7 +12,7 @@ api.interceptors.request.use(
     if (accessToken) {
       config.headers['Authorization'] = `Bearer ${accessToken}`;
     }
-    console.log('Request:', config); // Log the request details
+    // console.log('Request:', config); // Log the request details
     return config;
   },
   (error) => {
