@@ -44,6 +44,7 @@ const AddTodoForm = ({ onCancel, addTask, selectedDate }) => {
           Authorization: `Bearer ${accessToken}`,
         },
       });
+      console.log("추가: ", response.data);
       addTask(response.data); // 새 할 일 추가(todo list에 띄워주기 위해)
       onCancel(); // 할 일 추가 이후 폼 닫기
     } catch (error) {
