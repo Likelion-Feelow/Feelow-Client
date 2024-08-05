@@ -33,7 +33,7 @@ const Sidebar = ({ selectedDate, onAddTodoClick, tasks, setTasks, handleTaskSele
         <MenuContent>
           <MenuButton onClick={() => setMenuOpen(!menuOpen)}>☰</MenuButton>
           <MenuItem onClick={() => handleLogout(navigate)}>Logout</MenuItem>
-          <MenuItem onClick={() => navigate("/profile")}>Profile</MenuItem>
+          <MenuItem onClick={() => navigate("/profile")}>Statistics</MenuItem>
           <MenuItem onClick={() => navigate("/about")}>About</MenuItem>
         </MenuContent>
       </CSSTransition>

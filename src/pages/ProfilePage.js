@@ -132,6 +132,11 @@ const StatValue = styled.div`
   font-weight: bold;
 `;
 
+const Title = styled.h1`
+  font-size: 4vw;
+  text-align: center;
+`;
+
 function ProfilePage() {
   const [isVisible, setIsVisible] = useState(false);
   const [flipped, setFlipped] = useState(Array(8).fill(false));
@@ -146,25 +151,49 @@ function ProfilePage() {
         const today = new Date();
         const year = today.getFullYear();
         const month = today.getMonth() + 1;
-        const day = today.getDate();
+        const yesterday = today.getDate() - 1;
+
         const accessToken = localStorage.getItem('access_token');
 
-        console.log(`Requesting data for ${year}-${month}-${day}`);
+        console.log(`Requesting data for ${year}-${month}-01 to ${year}-${month}-${yesterday}`);
 
-        const response = await axios.get(`http://3.39.201.42:8090/tasks/static/?year=${year}&month=${month}&day=${day}`, {
-          headers: {
-            'Authorization': `Bearer ${accessToken}`
-          }
+        const requests = [];
+        for (let day = 1; day <= yesterday; day++) {
+          const request = axios.get(`http://3.39.201.42:8090/tasks/static/?year=${year}&month=${month}&day=${day}`, {
+            headers: {
+              'Authorization': `Bearer ${accessToken}`
+            }
+          });
+          requests.push(request);
+        }
+
+        const responses = await Promise.all(requests);
+        const aggregatedStats = {
+          total_focus_time: 0,
+          total_break_time: 0,
+          emotion_counts: {}
+        };
+
+        responses.forEach(response => {
+          aggregatedStats.total_focus_time += response.data.total_focus_time;
+          aggregatedStats.total_break_time += response.data.total_break_time;
+          
+          Object.keys(response.data.emotion_counts).forEach(emotion => {
+            if (!aggregatedStats.emotion_counts[emotion]) {
+              aggregatedStats.emotion_counts[emotion] = 0;
+            }
+            aggregatedStats.emotion_counts[emotion] += response.data.emotion_counts[emotion];
+          });
         });
-
-        console.log('Response data:', response.data);
 
         setStats({
-          nickname: response.data.nickname,
-          total_focus_time: response.data.total_focus_time,
-          total_break_time: response.data.total_break_time,
-          emotion_counts: response.data.emotion_counts
+          nickname: responses[0].data.nickname,
+          total_focus_time: aggregatedStats.total_focus_time,
+          total_break_time: aggregatedStats.total_break_time,
+          emotion_counts: aggregatedStats.emotion_counts,
+          month
         });
+
       } catch (error) {
         setError(error.message);
         console.error('Error fetching data:', error);
@@ -193,7 +222,7 @@ function ProfilePage() {
   return (
     <ProfileContainer isVisible={isVisible}>
       <MainContainer>
-        <h1>{stats.nickname}님의 통계</h1>
+        <Title>{stats.nickname}님의 {stats.month}월 통계</Title>
         <StatsContainer>
           <StatBlock onClick={() => handleFlip(0)} isFlipped={flipped[0]} bgColor="#fff" fontColor="#000">
             <StatBlockInner>
@@ -213,30 +242,88 @@ function ProfilePage() {
               <StatBack>{statsQuotes.감정}</StatBack>
             </StatBlockInner>
           </GradientStatBlock>
-          {emotions.map((emotion, index) => (
-            <StatBlock
-              key={index + 2}
-              bgColor={emotion.bgColor}
-              fontColor={emotion.fontColor}
-              onClick={() => handleFlip(index + 2)}
-              isFlipped={flipped[index + 2]}
-            >
-              <StatBlockInner>
-                <StatFront>
-                  <StatTitle>{emotion.main} 횟수</StatTitle>
-                  <StatValue>{stats.emotion_counts[emotion.main] || 0}회</StatValue>
-                </StatFront>
-                <StatBack>{emotion.quote}</StatBack>
-              </StatBlockInner>
-            </StatBlock>
-          ))}
-          <StatBlock onClick={() => handleFlip(7)} isFlipped={flipped[7]} bgColor="#fff" fontColor="#000">
+          <StatBlock
+            bgColor={emotions[0].bgColor}
+            fontColor={emotions[0].fontColor}
+            onClick={() => handleFlip(2)}
+            isFlipped={flipped[2]}
+          >
+            <StatBlockInner>
+              <StatFront>
+                <StatTitle>긍정 횟수</StatTitle>
+                <StatValue>{stats.emotion_counts[emotions[0].main] || 0}회</StatValue>
+              </StatFront>
+              <StatBack>{emotions[0].quote}</StatBack>
+            </StatBlockInner>
+          </StatBlock>
+          <StatBlock
+            bgColor={emotions[1].bgColor}
+            fontColor={emotions[1].fontColor}
+            onClick={() => handleFlip(3)}
+            isFlipped={flipped[3]}
+          >
+            <StatBlockInner>
+              <StatFront>
+                <StatTitle>평온 횟수</StatTitle>
+                <StatValue>{stats.emotion_counts[emotions[1].main] || 0}회</StatValue>
+              </StatFront>
+              <StatBack>{emotions[1].quote}</StatBack>
+            </StatBlockInner>
+          </StatBlock>
+          <StatBlock
+            onClick={() => handleFlip(4)}
+            isFlipped={flipped[4]}
+            bgColor="#fff"
+            fontColor="#000"
+          >
             <StatBlockInner>
               <StatFront>
                 <StatTitle>총 휴식 시간</StatTitle>
                 <StatValue>{stats.total_break_time}분</StatValue>
               </StatFront>
               <StatBack>{statsQuotes.휴식}</StatBack>
+            </StatBlockInner>
+          </StatBlock>
+          <StatBlock
+            bgColor={emotions[2].bgColor}
+            fontColor={emotions[2].fontColor}
+            onClick={() => handleFlip(5)}
+            isFlipped={flipped[5]}
+          >
+            <StatBlockInner>
+              <StatFront>
+                <StatTitle>우울 횟수</StatTitle>
+                <StatValue>{stats.emotion_counts[emotions[2].main] || 0}회</StatValue>
+              </StatFront>
+              <StatBack>{emotions[2].quote}</StatBack>
+            </StatBlockInner>
+          </StatBlock>
+          <StatBlock
+            bgColor={emotions[3].bgColor}
+            fontColor={emotions[3].fontColor}
+            onClick={() => handleFlip(6)}
+            isFlipped={flipped[6]}
+          >
+            <StatBlockInner>
+              <StatFront>
+                <StatTitle>불안 횟수</StatTitle>
+                <StatValue>{stats.emotion_counts[emotions[3].main] || 0}회</StatValue>
+              </StatFront>
+              <StatBack>{emotions[3].quote}</StatBack>
+            </StatBlockInner>
+          </StatBlock>
+          <StatBlock
+            bgColor={emotions[4].bgColor}
+            fontColor={emotions[4].fontColor}
+            onClick={() => handleFlip(7)}
+            isFlipped={flipped[7]}
+          >
+            <StatBlockInner>
+              <StatFront>
+                <StatTitle>분노 횟수</StatTitle>
+                <StatValue>{stats.emotion_counts[emotions[4].main] || 0}회</StatValue>
+              </StatFront>
+              <StatBack>{emotions[4].quote}</StatBack>
             </StatBlockInner>
           </StatBlock>
         </StatsContainer>
