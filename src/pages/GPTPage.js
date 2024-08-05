@@ -285,7 +285,7 @@ const GPTPage = () => {
 
   try {
     const response = await api.patch(
-      `/tasks/${selectedTask.id}`,
+      `/tasks/${selectedTask.task_id}`,
       requestData
     );
     console.log('Server response:', response.data);
@@ -338,6 +338,7 @@ return (
             <>
               <EmotionSelection 
                 onEmotionSelect={handleEmotionSelect}
+                selectedTask={selectedTask} // 추가: 선택된 작업 전달
               />
               <PrevNextButtonContainer>
                 <PrevNextButton onClick={handlePreviousPage}>이전으로</PrevNextButton>
