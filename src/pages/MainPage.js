@@ -81,74 +81,74 @@ function MainPage() {
 
 
 
-  const handleEndEmotionSelect = async (selectedEmotion) => {
-    if (selectedTask) {
-      const updatedTask = { ...selectedTask, changed_emotion: selectedEmotion };
+  // const handleEndEmotionSelect = async (selectedEmotion) => {
+  //   if (selectedTask) {
+  //     const updatedTask = { ...selectedTask, changed_emotion: selectedEmotion };
   
-      // 업데이트된 작업을 로컬 상태에 저장
-      setSelectedTask(updatedTask);
-      setTasks(tasks.map((task) => (task.task_id === updatedTask.task_id ? updatedTask : task)));
-      console.log("Task after end emotion select:", updatedTask);
+  //     // 업데이트된 작업을 로컬 상태에 저장
+  //     setSelectedTask(updatedTask);
+  //     setTasks(tasks.map((task) => (task.task_id === updatedTask.task_id ? updatedTask : task)));
+  //     console.log("Task after end emotion select:", updatedTask);
   
-      // Local Storage에서 access_token 추출
-      let accessToken = localStorage.getItem("access_token");
+  //     // Local Storage에서 access_token 추출
+  //     let accessToken = localStorage.getItem("access_token");
   
-      // 서버에 PATCH 요청 보내기
-      try {
-        const response = await api.patch(
-          `/tasks/${updatedTask.task_id}`,
-          {
-            current_emotion: selectedEmotion
-          },
-          {
-            headers: {
-              Authorization: `Bearer ${accessToken}`
-            }
-          }
-        );
+  //     // 서버에 PATCH 요청 보내기
+  //     try {
+  //       const response = await api.patch(
+  //         `/tasks/${updatedTask.task_id}`,
+  //         {
+  //           current_emotion: selectedEmotion
+  //         },
+  //         {
+  //           headers: {
+  //             Authorization: `Bearer ${accessToken}`
+  //           }
+  //         }
+  //       );
   
-        console.log("Server response:", response.data);
-      } catch (error) {
-        if (error.response && error.response.status === 401) {
-          try {
-            const refreshToken = localStorage.getItem('refresh_token');
-            const refreshResponse = await api.post('/api/token/refresh/', { refresh: refreshToken });
+  //       console.log("Server response:", response.data);
+  //     } catch (error) {
+  //       if (error.response && error.response.status === 401) {
+  //         try {
+  //           const refreshToken = localStorage.getItem('refresh_token');
+  //           const refreshResponse = await api.post('/api/token/refresh/', { refresh: refreshToken });
   
-            const newAccessToken = refreshResponse.data.access;
-            localStorage.setItem('access_token', newAccessToken);
+  //           const newAccessToken = refreshResponse.data.access;
+  //           localStorage.setItem('access_token', newAccessToken);
   
-            // Update the Authorization header for the api instance
-            api.defaults.headers.common['Authorization'] = `Bearer ${newAccessToken}`;
+  //           // Update the Authorization header for the api instance
+  //           api.defaults.headers.common['Authorization'] = `Bearer ${newAccessToken}`;
   
-            // Retry the original request with the new access token
-            const retryResponse = await api.patch(
-              `/tasks/${updatedTask.task_id}`,
-              {
-                current_emotion: selectedEmotion
-              },
-              {
-                headers: {
-                  Authorization: `Bearer ${newAccessToken}`
-                }
-              }
-            );
+  //           // Retry the original request with the new access token
+  //           const retryResponse = await api.patch(
+  //             `/tasks/${updatedTask.task_id}`,
+  //             {
+  //               current_emotion: selectedEmotion
+  //             },
+  //             {
+  //               headers: {
+  //                 Authorization: `Bearer ${newAccessToken}`
+  //               }
+  //             }
+  //           );
   
-            console.log("Retry server response:", retryResponse.data);
-          } catch (refreshError) {
-            console.error('Error refreshing token:', refreshError);
-            // Handle token refresh error, e.g., navigate to login page
-            navigate('/login');
-          }
-        } else {
-          console.error("Error updating end emotion:", error);
-        }
-      }
+  //           console.log("Retry server response:", retryResponse.data);
+  //         } catch (refreshError) {
+  //           console.error('Error refreshing token:', refreshError);
+  //           // Handle token refresh error, e.g., navigate to login page
+  //           navigate('/login');
+  //         }
+  //       } else {
+  //         console.error("Error updating end emotion:", error);
+  //       }
+  //     }
   
-      setSelectedEndEmotion(selectedEmotion);
-    } else {
-      console.error("selectedTask is not defined");
-    }
-  };
+  //     setSelectedEndEmotion(selectedEmotion);
+  //   } else {
+  //     console.error("selectedTask is not defined");
+  //   }
+  // };
 
 
 
@@ -165,7 +165,7 @@ function MainPage() {
         handleTaskSelect={handleTaskSelect} // 추가: 작업 선택 핸들러 전달
         selectedTask={selectedTask} // 추가: 선택된 작업 전달
         handleStartEmotionSelect={handleStartEmotionSelect}
-        handleEndEmotionSelect={handleEndEmotionSelect}
+        // handleEndEmotionSelect={handleEndEmotionSelect}
       />
       <Sidebar
         selectedDate={selectedDate}

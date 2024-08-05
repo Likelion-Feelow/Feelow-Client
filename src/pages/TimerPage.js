@@ -143,7 +143,7 @@ const ButtonImage = styled.img`
 const ResetButton = styled.button`
   width: 10vw;
   height: 3vw;
-  font-size: 2vw;
+  font-size: 1.7vw;
   cursor: pointer;
   color: white;
   font-weight: bold;
@@ -312,7 +312,7 @@ const TimerPage = () => {
                 <ButtonImage src={isActive ? PauseImage : StartImage} alt={isActive ? "Pause" : "Start"} />
               </TimerButton>
               <ResetButton onClick={resetTimer}>
-                RESET
+                Reset
               </ResetButton>
             </TimerButtonContainer>
           </TimerDisplay>

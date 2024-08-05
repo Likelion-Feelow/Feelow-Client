@@ -159,6 +159,7 @@ const Avatar = styled.img`
   height: 5vw;
   object-fit: cover;
   margin-bottom: 1vw;
+  margin-top: 1vw;
 `;
 
 const MemberInfo = styled.div`
@@ -171,6 +172,10 @@ const Text = styled.p`
   font-size: 1.2vw;
   line-height: 1.8;
   margin-bottom: 2vw;
+`;
+
+const RoleText = styled.div`\
+  font-size: 1.2vw;
 `;
 
 const colors = [
@@ -206,7 +211,7 @@ const AboutPage = () => {
     { name: '안재경', role: 'Project Manager', description: '안재경은 프로젝트 매니저로 팀을 이끌고 있습니다.' },
     { name: '강유민', role: 'Designer', description: '강유민은 디자이너로, 디자인을 담당하고 있습니다.' },
     { name: '김동욱', role: 'Frontend', description: '김동욱은 프론트엔드 개발을 담당하고 있습니다.' },
-    { name: '엄경호', role: 'Frontend', description: '엄경호는 프론트엔드 개발을 담당하고 있습니다.' },
+    { name: '엄경호', role: 'Frontend', description: '기술로 치유하는 정신건강' },
     { name: '변희민', role: 'Backend', description: '변희민은 백엔드 개발을 담당하고 있습니다.' },
     { name: '오연서', role: 'Backend', description: '오연서는 백엔드 개발을 담당하고 있습니다.' },
   ];
@@ -246,7 +251,7 @@ const AboutPage = () => {
                   <Avatar src={memberImages[index]} alt={`${member.name}'s avatar`} />
                   <MemberInfo>
                     <div>{member.name}</div>
-                    <div>{member.role}</div>
+                    <RoleText>{member.role}</RoleText>
                   </MemberInfo>
                 </CardFront>
                 <CardBack>

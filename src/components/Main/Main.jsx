@@ -102,7 +102,7 @@ const Main = ({
           }} 
         />
         )}
-        {view === "endEmotion" && selectedTask && (
+        {/* {view === "endEmotion" && selectedTask && (
         <EndEmotionSelection
           selectedTask={selectedTask} 
           onEmotionSelect={(selectedEmotion) => {
@@ -110,7 +110,7 @@ const Main = ({
             setView("calendar");
           }} 
         />
-        )}
+        )} */}
         {view === "todolist" && (
           <TodoList 
             selectedDate={selectedDate} 

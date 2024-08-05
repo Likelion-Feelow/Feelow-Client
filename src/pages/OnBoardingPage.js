@@ -34,7 +34,7 @@ const slideUp = keyframes`
     transform: translateY(0);
   }
   to {
-    transform: translateY(-10vw);
+    transform: translateY(-6vw);
   }
 `;
 
@@ -43,7 +43,7 @@ const slideDown = keyframes`
     transform: translateY(0);
   }
   to {
-    transform: translateY(10vw);
+    transform: translateY(6vw);
   }
 `;
 
@@ -52,25 +52,25 @@ const slideDown2 = keyframes`
     transform: translateY(0);
   }
   to {
-    transform: translateY(10vw);
+    transform: translateY(6vw);
   }
 `;
 
 const slideLeft = keyframes`
   from {
-    transform: translateY(10vw);
+    transform: translateY(6vw);
   }
   to {
-    transform: translate(-14vw, 10vw);
+    transform: translate(-10vw, 6vw);
   }
 `;
 
 const slideRight = keyframes`
   from {
-    transform: translateY(10vw);
+    transform: translateY(6vw);
   }
   to {
-    transform: translate(14vw, 10vw);
+    transform: translate(10vw, 6vw);
   }
 `;
 
@@ -89,25 +89,32 @@ const WhiteBackgroundText = styled.div`
   opacity: 0;
   animation-fill-mode: forwards;
 
-  font-size: 6vw;
+  font-size: 5vw;
   font-weight: bold;
   font-family: "helvetica";
 `;
 
 const FeelowText = styled(WhiteBackgroundText)`
   animation: ${({ isVisible }) => isVisible && css`${fadeIn} 0.5s forwards, ${slideUp} 0.5s forwards 0.5s`};
+  color: #3893ff;
 `;
 
 const FeelText = styled(WhiteBackgroundText)`
   animation: ${({ isVisible }) => isVisible && css`${fadeIn} 0.5s forwards 1s, ${slideDown} 0.5s forwards 1.5s, ${slideLeft} 0.5s forwards 2s`};
+  font-size: 4vw;
 `;
 
 const FlowText = styled(WhiteBackgroundText)`
   animation: ${({ isVisible }) => isVisible && css`${fadeIn} 0.5s forwards 2.5s, ${slideDown} 0.5s forwards 3s, ${slideRight} 0.5s forwards 3.5s`};
+  font-size: 4vw;
+  margin-left: 0.5vw;
 `;
 
 const PlusText = styled(WhiteBackgroundText)`
   animation: ${({ isVisible }) => isVisible && css`${fadeIn} 0.5s forwards 4s, ${slideDown2} 0.5s forwards 4.5s`};
+  font-size: 4vw;
+  margin-right: 0.1vw;
+  margin-bottom: 1vh;
 `;
 
 const EqualText = styled(WhiteBackgroundText)`
@@ -239,6 +246,7 @@ const MenuItemWrapper = styled.div`
   display: flex;
   transition: opacity 0.6s ease;
   opacity: ${({ isHovered }) => (isHovered ? 0.4 : 1)};
+  margin: 3vh 0;
 
 `;
 
@@ -321,15 +329,17 @@ const BlueBackgroundText = styled.div`
 
 const SecondWhiteBackground = styled(Section)`
   background-color: white;
+  
 `;
 
 const SecondWhiteBackgroundText = styled.div`
-  font-size: 3.5vw;
+  font-size: 3vw;
   font-weight: bold;
   font-family: "helvetica";
   color: black;
   text-align: center;
   white-space: pre-line;
+  
   margin: 2vh 0;
 `;
 
@@ -339,16 +349,18 @@ const ThirdWhiteBackground = styled(Section)`
 
 const ThirdBackgroundImage = styled.img`
   width: 20vw; /* 이미지 크기를 조정하세요 */
-  margin-bottom: 7vh;
+  
+  margin-bottom: 6vh;
 `;
 
 const ThirdBackgroundText = styled.div`
-  font-size: 3vw;
+  font-size: 2.5vw;
   font-weight: bold;
   font-family: "helvetica";
   color: black;
   text-align: center;
-  margin: 2vh 0;
+  margin-top: 3vh;
+  line-height: 1;
 `;
 
 const FourthWhiteBackground = styled(Section)`
@@ -357,16 +369,18 @@ const FourthWhiteBackground = styled(Section)`
 
 const FourthBackgroundImage = styled.img`
   width: 17vw; /* 이미지 크기를 조정하세요 */
-  margin-bottom: 8vh;
+  margin-bottom: 6vh;
 `;
 
 const FourthBackgroundText = styled.div`
-  font-size: 3vw;
-  margin: 2vh 0;
+  font-size: 2.5vw;
   font-weight: bold;
   font-family: "helvetica";
   color: black;
   text-align: center;
+  margin-top: 3vh;
+  line-height: 1;
+
 `;
 
 const FinalBackground = styled(Section)`
@@ -393,7 +407,7 @@ const FinalBackgroundText = styled.div`
   font-family: 'helvetica';
   color: white;
   text-align: center;
-  margin: 3vh 0;
+  margin: 4vh 0;
 
   display: inline-block;
 
@@ -538,6 +552,8 @@ function OnBoardingPage() {
     <Container>
       <Header>
         <Logo>Feelow</Logo>
+
+
         <MenuButton onClick={toggleMenu} isOpen={isMenuOpen}>
           ☰
         </MenuButton>
@@ -624,8 +640,7 @@ function OnBoardingPage() {
         <ThirdBackgroundText>
           내 마음대로 조절하기 힘든 감정,
         </ThirdBackgroundText>
-        <ThirdBackgroundText>Feelow의 Flow에 따라</ThirdBackgroundText>
-        <ThirdBackgroundText>관리해요!</ThirdBackgroundText>
+        <ThirdBackgroundText>Feelow의 Flow에 따라 관리해요!</ThirdBackgroundText>
       </ThirdWhiteBackground>
 
       <FourthWhiteBackground
@@ -634,8 +649,7 @@ function OnBoardingPage() {
       >
         <FourthBackgroundImage src={ListImage} alt="Another Example Image" />
         <FourthBackgroundText>미루기만 하는 할 일들,</FourthBackgroundText>
-        <FourthBackgroundText>Feelow의 Flow에 따라</FourthBackgroundText>
-        <FourthBackgroundText>완수해요!</FourthBackgroundText>
+        <FourthBackgroundText>Feelow의 Flow에 따라 완수해요!</FourthBackgroundText>
       </FourthWhiteBackground>
 
       <FinalBackground

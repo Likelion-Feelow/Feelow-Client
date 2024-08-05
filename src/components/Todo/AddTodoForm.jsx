@@ -120,17 +120,16 @@ const fadeIn = keyframes`
 
 const FormContainer = styled.div`
   display: grid;
-  grid-template-rows: 1fr 4fr 1fr;
+  grid-template-rows: auto auto auto;
   grid-template-areas:
     'title'
-    'form'
-    'button';
-  gap: 3vh;
+    'form';
+  gap: 2vh;
   border-radius: 10px;
-  padding: 2vh 3vw;
+  padding: 3vh 3vw;
   background-color: #ECF8FF;
   width: 80%;
-  height: 70%;
+  height: auto;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   animation: ${fadeIn} 0.5s ease-in-out; /* 페이드 인 애니메이션 추가 */
 `;
@@ -141,6 +140,7 @@ const Title = styled.h2`
   color: #53B7FF;
   border-radius: 10px 10px 0 0;
   text-align: left;
+  font-size: 2vw;
 `;
 
 const Form = styled.form`
@@ -192,6 +192,7 @@ const Textarea = styled.textarea`
   background-color: #ECF8FF;
   margin-bottom: 2vh;
   font-size: 1.3vw;
+  height: 5vw;
 `;
 
 const ButtonContainer = styled.div`
@@ -201,8 +202,8 @@ const ButtonContainer = styled.div`
 `;
 
 const Button = styled.button`
-  width: 5vw;
-  height: 4vh;
+  width: 6vw;
+  height: 4.5vh;
   border: none;
   border-radius: 5px;
   background-color: white;
@@ -220,7 +221,7 @@ const Button = styled.button`
 
 const CancelButton = styled.button`
   width: 5vw;
-  height: 4vh;
+  height: 4.5vh;
   border: none;
   border-radius: 5px;
   background-color: #FF9D9D;
