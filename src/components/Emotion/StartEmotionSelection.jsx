@@ -95,6 +95,7 @@ const HeaderTitle = styled.div`
     color: white;
     margin-top: 3vh;
     margin-left: 2vw;
+    text-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 `;
 
 const QuestionContainer = styled.div`
@@ -111,7 +112,7 @@ const Question = styled.div`
     color: white;
     font-weight: bold;
     margin-left: 8vw;
-    
+    text-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 `;
 
 const EmotionBlock = styled.div`
@@ -122,6 +123,7 @@ const EmotionBlock = styled.div`
     border-radius: 15px;
     background-color: transparent;
     overflow: hidden;
+    
 `;
 
 const growShrink = keyframes`
@@ -152,6 +154,7 @@ const MainEmotionButton = styled.button`
     width: 90%;
     height: 5vw;
     cursor: pointer;
+    text-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
     transition: background-color 0.3s, color 0.3s;
     &:hover {
         background-color: ${props => !props.active && `darken(${props.bgColor}, 10%)`};
@@ -165,6 +168,7 @@ const SubEmotionList = styled.div`
     width: 100%;
     display: flex;
     flex-direction: column;
+    text-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
     align-items: center;
     scrollbar-width: none; /* Firefox */
     -ms-overflow-style: none;  /* Internet Explorer 10+ */
@@ -199,6 +203,7 @@ const SubEmotionButton = styled.button`
 `;
 
 const ConfirmButton = styled.button`
+text-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
     background-color: ${props => props.bgColor || '#3893FF'};
     color: ${props => props.color || 'white'};
     font-size: 1.5vw;
@@ -215,6 +220,7 @@ const ConfirmButton = styled.button`
 `;
 
 const NextButton = styled.button`
+text-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
     background-color: #3893FF;
     color: white;
     font-size: 1.5vw;

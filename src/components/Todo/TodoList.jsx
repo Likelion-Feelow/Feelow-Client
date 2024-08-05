@@ -25,6 +25,7 @@ const TodoList = ({ selectedDate, tasks, setTasks, addTask, handleTaskSelect, se
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [showNoTaskMessage, setShowNoTaskMessage] = useState(false);
+  const [hoveredTaskId, setHoveredTaskId] = useState(null); // Hover 상태를 관리하는 상태 변수 추가
 
   useEffect(() => {
     const fetchTasks = async () => {
@@ -108,6 +109,8 @@ const TodoList = ({ selectedDate, tasks, setTasks, addTask, handleTaskSelect, se
               <TaskItem 
                 onClick={() => handleTaskSelect(task)} 
                 selected={selectedTask && selectedTask.id === task.id}
+                onMouseEnter={() => setHoveredTaskId(task.id)} // Hover 시작
+                onMouseLeave={() => setHoveredTaskId(null)} // Hover 종료
               >
                 <Circle 
                   selected={selectedTask && selectedTask.id === task.id} 
@@ -119,7 +122,10 @@ const TodoList = ({ selectedDate, tasks, setTasks, addTask, handleTaskSelect, se
                   <TaskDescription>{task.task_description}</TaskDescription>
                   <TaskTime>예상 시간: {formatDuration(task.task_duration)}</TaskTime>
                 </TaskContent>
-                <DeleteButton onClick={(e) => { e.stopPropagation(); handleDeleteTask(task.id); }} />
+                <DeleteButton 
+                  onClick={(e) => { e.stopPropagation(); handleDeleteTask(task.id); }}
+                  isVisible={hoveredTaskId === task.id} // Hover 상태에 따라 DeleteButton 표시 여부 결정
+                />
               </TaskItem>
             </CSSTransition>
           ))
@@ -203,7 +209,7 @@ const ListContainer = styled.div`
   }
   .fade-exit-active {
     opacity: 0;
-    transition: opacity 200ms ease-out;
+    transition: opacity 200ms ease-out.
   }
 `;
 
@@ -223,7 +229,14 @@ const DeleteButton = styled.button`
   
   top: 50%;
   transform: translate(-20%, -50%);
-  opacity: 0;
+  opacity: ${({ isVisible }) => (isVisible ? 1 : 0)};
+  transition: opacity 0.3s, right 0.3s;
+
+  ${({ isVisible }) => isVisible ? `
+    right: 10px;
+  ` : `
+    right: -50px;
+  `}
 `;
 
 const TaskItem = styled.div`
@@ -245,18 +258,6 @@ const TaskItem = styled.div`
     background-color: #f0f8ff;
     border-color: #0C98FF;
   `}
-
-  &:hover {
-    ${DeleteButton} {
-      animation: ${slideIn} 0.3s forwards;
-    }
-  }
-
-  &:not(:hover) {
-    ${DeleteButton} {
-      animation: ${slideOut} 0.3s forwards;
-    }
-  }
 `;
 
 const Circle = styled.div`
