@@ -286,7 +286,7 @@ const GPTPage = () => {
 
   try {
     const response = await api.patch(
-      `/tasks/${selectedTask.task_id}`,
+      `/tasks/${selectedTask.id}`,
       requestData
     );
     console.log('Server response:', response.data);
