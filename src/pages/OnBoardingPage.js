@@ -95,25 +95,24 @@ const WhiteBackgroundText = styled.div`
 `;
 
 const FeelowText = styled(WhiteBackgroundText)`
-  animation: ${({ isVisible }) => isVisible && css`${fadeIn} 1s forwards, ${slideUp} 1s forwards 1s`};
+  animation: ${({ isVisible }) => isVisible && css`${fadeIn} 0.5s forwards, ${slideUp} 0.5s forwards 0.5s`};
 `;
 
 const FeelText = styled(WhiteBackgroundText)`
-  animation: ${({ isVisible }) => isVisible && css`${fadeIn} 1s forwards 2s, ${slideDown} 1s forwards 3s, ${slideLeft} 1s forwards 4s`};
+  animation: ${({ isVisible }) => isVisible && css`${fadeIn} 0.5s forwards 1s, ${slideDown} 0.5s forwards 1.5s, ${slideLeft} 0.5s forwards 2s`};
 `;
 
 const FlowText = styled(WhiteBackgroundText)`
-  animation: ${({ isVisible }) => isVisible && css`${fadeIn} 1s forwards 5s, ${slideDown} 1s forwards 6s, ${slideRight} 1s forwards 7s`};
+  animation: ${({ isVisible }) => isVisible && css`${fadeIn} 0.5s forwards 2.5s, ${slideDown} 0.5s forwards 3s, ${slideRight} 0.5s forwards 3.5s`};
 `;
 
 const PlusText = styled(WhiteBackgroundText)`
-  animation: ${({ isVisible }) => isVisible && css`${fadeIn} 1s forwards 8s, ${slideDown2} 1s forwards 9s`};
+  animation: ${({ isVisible }) => isVisible && css`${fadeIn} 0.5s forwards 4s, ${slideDown2} 0.5s forwards 4.5s`};
 `;
 
 const EqualText = styled(WhiteBackgroundText)`
-  animation: ${({ isVisible }) => isVisible && css`${fadeIn} 1s forwards 10s`};
+  animation: ${({ isVisible }) => isVisible && css`${fadeIn} 0.5s forwards 5s`};
 `;
-
 
 
 

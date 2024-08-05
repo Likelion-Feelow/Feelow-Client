@@ -54,6 +54,15 @@ const TodoList = ({ selectedDate, tasks, setTasks, addTask, handleTaskSelect, se
           console.log(`Task: ${task.task_name}, Focus Time: ${task.focus_time}, Break Time: ${task.break_time}`);
         });
 
+        // 우선순위에 따라 정렬
+        tasksForSelectedDate.sort((a, b) => {
+          const aPriority = (a.current_emotion === null && a.changed_emotion === null) ? 1
+            : (a.current_emotion === null || a.changed_emotion === null) ? 2 : 3;
+          const bPriority = (b.current_emotion === null && b.changed_emotion === null) ? 1
+            : (b.current_emotion === null || b.changed_emotion === null) ? 2 : 3;
+          return aPriority - bPriority;
+        });
+
         setTasks(tasksForSelectedDate);
         setShowNoTaskMessage(tasksForSelectedDate.length === 0);
         setError(null);
@@ -197,7 +206,7 @@ const ListContainer = styled.div`
   scrollbar-width: none; /* For Firefox */
   -ms-overflow-style: none;  /* For Internet Explorer and Edge */
   
-  &::-webkit-scrollbar {
+    &::-webkit-scrollbar {
     display: none; /* For Chrome, Safari, and Opera */
   }
 
@@ -226,7 +235,7 @@ const DeleteButton = styled.button`
   cursor: pointer;
   margin-left: 10px;
   position: absolute;
-    right: -50px;
+  right: -50px;
   top: 50%;
   font-size: 1.2vw;
   transform: translate(-20%, -50%);
