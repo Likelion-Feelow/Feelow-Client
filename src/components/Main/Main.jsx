@@ -81,7 +81,7 @@ const Main = ({
 
 
       <Header>
-        <LogoImage onClick={() => navigate('/onboarding')} src={logo} alt="Logo" />
+        <LogoImage onClick={() => navigate('/main')} src={logo} alt="Logo" />
       </Header>
 
 

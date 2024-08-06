@@ -121,6 +121,12 @@ const LoginPage = () => {
     }
   };
 
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      handleLogin();
+    }
+  };
+
   return (
     <Container>
       <LoginImage src={Logo} alt="Login" />
@@ -140,6 +146,7 @@ const LoginPage = () => {
           type="password" 
           value={password} 
           onChange={(e) => setPassword(e.target.value)} 
+          onKeyDown={handleKeyDown} 
         />
       </InputContainer>
 

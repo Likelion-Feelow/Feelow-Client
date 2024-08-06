@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import {
   startOfMonth,
@@ -130,6 +130,7 @@ const StyledCalendar = ({ selectedDate, setSelectedDate }) => {
   const [days, setDays] = useState([]);
   const [feelings, setFeelings] = useState({});
   const [tasks, setTasks] = useState([]);
+  // const prevFeelingsRef = useRef({});
 
   useEffect(() => {
     const fetchEmotionData = async () => {
@@ -144,6 +145,12 @@ const StyledCalendar = ({ selectedDate, setSelectedDate }) => {
           acc[day.date] = emotionColors[day.superior_emotion] || null;
           return acc;
         }, {});
+
+        // Check for changes in emotions
+        // if (JSON.stringify(prevFeelingsRef.current) !== JSON.stringify(emotionData)) {
+        //   prevFeelingsRef.current = emotionData;
+        //   window.location.reload(); // Reload the page if emotions have changed
+        // }
 
         setFeelings(emotionData);
       } catch (error) {

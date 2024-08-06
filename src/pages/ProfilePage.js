@@ -158,16 +158,11 @@ function ProfilePage() {
         const year = today.getFullYear();
         const month = today.getMonth() + 1;
         const yesterday = today.getDate() - 1;
+        // const accessToken = localStorage.getItem('access_token');
 
         console.log(`Requesting data for ${year}-${month}-01 to ${year}-${month}-${yesterday}`);
 
         const requests = [];
-        const aggregatedStats = {
-          total_focus_time: 0,
-          total_break_time: 0,
-          emotion_counts: {},
-          nickname: ''
-        };
 
         for (let day = 1; day <= yesterday; day++) {
           const request = api.get(`/tasks/static/?year=${year}&month=${month}&day=${day}`);
@@ -175,7 +170,13 @@ function ProfilePage() {
         }
 
         const responses = await Promise.all(requests);
-        console.log("responses: ", responses)
+
+        const aggregatedStats = {
+          total_focus_time: 0,
+          total_break_time: 0,
+          emotion_counts: {}
+        };
+
 
         responses.forEach(response => {
           if (!aggregatedStats.nickname) {
