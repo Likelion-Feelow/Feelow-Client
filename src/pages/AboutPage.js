@@ -98,10 +98,10 @@ const MemberList = styled.div`
   margin: 0 auto;
   
   
-  &::-webkit-scrollbar {
+  /* &::-webkit-scrollbar {
     display: none;
-  }
-  scrollbar-width: none;
+  } */
+  scrollbar-width: auto;
 `;
 
 const Card = styled.div`

@@ -96,7 +96,8 @@ const SignUpPage = () => {
     try {
       const response = await axios.post('http://3.39.201.42:8090/auths/register', requestBody);
       if (response.status === 201) {
-        setMessage(`사용자 ${response.data.nickname}가 성공적으로 등록되었습니다!`);
+        // setMessage(`사용자 ${response.data.nickname}가 성공적으로 등록되었습니다!`);
+        setMessage("사용자 등록이 완료되었습니다!");
         alert(message);
         navigate('/login');
       } else {
