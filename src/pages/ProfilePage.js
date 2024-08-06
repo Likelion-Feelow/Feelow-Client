@@ -50,7 +50,7 @@ const StatsContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 3vw;
-  width: 70vw;
+  width: 60vw;
 `;
 
 const StatBlock = styled.div` 
@@ -135,7 +135,7 @@ const StatValue = styled.div`
 `;
 
 const Title = styled.h1`
-  font-size: 4vw;
+  font-size: 3vw;
   text-align: center;
   color: white;
   background-color: #53B7FF;
