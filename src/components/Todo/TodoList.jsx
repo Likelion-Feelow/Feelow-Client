@@ -303,7 +303,8 @@ const TaskDescription = styled.p`
   margin: 5px 0;
   color: #666;
   max-height: 6vw; // Add a maximum height
-  overflow-y: auto; // Enable vertical scrolling
+  overflow-y: scroll;
+  word-break: break-all;
 `;
 
 const TaskTime = styled.p`
