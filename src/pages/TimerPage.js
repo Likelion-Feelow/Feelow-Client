@@ -214,6 +214,22 @@ const TimerPage = () => {
   };
 
   useEffect(() => {
+    // 브라우저 알림 권한 요청
+    if (Notification.permission !== "granted") {
+      Notification.requestPermission();
+    }
+  }, []);
+
+  const showNotification = (title, message) => {
+    if (Notification.permission === "granted") {
+      new Notification(title, {
+        body: message,
+        icon: "/path/to/icon.png" // 아이콘 경로를 설정할 수 있습니다.
+      });
+    }
+  };
+
+  useEffect(() => {
     let interval = null;
     if (isActive && time > 0) {
       interval = setInterval(() => {
@@ -229,9 +245,13 @@ const TimerPage = () => {
       setProgress(100);
       setTimeout(() => {
         if (isFocus) {
+          showNotification("집중 시간 종료", "집중 시간이 끝났습니다. 이제 휴식 시간을 가지세요!");
+          alert("집중 시간이 끝났습니다. 이제 휴식 시간을 가지세요!");
           setIsFocus(false);
           setTime(breakTime);
         } else {
+          showNotification("휴식 시간 종료", "휴식 시간이 끝났습니다. 이제 집중할 시간입니다!");
+          alert("휴식 시간이 끝났습니다. 이제 집중할 시간입니다!");
           setIsFocus(true);
           setCurrentCycle(currentCycle + 1);
           if (currentCycle < cycles - 1) {

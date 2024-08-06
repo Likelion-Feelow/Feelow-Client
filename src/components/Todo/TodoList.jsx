@@ -79,6 +79,7 @@ const TodoList = ({ selectedDate, tasks, setTasks, addTask, handleTaskSelect, se
       setError("할 일을 삭제하는 데 문제가 발생했습니다.");
       console.log("Error deleting task:", error);
     }
+    window.location.reload()
   };
 
   const formatDuration = (seconds) => {
@@ -303,7 +304,8 @@ const TaskDescription = styled.p`
   margin: 5px 0;
   color: #666;
   max-height: 6vw; // Add a maximum height
-  overflow-y: auto; // Enable vertical scrolling
+  overflow-y: scroll;
+  word-break: break-all;
 `;
 
 const TaskTime = styled.p`

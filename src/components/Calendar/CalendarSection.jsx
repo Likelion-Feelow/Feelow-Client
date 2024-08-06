@@ -285,7 +285,7 @@ const AppContainer = styled.div`
 const ArrowButton = styled.button`
   background: none;
   border: none;
-  color: white;
+  color: #53b7ff;
   font-weight: 600;
   font-size: 1.5rem;
   cursor: pointer;

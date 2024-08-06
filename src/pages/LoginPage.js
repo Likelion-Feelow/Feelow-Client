@@ -3,6 +3,7 @@ import styled from "styled-components";
 import Logo from "../images/Logo.png";
 import { useNavigate } from "react-router-dom";
 import axios from 'axios';
+import KakaoLoginButton from "../components/Login/KakaoLoginButton";
 
 const Container = styled.div`
   display: flex;
@@ -156,7 +157,7 @@ const LoginPage = () => {
       </ButtonRow>
 
       {/* 카카오 로그인 */}
-      {/* <KakaoLoginButton /> */}
+      <KakaoLoginButton />
     </Container>
   );
 };
