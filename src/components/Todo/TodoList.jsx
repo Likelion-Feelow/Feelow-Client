@@ -79,6 +79,7 @@ const TodoList = ({ selectedDate, tasks, setTasks, addTask, handleTaskSelect, se
       setError("할 일을 삭제하는 데 문제가 발생했습니다.");
       console.log("Error deleting task:", error);
     }
+    window.location.reload()
   };
 
   const formatDuration = (seconds) => {
