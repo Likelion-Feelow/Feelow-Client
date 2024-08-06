@@ -12,11 +12,11 @@ const fadeIn = keyframes`
 `;
 
 const emotions = [
-  { main: '긍정', bgColor: '#FFD89D', fontColor: '#FFA51E', quote: '긍정적인 생각은 부정적인 생각보다 모든 것을 더 잘하게 만듭니다.' },
-  { main: '평온', bgColor: '#FF9DC6', fontColor: '#FF4A96', quote: '평온은 내부에서 나옵니다. 외부에서 찾지 마십시오.' },
-  { main: '우울', bgColor: '#67BFFF', fontColor: '#0094FF', quote: '가장 어두운 밤도 끝나고 해가 뜹니다.' },
-  { main: '불안', bgColor: '#C29DFF', fontColor: '#853AFF', quote: '어려움이 당신을 불안하게 하지 마십시오; 결국, 가장 어두운 밤에 별이 더 밝게 빛납니다.' },
-  { main: '분노', bgColor: '#FF9D9D', fontColor: '#FF4E4E', quote: '분노와 원망, 질투는 다른 사람의 마음을 바꾸지 않습니다 - 오직 당신의 마음만 바꿉니다.' },
+  { main: '긍정', bgColor: '#FFE6C1', fontColor: '#FFA51E', quote: '긍정적인 생각은 부정적인 생각보다 모든 것을 더 잘하게 만듭니다.' },
+  { main: '평온', bgColor: '#FFDCEC', fontColor: '#FF4A96', quote: '평온은 내부에서 나옵니다. 외부에서 찾지 마십시오.' },
+  { main: '우울', bgColor: '#A7DFFF', fontColor: '#0094FF', quote: '가장 어두운 밤도 끝나고 해가 뜹니다.' },
+  { main: '불안', bgColor: '#D8DCFF', fontColor: '#853AFF', quote: '어려움이 당신을 불안하게 하지 마십시오. 결국, 가장 어두운 밤에 별이 더 밝게 빛납니다.' },
+  { main: '분노', bgColor: '#FFD3D3', fontColor: '#FF4E4E', quote: '분노와 원망, 질투는 다른 사람의 마음을 바꾸지 않습니다. 오직 당신의 마음만 바꿉니다.' },
 ];
 
 const statsQuotes = {
@@ -53,7 +53,7 @@ const StatsContainer = styled.div`
   width: 60vw;
 `;
 
-const StatBlock = styled.div`
+const StatBlock = styled.div` 
   background: ${(props) => props.bgColor || '#fff'};
   border-radius: 15px;
   text-align: center;
@@ -85,6 +85,7 @@ const StatBlockInner = styled.div`
   text-align: center;
   transition: transform 0.6s;
   transform-style: preserve-3d;
+  line-height: 1.5;
 `;
 
 const StatFront = styled.div`
@@ -119,22 +120,27 @@ const StatBack = styled.div`
   left: 5%;
   overflow-y: auto;
   overflow-x: hidden;
-  font-size: 1.5vw;
+  font-size: 1vw;
 `;
 
 const StatTitle = styled.div`
-  font-size: calc(0.3em + 1vw);
+  font-size: 1.6vw;
+  font-weight: bold;
   margin-bottom: 5px;
 `;
 
 const StatValue = styled.div`
-  font-size: calc(0.8em + 1vw);
-  font-weight: bold;
+  font-size: 1.4vw;
+  
 `;
 
 const Title = styled.h1`
-  font-size: 4vw;
+  font-size: 3vw;
   text-align: center;
+  color: white;
+  background-color: #53B7FF;
+  padding: 1vw 2vw;
+  border-radius: 10px;
 `;
 
 function ProfilePage() {
@@ -157,22 +163,28 @@ function ProfilePage() {
         console.log(`Requesting data for ${year}-${month}-01 to ${year}-${month}-${yesterday}`);
 
         const requests = [];
+
         for (let day = 1; day <= yesterday; day++) {
           const request = api.get(`/tasks/static/?year=${year}&month=${month}&day=${day}`);
           requests.push(request);
         }
 
         const responses = await Promise.all(requests);
+
         const aggregatedStats = {
           total_focus_time: 0,
           total_break_time: 0,
           emotion_counts: {}
         };
 
+
         responses.forEach(response => {
+          if (!aggregatedStats.nickname) {
+            aggregatedStats.nickname = response.data.nickname;
+          }
           aggregatedStats.total_focus_time += response.data.total_focus_time;
           aggregatedStats.total_break_time += response.data.total_break_time;
-          
+
           Object.keys(response.data.emotion_counts).forEach(emotion => {
             if (!aggregatedStats.emotion_counts[emotion]) {
               aggregatedStats.emotion_counts[emotion] = 0;
@@ -182,7 +194,7 @@ function ProfilePage() {
         });
 
         setStats({
-          nickname: responses[0].data.nickname,
+          nickname: aggregatedStats.nickname,
           total_focus_time: aggregatedStats.total_focus_time,
           total_break_time: aggregatedStats.total_break_time,
           emotion_counts: aggregatedStats.emotion_counts,

@@ -19,6 +19,7 @@ const MainContainer = styled.div`
   padding: 1vw;
   position: relative;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  overflow: hidden; /* 부모 컴포넌트를 벗어나지 않도록 설정 */
 `;
 
 const CenterContainer = styled.div`
@@ -41,8 +42,8 @@ const wave = keyframes`
 const Dots = styled.div`
   display: flex;
   align-items: center;
-  margin-bottom: 3.5vh;
-  margin-top: 8vh;
+  margin-bottom: 4vw;
+  margin-top: 7vw;
 `;
 
 const Dot = styled.div`
@@ -56,20 +57,21 @@ const Dot = styled.div`
 `;
 
 const LoadingText = styled.div`
-  margin-top: 3vw;
+  margin-top: 1.5vw;
   font-family: Helvetica, sans-serif;
-  color: black;
+  color: white;
   font-weight: bold;
   font-size: 2vw;
 `;
 
 const LogoText = styled.div`
-  grid-area: logo;
+  position: absolute;
   font-family: Helvetica, sans-serif;
-  color: #53b7ff;
+  color: white;
   font-weight: bold;
   font-size: 2vw;
-  margin-bottom: 3vw;
+  top: 2vw;
+  left: 3.5vw;
 `;
 
 const LogoText2 = styled.div`
@@ -77,10 +79,9 @@ const LogoText2 = styled.div`
   position: absolute;
   left: 3vw;
   font-family: Helvetica, sans-serif;
-  color: #53b7ff;
+  color: white;
   font-weight: bold;
   font-size: 2vw;
-  margin-bottom: 3vw;
 `;
 
 const EmptyDiv = styled.div`
@@ -90,7 +91,7 @@ const EmptyDiv = styled.div`
 const ResultContainer = styled.div`
   display: grid;
   grid-template-areas:
-    "logo empty2 empty3 empty4"
+    "empty2 focusTitle focusTime empty4"
     "empty5 focusTitle focusTime iconArea"
     "empty6 restTitle restTime iconArea"
     "reason reason reason reason";
@@ -98,14 +99,15 @@ const ResultContainer = styled.div`
   grid-template-columns: 1fr 1fr 1fr 1fr;
   align-items: center;
   justify-items: center;
-  gap: 1vw;
-  width: 90%;
-  height: 65%;
+  gap: 0.5vw;
+  width: 80%;
+  height: 60%;
   background-color: white;
   border-radius: 30px;
   padding: 2vw;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  margin-top: 2vw;
+  margin-top: 3.5vw;
+  overflow: auto; /* 높이가 줄어들면 스크롤 가능 */
 `;
 
 const TaskNameText = styled.div`
@@ -115,6 +117,7 @@ const TaskNameText = styled.div`
   font-size: 1.5vw;
   margin: 1vw 0;
   font-weight: bold;
+  line-height: 1.7;
   white-space: pre-wrap; /* This will preserve the whitespace and line breaks in the text */
   word-wrap: break-word; /* This ensures that long words will break and wrap to the next line */
 `;
@@ -125,9 +128,10 @@ const TimeText = styled.div`
   background-color: #53b7ff;
   border-radius: 20px;
   padding: 0.5vw 1vw;
-  font-size: 2vw;
+  font-size: 1.8vw;
   font-weight: bold;
   box-shadow: 0 2px 0 rgba(0, 0, 0, 0.1);
+  text-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   text-align: center;
   width: 90%;
 `;
@@ -138,10 +142,12 @@ const TimeText3 = styled.div`
   background-color: white;
   border-radius: 20px;
   padding: 0.5vw 1vw;
-  font-size: 2vw;
+  font-size: 1.8vw;
   font-weight: bold;
   box-shadow: 0 2px 0 rgba(0, 0, 0, 0.1);
+  text-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   text-align: center;
+  margin-bottom: 2.5vw;
   width: 90%;
 `;
 
@@ -150,10 +156,11 @@ const TimeText2 = styled.div`
   color: #53b7ff;
   font-weight: bold;
   padding: 0.5vw 1vw;
-  font-size: 3vw;
+  font-size: 2vw;
   text-align: center;
   display: flex;
   align-items: center;
+  text-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   justify-content: center;
 `;
 
@@ -163,11 +170,13 @@ const TimeText4 = styled.div`
   font-weight: bold;
   padding-left: 0.5vw;
   padding: 0.5vw 1vw;
-  font-size: 3vw;
+  font-size: 2vw;
   text-align: center;
+  text-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-bottom: 2.5vw;
 `;
 
 const TimerIMGContainer = styled.img`
@@ -175,9 +184,18 @@ const TimerIMGContainer = styled.img`
   height: 8vw;
 `;
 
-
 const TextWrapper = styled.div`
   display: flex;
+`;
+
+const ButtonContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  gap: 1vw;
+  margin-top: 2vw;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
 `;
 
 const StartButton = styled.button`
@@ -196,9 +214,11 @@ const StartButton = styled.button`
     background-color: #3e94cc;
     color: white;
   }
-  grid-area: startButton;
-  margin-top: 2vw;
+  white-space: nowrap; /* 버튼 크기 조절 */
+  overflow: hidden; /* 버튼 크기 조절 */
+  text-overflow: ellipsis; /* 버튼 크기 조절 */
 `;
+
 const CancelButton = styled.button`
   background-color: #00A1FB;
   color: #DAF1FF;
@@ -214,8 +234,9 @@ const CancelButton = styled.button`
   &:hover {
     background-color: #3e94cc;
   }
-  grid-area: startButton;
-  margin-top: 2vw;
+  white-space: nowrap; /* 버튼 크기 조절 */
+  overflow: hidden; /* 버튼 크기 조절 */
+  text-overflow: ellipsis; /* 버튼 크기 조절 */
 `;
 
 const CycleIconContainer = styled.div`
@@ -224,7 +245,7 @@ const CycleIconContainer = styled.div`
   justify-content: center;
   flex-direction: column;
   margin-right: 5vw;
-  margin-top: 2.5vh;
+  margin-bottom: 2.3vw;
 `;
 
 const CycleIcon = styled.div`
@@ -237,9 +258,10 @@ const CycleText = styled.div`
   font-size: 3.5vw;
   color: black;
   position: absolute;
-  top: 38%;
-  left: 46%;
+    top: 38%;
+  left: 50%;
   transform: translate(-50%, -50%);
+  text-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 `;
 
 const ErrorMessage = styled.div`
@@ -387,9 +409,9 @@ const Evaluating = ({
     const hours = Math.floor(seconds / 3600);
     const minutes = Math.floor((seconds % 3600) / 60);
     const secs = seconds % 60;
-    return `${hours > 0 ? `${hours}H ` : ""}${
-      minutes > 0 ? `${minutes}M ` : ""
-    }${secs > 0 ? `${secs}S` : ""}`;
+    return `${hours > 0 ? `${hours}시간 ` : ""}${
+      minutes > 0 ? `${minutes}분 ` : ""
+    }${secs > 0 ? `${secs}초` : ""}`;
   };
 
   const handleStartButtonClick = () => {
@@ -406,14 +428,14 @@ const Evaluating = ({
 
   return (
     <MainContainer>
+      <LogoText>Evaluating</LogoText>
+
       <ResultContainer>
-        <LogoText>Evaluating</LogoText>
         <EmptyDiv gridArea="empty2" />
         <EmptyDiv gridArea="empty3" />
         <EmptyDiv gridArea="empty4" />
         <EmptyDiv gridArea="empty5" />
         <EmptyDiv gridArea="empty6" />
-
 
         <TimeText style={{ gridArea: "focusTitle" }}>Focus Time</TimeText>
         <TimeText2 style={{ gridArea: "focusTime" }}>
@@ -430,18 +452,14 @@ const Evaluating = ({
           </CycleIcon>
         </CycleIconContainer>
 
-
-
-
-
         <ReasonContainer>
           <TaskNameText>{reason}</TaskNameText>
         </ReasonContainer>
       </ResultContainer>
-      <div style={{ display: 'flex', gap: '30px' }}>
-        <StartButton onClick={handleStartButtonClick}>START</StartButton>
-        <CancelButton onClick={onCancel}>취소</CancelButton>
-      </div>
+      <ButtonContainer>
+        <StartButton onClick={handleStartButtonClick}>Start</StartButton>
+        <CancelButton onClick={onCancel}>Back</CancelButton>
+      </ButtonContainer>
     </MainContainer>
   );
 };

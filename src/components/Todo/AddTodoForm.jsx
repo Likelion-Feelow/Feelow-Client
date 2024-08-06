@@ -15,6 +15,11 @@ const AddTodoForm = ({ onCancel, addTask, selectedDate }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (taskName.length > 100) {
+      alert("할 일 이름은 100자를 초과할 수 없습니다.");
+      return;
+    }
+
     // 각 시간 필드가 비어 있는 경우 0으로 설정
     const hoursValue = hours === '' ? 0 : parseInt(hours);
     const minutesValue = minutes === '' ? 0 : parseInt(minutes);
@@ -236,4 +241,4 @@ const CancelButton = styled.button`
   &:hover {
     background-color: #357ae8;
   }
-`;
+`; 

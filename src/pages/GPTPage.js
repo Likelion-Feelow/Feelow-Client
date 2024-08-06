@@ -46,11 +46,11 @@ const Box = styled.div`
 
 const TopBox = styled.div`
   width: 50vw;
-  height: 14vh;
+  height: 10vw;
   background-color: #53B7FF;
   border-radius: 20px;
   position: absolute;
-  margin-top: -35vh; /* Adjusted margin */
+  margin-top: -37.5vh; /* Adjusted margin */
   left: 50%;
   transform: translateX(-50%);
   display: flex;
@@ -258,7 +258,7 @@ const GPTPage = () => {
     if (!loading) {
       const timer = setTimeout(() => {
         setButtonVisible(true);
-      }, 3000);
+      }, 1000);
 
       return () => clearTimeout(timer);
     }

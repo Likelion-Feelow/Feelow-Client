@@ -302,6 +302,8 @@ const TaskName = styled.h3`
 const TaskDescription = styled.p`
   margin: 5px 0;
   color: #666;
+  max-height: 6vw; // Add a maximum height
+  overflow-y: auto; // Enable vertical scrolling
 `;
 
 const TaskTime = styled.p`

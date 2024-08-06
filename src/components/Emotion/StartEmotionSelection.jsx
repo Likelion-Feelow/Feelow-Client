@@ -11,12 +11,16 @@ const Container = styled.div`
     
     font-family: Helvetica, sans-serif;
     font-weight: bold;
-    height: 70vh;
+    height: 40vw;
     width: 65vw;
     background-color: #A8E0FF;
     padding: 1vw;
     border-radius: 15px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+
+    @media (max-width: 800px) {
+        height: 40vw;
+    }
 `;
 
 const slideDown = keyframes`
@@ -174,12 +178,20 @@ const SubEmotionList = styled.div`
     -ms-overflow-style: none;  /* Internet Explorer 10+ */
     transition: height 0.5s ease-in-out;
     ${props => props.active && css`
-        height: 35vh;
+        height: 20vw;
         animation: ${slideUp} 0.5s ease-in;
     `}
     &::-webkit-scrollbar {
         width: 0px;
         background: transparent; /* Chrome/Safari/Webkit */
+    }
+
+    @media (max-width: 800px) {
+        overflow-y: auto;
+        ${props => props.active && css`
+            height: 16vw;
+            animation: ${slideUp} 0.5s ease-in;
+        `}
     }
 `;
 
