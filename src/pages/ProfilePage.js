@@ -152,7 +152,7 @@ function ProfilePage() {
         const year = today.getFullYear();
         const month = today.getMonth() + 1;
         const yesterday = today.getDate() - 1;
-        const accessToken = localStorage.getItem('access_token');
+        // const accessToken = localStorage.getItem('access_token');
 
         console.log(`Requesting data for ${year}-${month}-01 to ${year}-${month}-${yesterday}`);
 
