@@ -12,11 +12,11 @@ const fadeIn = keyframes`
 `;
 
 const emotions = [
-  { main: '긍정', bgColor: '#FFD89D', fontColor: '#FFA51E', quote: '긍정적인 생각은 부정적인 생각보다 모든 것을 더 잘하게 만듭니다.' },
-  { main: '평온', bgColor: '#FF9DC6', fontColor: '#FF4A96', quote: '평온은 내부에서 나옵니다. 외부에서 찾지 마십시오.' },
-  { main: '우울', bgColor: '#67BFFF', fontColor: '#0094FF', quote: '가장 어두운 밤도 끝나고 해가 뜹니다.' },
-  { main: '불안', bgColor: '#C29DFF', fontColor: '#853AFF', quote: '어려움이 당신을 불안하게 하지 마십시오; 결국, 가장 어두운 밤에 별이 더 밝게 빛납니다.' },
-  { main: '분노', bgColor: '#FF9D9D', fontColor: '#FF4E4E', quote: '분노와 원망, 질투는 다른 사람의 마음을 바꾸지 않습니다 - 오직 당신의 마음만 바꿉니다.' },
+  { main: '긍정', bgColor: '#FFE6C1', fontColor: '#FFA51E', quote: '긍정적인 생각은 부정적인 생각보다 모든 것을 더 잘하게 만듭니다.' },
+  { main: '평온', bgColor: '#FFDCEC', fontColor: '#FF4A96', quote: '평온은 내부에서 나옵니다. 외부에서 찾지 마십시오.' },
+  { main: '우울', bgColor: '#A7DFFF', fontColor: '#0094FF', quote: '가장 어두운 밤도 끝나고 해가 뜹니다.' },
+  { main: '불안', bgColor: '#D8DCFF', fontColor: '#853AFF', quote: '어려움이 당신을 불안하게 하지 마십시오. 결국, 가장 어두운 밤에 별이 더 밝게 빛납니다.' },
+  { main: '분노', bgColor: '#FFD3D3', fontColor: '#FF4E4E', quote: '분노와 원망, 질투는 다른 사람의 마음을 바꾸지 않습니다. 오직 당신의 마음만 바꿉니다.' },
 ];
 
 const statsQuotes = {
@@ -50,10 +50,10 @@ const StatsContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 3vw;
-  width: 60vw;
+  width: 70vw;
 `;
 
-const StatBlock = styled.div`
+const StatBlock = styled.div` 
   background: ${(props) => props.bgColor || '#fff'};
   border-radius: 15px;
   text-align: center;
@@ -85,6 +85,7 @@ const StatBlockInner = styled.div`
   text-align: center;
   transition: transform 0.6s;
   transform-style: preserve-3d;
+  line-height: 1.5;
 `;
 
 const StatFront = styled.div`
@@ -119,22 +120,27 @@ const StatBack = styled.div`
   left: 5%;
   overflow-y: auto;
   overflow-x: hidden;
-  font-size: 1.5vw;
+  font-size: 1vw;
 `;
 
 const StatTitle = styled.div`
-  font-size: calc(0.3em + 1vw);
+  font-size: 1.6vw;
+  font-weight: bold;
   margin-bottom: 5px;
 `;
 
 const StatValue = styled.div`
-  font-size: calc(0.8em + 1vw);
-  font-weight: bold;
+  font-size: 1.4vw;
+  
 `;
 
 const Title = styled.h1`
   font-size: 4vw;
   text-align: center;
+  color: white;
+  background-color: #53B7FF;
+  padding: 1vw 2vw;
+  border-radius: 10px;
 `;
 
 function ProfilePage() {
