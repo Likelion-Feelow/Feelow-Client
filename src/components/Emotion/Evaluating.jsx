@@ -3,7 +3,7 @@ import styled, { keyframes } from "styled-components";
 import { FaClock } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import TimerIMG from "../../images/Timer2.png";
+import TimerIMG from "../../images/Timer3.png";
 
 // 스타일 컴포넌트 정의
 const MainContainer = styled.div`
@@ -91,20 +91,19 @@ const EmptyDiv = styled.div`
 const ResultContainer = styled.div`
   display: grid;
   grid-template-areas:
-    "empty2 focusTitle focusTime empty4"
-    "empty5 focusTitle focusTime iconArea"
-    "empty6 restTitle restTime iconArea"
-    "reason reason reason reason";
-  grid-template-rows: 1fr 1fr 1fr 3fr;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
+    "focusTitle focusTime iconArea"
+    "restTitle restTime iconArea"
+    "reason reason reason";
+  grid-template-rows: 1fr 1fr 2fr;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
   justify-items: center;
-  gap: 0.5vw;
-  width: 80%;
-  height: 60%;
+  gap: 1vw;
+  width: 75%;
+  height: 55%;
   background-color: white;
   border-radius: 30px;
-  padding: 2vw;
+  padding: 3vw;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   margin-top: 3.5vw;
   overflow: auto; /* 높이가 줄어들면 스크롤 가능 */
@@ -114,7 +113,7 @@ const TaskNameText = styled.div`
   font-family: helvetica;
   color: black;
   padding: 0.5vw 1vw;
-  font-size: 1.5vw;
+  font-size: 1vw;
   margin: 1vw 0;
   font-weight: bold;
   line-height: 1.7;
@@ -127,28 +126,40 @@ const TimeText = styled.div`
   color: white;
   background-color: #53b7ff;
   border-radius: 20px;
-  padding: 0.5vw 1vw;
+  padding: 1vw 1vw;
+  width: 12vw;
+
   font-size: 1.8vw;
   font-weight: bold;
   box-shadow: 0 2px 0 rgba(0, 0, 0, 0.1);
   text-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+
   text-align: center;
-  width: 90%;
+  
+  
+  
+  margin-left: 3vw;
+  
+  
 `;
 
 const TimeText3 = styled.div`
   font-family: Helvetica, sans-serif;
   color: #53b7ff;
-  background-color: white;
+  background-color: #ecf8ff;
   border-radius: 20px;
-  padding: 0.5vw 1vw;
+  margin-left: 3vw;
+  padding: 1vw 1vw;
+  width: 12vw;
   font-size: 1.8vw;
   font-weight: bold;
+  
   box-shadow: 0 2px 0 rgba(0, 0, 0, 0.1);
   text-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   text-align: center;
-  margin-bottom: 2.5vw;
-  width: 90%;
+  
+  
+  
 `;
 
 const TimeText2 = styled.div`
@@ -157,17 +168,20 @@ const TimeText2 = styled.div`
   font-weight: bold;
   padding: 0.5vw 1vw;
   font-size: 2vw;
+  
   text-align: center;
   display: flex;
   align-items: center;
   text-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   justify-content: center;
+
 `;
 
 const TimeText4 = styled.div`
   font-family: Helvetica, sans-serif;
   color: #53b7ff;
   font-weight: bold;
+  
   padding-left: 0.5vw;
   padding: 0.5vw 1vw;
   font-size: 2vw;
@@ -176,7 +190,7 @@ const TimeText4 = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 2.5vw;
+  
 `;
 
 const TimerIMGContainer = styled.img`
@@ -243,9 +257,10 @@ const CycleIconContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-direction: column;
-  margin-right: 5vw;
-  margin-bottom: 2.3vw;
+  margin-left: 3vw;
+  margin-top: 3vw;
+  
+  
 `;
 
 const CycleIcon = styled.div`
@@ -258,16 +273,17 @@ const CycleText = styled.div`
   font-size: 3.5vw;
   color: black;
   position: absolute;
-    top: 38%;
+  top: 38%;
   left: 50%;
   transform: translate(-50%, -50%);
   text-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 `;
 
 const ErrorMessage = styled.div`
-  margin-top: 2vw;
+  margin: 2vw 0;
   font-family: Helvetica, sans-serif;
   color: red;
+  
   font-size: 2vw;
 `;
 
@@ -276,7 +292,7 @@ const ReasonContainer = styled.div`
   border-radius: 20px;
   grid-area: reason;
   text-align: center;
-  margin: 0 4vw;
+  margin: 5vw 3vw;
   overflow: auto;
   max-height: 20vh;
   white-space: pre-wrap; /* This will preserve the whitespace and line breaks in the text */
@@ -349,7 +365,7 @@ const Evaluating = ({
         isNaN(parseFloat(breakTime)) ||
         isNaN(parseFloat(cycles))
       ) {
-        throw new Error("Received invalid numbers from the API");
+        throw new Error("숫자가 올바르지 않습니다. 재시도해주세요.");
       }
 
       setPomodoroCycle({
@@ -361,7 +377,7 @@ const Evaluating = ({
       setLoading(false);
     } catch (error) {
       console.error("Error fetching Pomodoro cycle:", error);
-      setError("Failed to fetch the Pomodoro cycle. Please try again later.");
+      setError("오류가 발생했습니다. 재시도해주세요.");
       setLoading(false);
     }
   };
@@ -431,11 +447,6 @@ const Evaluating = ({
       <LogoText>Evaluating</LogoText>
 
       <ResultContainer>
-        <EmptyDiv gridArea="empty2" />
-        <EmptyDiv gridArea="empty3" />
-        <EmptyDiv gridArea="empty4" />
-        <EmptyDiv gridArea="empty5" />
-        <EmptyDiv gridArea="empty6" />
 
         <TimeText style={{ gridArea: "focusTitle" }}>Focus Time</TimeText>
         <TimeText2 style={{ gridArea: "focusTime" }}>

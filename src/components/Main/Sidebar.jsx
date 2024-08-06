@@ -99,7 +99,7 @@ const Title = styled.h2`
   padding: 5px 10px;
   margin: 0 2vw;
   border-radius: 10px;
-  font-family: "Krona One";
+  font-family: "Helvetica";
 `;
 
 const TodoListContainer = styled.div`

@@ -297,6 +297,9 @@ const TaskContent = styled.div`
 const TaskName = styled.h3`
   margin: 0;
   color: #333;
+  max-height: 6vw;
+  overflow-y: scroll;
+  word-break: break-all;
 `;
 
 const TaskDescription = styled.p`
